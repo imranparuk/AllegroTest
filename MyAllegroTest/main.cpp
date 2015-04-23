@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 		al_destroy_bitmap(player);
 		al_destroy_bitmap(ball);
 		al_destroy_display(display);
-		//brick.~Brick();
+		brick.~Brick();
 		al_destroy_timer(timer);
 		return -1;
 	}
@@ -170,6 +170,22 @@ int main(int argc, char **argv)
 				al_flip_display();
 				std::cout << "Score is 1: " << ++score;
 			}
+
+			for (int i = 0; i < 10; i++)
+			{
+				bool check = b.arr[i]->detectCollision(ball_x,ball_y,BALL_SIZE);
+				if (check && !b.arr[i]->isDestroyed())
+				{
+					b.arr[i]->destroy(true);
+					ball_dx *= -1;
+					ball_dy *= -1;
+					al_set_target_bitmap(b.arr[i]->getBitMap());
+					al_clear_to_color(al_map_rgb(0, 0, 0));
+					al_set_target_bitmap(al_get_backbuffer(display));
+					al_flip_display();
+					std::cout << "Score is 1: " << ++score;
+				}
+			}
 	
 			ball_x += ball_dx;
 			ball_y += ball_dy;
@@ -227,8 +243,6 @@ int main(int argc, char **argv)
 			redraw = false;
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			al_draw_bitmap(brick.getBitMap(), brick.getLocX(), brick.getLocY(), 0);
-			//for (int i = 0; i < 10; i++)
-				//al_draw_bitmap(arr[i]->getBitMap(), arr[i]->getLocX(), arr[i]->getLocY(),0);
 			for (int i = 0; i < 10; i++)
 				al_draw_bitmap(b.arr[i]->getBitMap(),b.arr[i]->getLocX(),b.arr[i]->getLocY(),0);
 			al_draw_bitmap(player, player_x, player_y, 0);
