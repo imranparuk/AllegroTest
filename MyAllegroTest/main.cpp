@@ -12,7 +12,7 @@ const int PLAYER_SIZEY = 10;
 
 const int BRICK_SIZE = 20;
 
-//imranp
+
 enum MYKEYS {
 	KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
 };
