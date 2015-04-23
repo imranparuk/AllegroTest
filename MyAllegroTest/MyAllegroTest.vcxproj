@@ -67,15 +67,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="Brick.cpp" />
     <ClCompile Include="GameEngine.cpp" />
-    <ClCompile Include="ghost.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="playa.cpp" />
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ball.h" />
+    <ClInclude Include="Brick.h" />
     <ClInclude Include="GameEngine.h" />
-    <ClInclude Include="ghost.h" />
-    <ClInclude Include="playa.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
