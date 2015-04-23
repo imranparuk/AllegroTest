@@ -2,6 +2,9 @@
 #include <allegro5/allegro.h>
 #include <iostream>
 
+using namespace std;
+
+
 const float FPS = 60;
 const int SCREEN_W = 640;
 const int SCREEN_H = 480;
@@ -64,6 +67,7 @@ int main(int argc, char **argv)
 	}
 
 	display = al_create_display(SCREEN_W, SCREEN_H);
+
 	if (!display) {
 		fprintf(stderr, "failed to create display!\n");
 		al_destroy_timer(timer);
@@ -224,8 +228,8 @@ int main(int argc, char **argv)
 		}
 
 		if (redraw && al_is_event_queue_empty(event_queue)) {
+			
 			redraw = false;
-
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			al_draw_bitmap(brick, brick_x, brick_y, 0);
 			al_draw_bitmap(player, player_x, player_y, 0);
