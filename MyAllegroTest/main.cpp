@@ -84,14 +84,9 @@ int main(int argc, char **argv)
 		al_destroy_timer(timer);
 		return -1;
 	}
-
-	Brick brick(20, 10, 500, 300);
-	if (!brick.getBitMap())
-	{
-		fprintf(stderr, "Failed to create brick!\n");
-		al_destroy_display(display);
-		al_destroy_timer(timer);
-	}
+	Brick b;
+	int n = 60;
+	b.createBrick(n);
 
 	al_set_target_bitmap(player);
 	al_clear_to_color(al_map_rgb(255, 0, 255));
@@ -154,19 +149,19 @@ int main(int argc, char **argv)
 			if ((ball_y < 0) || ((ball_y+BALL_SIZE> player_y) && (ball_y<player_y+PLAYER_SIZEY) && (ball_x+BALL_SIZE> player_x) && (ball_x <player_x + PLAYER_SIZEX))) {
 				ball_dy = -ball_dy;
 			}
-
-			if (!(destroyed) && (ball_y + BALL_SIZE > brick.getLocY()) && (ball_y < brick.getLocY() + brick.getSizeY()) && (ball_x + BALL_SIZE > brick.getLocX()) && (ball_x < brick.getLocX() + brick.getSizeY()))
-			{
-				destroyed = true;
-				ball_dx *= -1;
-				ball_dy *= -1;
-				al_set_target_bitmap(brick.getBitMap());
-				al_clear_to_color(al_map_rgb(0, 0, 0));
-				al_set_target_bitmap(al_get_backbuffer(display));
-				al_flip_display();
-				std::cout << "Score is 1: " << ++score;
-			}
-	
+			   
+				if (!(destroyed) && (ball_y + BALL_SIZE > b.arr[2]->getLocY()) && (ball_y < b.arr[2]->getLocY() + b.arr[2]->getSizeY()) && (ball_x + BALL_SIZE > b.arr[2]->getLocX()) && (ball_x < b.arr[2]->getLocX() + b.arr[2]->getSizeY()))
+				{
+					destroyed = true;
+					ball_dx *= -1;
+					ball_dy *= -1;
+					al_set_target_bitmap(b.arr[2]->getBitMap());
+					al_clear_to_color(al_map_rgb(0, 0, 0));
+					al_set_target_bitmap(al_get_backbuffer(display));
+					al_flip_display();
+					std::cout << "Score is 1: " << ++score;
+				}
+			
 			ball_x += ball_dx;
 			ball_y += ball_dy;
 
@@ -222,7 +217,10 @@ int main(int argc, char **argv)
 			
 			redraw = false;
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-			al_draw_bitmap(brick.getBitMap(), brick.getLocX(), brick.getLocY(), 0);
+			for (int i = 0; i < n; i++)
+			{
+				al_draw_bitmap(b.arr[i]->getBitMap(), b.arr[i]->getLocX(), b.arr[i]->getLocY(), 0);
+			}
 			al_draw_bitmap(player, player_x, player_y, 0);
 			al_draw_bitmap(ball, ball_x, ball_y, 100);
 			al_flip_display();
