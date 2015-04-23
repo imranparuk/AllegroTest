@@ -2,9 +2,10 @@
 #include <allegro5/allegro.h>
 #include <iostream>
 #include"Brick.h"
+#include"ArrayOfBricks.h"
+
 
 using namespace std;
-
 
 const float FPS = 60;
 const int SCREEN_W = 640;
@@ -85,13 +86,16 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	Brick brick(20, 10, 500, 300);
+	Brick brick(500, 300);
 	if (!brick.getBitMap())
 	{
 		fprintf(stderr, "Failed to create brick!\n");
 		al_destroy_display(display);
 		al_destroy_timer(timer);
-	}
+	} 
+
+	ArrayOfBricks b(10, 100, 100);
+
 
 	al_set_target_bitmap(player);
 	al_clear_to_color(al_map_rgb(255, 0, 255));
@@ -223,6 +227,10 @@ int main(int argc, char **argv)
 			redraw = false;
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			al_draw_bitmap(brick.getBitMap(), brick.getLocX(), brick.getLocY(), 0);
+			//for (int i = 0; i < 10; i++)
+				//al_draw_bitmap(arr[i]->getBitMap(), arr[i]->getLocX(), arr[i]->getLocY(),0);
+			for (int i = 0; i < 10; i++)
+				al_draw_bitmap(b.arr[i]->getBitMap(),b.arr[i]->getLocX(),b.arr[i]->getLocY(),0);
 			al_draw_bitmap(player, player_x, player_y, 0);
 			al_draw_bitmap(ball, ball_x, ball_y, 100);
 			al_flip_display();
