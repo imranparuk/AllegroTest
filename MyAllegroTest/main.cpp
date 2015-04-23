@@ -15,6 +15,8 @@ const int BRICK_SIZE = 20;
 int score = 0;
 int lives = 10;
 
+bool destroyed = false;
+
 
 enum MYKEYS {
 	KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
@@ -158,8 +160,9 @@ int main(int argc, char **argv)
 				ball_dy = -ball_dy;
 			}
 
-			if ((ball_y + BALL_SIZE > brick_y) && (ball_y < brick_y + BRICK_SIZE) && (ball_x + BALL_SIZE > brick_x) && (ball_x < brick_x + BRICK_SIZE))
+			if (!(destroyed) && (ball_y + BALL_SIZE > brick_y) && (ball_y < brick_y + BRICK_SIZE) && (ball_x + BALL_SIZE > brick_x) && (ball_x < brick_x + BRICK_SIZE))
 			{
+				destroyed = true;
 				ball_dx *= -1;
 				ball_dy *= -1;
 				al_set_target_bitmap(brick);
@@ -167,8 +170,6 @@ int main(int argc, char **argv)
 				al_set_target_bitmap(al_get_backbuffer(display));
 				al_flip_display();
 				std::cout << "Score: " << ++score;
-				//binisacunt
-
 			}
 	
 			ball_x += ball_dx;
