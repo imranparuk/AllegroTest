@@ -12,6 +12,9 @@ const int PLAYER_SIZEY = 10;
 
 const int BRICK_SIZE = 20;
 
+int score = 0;
+int lives = 10;
+
 
 enum MYKEYS {
 	KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
@@ -139,7 +142,7 @@ int main(int argc, char **argv)
 			}
 			if (ball_y > SCREEN_H - BALL_SIZE)
 			{
-				std::cout << "Life -1";
+				std::cout << "Lives Left: " << --lives;
 				ball_x = 100;
 				ball_y = 100;
 				ball_dx = 4;
@@ -157,11 +160,14 @@ int main(int argc, char **argv)
 
 			if ((ball_y + BALL_SIZE > brick_y) && (ball_y < brick_y + BRICK_SIZE) && (ball_x + BALL_SIZE > brick_x) && (ball_x < brick_x + BRICK_SIZE))
 			{
-
+				ball_dx *= -1;
+				ball_dy *= -1;
 				al_set_target_bitmap(brick);
 				al_clear_to_color(al_map_rgb(0, 0, 0));
-				
-				break;
+				al_set_target_bitmap(al_get_backbuffer(display));
+				al_flip_display();
+				std::cout << "Score: " << ++score;
+
 			}
 	
 			ball_x += ball_dx;
