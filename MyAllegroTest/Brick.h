@@ -10,7 +10,7 @@ private:
 	const int sizeX;
 	const int sizeY;
 	const int locationX;
-	const int locationY;
+	const int locationY;  //hello
 	ALLEGRO_BITMAP *brick = NULL;
 	
 public:
