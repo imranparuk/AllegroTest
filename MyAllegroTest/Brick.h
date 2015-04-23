@@ -13,7 +13,6 @@ private:
 	const int locationY;
 	ALLEGRO_BITMAP *brick = NULL;
 	
-
 public:
 	Brick(int sx, int sy, int lx, int ly) :sizeX(sx), sizeY(sy), locationX(lx), locationY(ly)
 	{ 

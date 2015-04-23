@@ -11,8 +11,6 @@ const int BALL_SIZE = 20;
 const int PLAYER_SIZEX = 100;
 const int PLAYER_SIZEY = 10;
 
-const int BRICK_SIZE = 20;
-
 int score = 0;
 int lives = 10;
 
