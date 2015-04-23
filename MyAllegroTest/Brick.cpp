@@ -1,11 +1,25 @@
 #include "Brick.h"
 
-
-Brick::Brick()
+int Brick::getLocX()
 {
+	return locationX;
 }
 
-
-Brick::~Brick()
+int Brick::getLocY()
 {
+	return locationY;
 }
+
+ALLEGRO_BITMAP *Brick::getBitMap()
+{
+	return brick;
+}
+
+int Brick::getSizeX()
+{
+	return sizeX;
+};
+int Brick::getSizeY()
+{
+	return sizeY;
+};
