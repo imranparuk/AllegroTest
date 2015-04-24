@@ -195,7 +195,7 @@ int main(int argc, char **argv)
 				//std::cout << "New Angle: " << ballAngle << std::endl;
 
 				//ball_dx = ballVel*cos(ballAngle);
-			    //ball_dy = ballVel*sin(-ballAngle);
+			    //ball_dy = ballVel*sin(-ballAngle);c
 			
 
 		
