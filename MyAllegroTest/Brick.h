@@ -22,11 +22,9 @@ public:
 		brick = al_create_bitmap(sizeX,sizeY); 
 		al_set_target_bitmap(brick);
 		al_clear_to_color(al_map_rgb(125, 246, 231));
-		fprintf(stderr, "Brick Created!\n");
 		if (!brick)
 		{
 			fprintf(stderr, "Failed to create player bitmap!\n");
-			//quit game
 		}
 	};
 	~Brick()
