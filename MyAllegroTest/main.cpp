@@ -9,7 +9,7 @@
 using namespace std;
 
 
-const float FPS = 60;
+const float FPS = 45;
 const int SCREEN_W = 640;
 const int SCREEN_H = 480;
 
@@ -45,9 +45,9 @@ int main(int argc, char **argv)
 	float player_y = SCREEN_H-70;
 	float player_dx = 0; float player_dy = 0;
 
-	float ball_x = 60;
-	float ball_y = 60;
-	float ball_dx = -4.0, ball_dy = 4.0;
+	float ball_x = 100;
+	float ball_y = 10;
+	float ball_dx = 4.0, ball_dy = 4.0;
 
 	bool key[4] = { false, false, false, false };
 	bool redraw = true;
@@ -142,11 +142,11 @@ int main(int argc, char **argv)
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
 			if (key[KEY_LEFT] && player_x >= 4.0) {
-				player_x -= 4.0;
+				player_x -= 5.0;
 			}
 
 			if (key[KEY_RIGHT] && player_x <= SCREEN_W - PLAYER_SIZEX - 4.0) {
-				player_x += 4.0;
+				player_x += 5.0;
 			}
 
 			if (player_x > SCREEN_W )
