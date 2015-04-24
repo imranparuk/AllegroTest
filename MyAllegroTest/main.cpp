@@ -203,13 +203,14 @@ int main(int argc, char **argv)
 			{
 				for (int i = 0; i < level[j].getNum(); i++)
 				{
+					bool checkVer = level[j].arr[i]->detectCollisionVertical(ball_x, ball_y, ball_dx, ball_dy, BALL_SIZE_RADIUS);
 					bool checkHor = level[j].arr[i]->detectCollisionHorizontal(ball_x, ball_y, ball_dx, ball_dy, BALL_SIZE_RADIUS);
-					//bool checkVer = level[j].arr[i]->detectCollisionVertical(ball_x, ball_y, ball_dx, ball_dy, BALL_SIZE_RADIUS);
-					bool checkVer = false;
-					if ((checkHor || checkVer) && !level[j].arr[i]->isDestroyed())
+
+					if ((checkVer||checkHor) && !level[j].arr[i]->isDestroyed())
 					{
-						if (checkHor) ball_dx = -ball_dx;
+						//if (checkHor) ball_dx = -ball_dx;
 						if (checkVer) ball_dy = -ball_dy;
+						if (checkHor) ball_dx = -ball_dx;
 						level[j].arr[i]->destroy(true);
 						al_set_target_bitmap(level[j].arr[i]->getBitMap());
 						al_clear_to_color(al_map_rgb(0, 0, 0));
