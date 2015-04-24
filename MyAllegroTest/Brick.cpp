@@ -37,15 +37,15 @@ bool Brick::detectCollisionVertical(const int ball_x, const int ball_y, const in
 
    if (super == true)
    {
-	   if ((ball_y + BALL_SIZE_RADIUS >= locationY) && (ball_y + BALL_SIZE_RADIUS <= locationY + temp_dy) && (ball_x /*+ BALL_SIZE_RADIUS*/ > locationX) && (ball_x /*- BALL_SIZE_RADIUS*/ < locationX + sizeX))
+   if ((ball_y + BALL_SIZE_RADIUS >= locationY) && (ball_y + BALL_SIZE_RADIUS <= locationY + temp_dy) && (ball_x /*+ BALL_SIZE_RADIUS*/ > locationX) && (ball_x /*- BALL_SIZE_RADIUS*/ < locationX + sizeX))
 	   {
 		   superLevel--;
-		   return true;
+		return true;
 	   }
-	   else if ((ball_y - BALL_SIZE_RADIUS <= locationY + sizeY) && (ball_y - BALL_SIZE_RADIUS >= locationY + sizeY - temp_dy) && (ball_x /*+ BALL_SIZE_RADIUS*/ > locationX) && (ball_x /*- BALL_SIZE_RADIUS*/ < locationX + sizeX))
+   else if ((ball_y - BALL_SIZE_RADIUS <= locationY + sizeY) && (ball_y - BALL_SIZE_RADIUS >= locationY + sizeY - temp_dy) && (ball_x /*+ BALL_SIZE_RADIUS*/ > locationX) && (ball_x /*- BALL_SIZE_RADIUS*/ < locationX + sizeX))
 	   {
 		   superLevel--;
-		   return true;
+		return true;
 	   }
    }
    else
@@ -55,7 +55,7 @@ bool Brick::detectCollisionVertical(const int ball_x, const int ball_y, const in
 	   else if ((ball_y - BALL_SIZE_RADIUS <= locationY + sizeY) && (ball_y - BALL_SIZE_RADIUS >= locationY + sizeY - temp_dy) && (ball_x /*+ BALL_SIZE_RADIUS*/ > locationX) && (ball_x /*- BALL_SIZE_RADIUS*/ < locationX + sizeX))
 		   return true;
    }
-   return false;
+		return false;
 };
 
 bool Brick::detectCollisionHorizontal(const int ball_x, const int ball_y, const int ball_dx, const int ball_dy, const int BALL_SIZE_RADIUS)
@@ -67,12 +67,12 @@ bool Brick::detectCollisionHorizontal(const int ball_x, const int ball_y, const 
 		if ((ball_x + BALL_SIZE_RADIUS >= locationX) && (ball_x + BALL_SIZE_RADIUS <= locationX + temp_dx) && (ball_y + BALL_SIZE_RADIUS > locationY + temp_dy) && (ball_y - BALL_SIZE_RADIUS < locationY + sizeY))
 		{
 			superLevel--;
-			return true;
+	   return true;
 		}
 		else if ((ball_x - BALL_SIZE_RADIUS <= locationX + sizeX) && (ball_x + BALL_SIZE_RADIUS >= locationX + sizeX - temp_dx) && (ball_y + BALL_SIZE_RADIUS > locationY + temp_dy) && (ball_y - BALL_SIZE_RADIUS < locationY + sizeY))
 		{
 			superLevel--;
-			return true;
+	   return true;
 		}
 	}
 	else
@@ -82,7 +82,7 @@ bool Brick::detectCollisionHorizontal(const int ball_x, const int ball_y, const 
 		else if ((ball_x - BALL_SIZE_RADIUS <= locationX + sizeX) && (ball_x + BALL_SIZE_RADIUS >= locationX + sizeX - temp_dx) && (ball_y + BALL_SIZE_RADIUS > locationY + temp_dy) && (ball_y - BALL_SIZE_RADIUS < locationY + sizeY))
 			return true;
 	}
-	return false;
+	   return false;
 };
 bool Brick::isDestroyed()
 {
