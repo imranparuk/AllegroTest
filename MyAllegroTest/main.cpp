@@ -295,6 +295,9 @@ int main(int argc, char **argv)
 			al_draw_bitmap(brick.getBitMap(), brick.getLocX(), brick.getLocY(), 0);
 			al_draw_bitmap(player, player_x, player_y, 0);
 			//al_draw_bitmap(ball, ball_x, ball_y, 100);
+			for (int j = 0; j < 5; j++)
+				for (int i = 0; i < level[j].getNum(); i++)
+					al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
 
 			al_draw_filled_circle(ball_x, ball_y, BALL_SIZE_RADIUS, al_map_rgb(50, 50, 50));
 
