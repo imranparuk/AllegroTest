@@ -86,6 +86,10 @@ int main(int argc, char **argv)
 	}
 
 	Brick brick(20, 10, 500, 300);
+	Brick brick1(20, 10, 0, 0);
+	Brick brick2(20, 10, 200, 300);
+
+
 	if (!brick.getBitMap())
 	{
 		fprintf(stderr, "Failed to create brick!\n");
@@ -223,6 +227,12 @@ int main(int argc, char **argv)
 			redraw = false;
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			al_draw_bitmap(brick.getBitMap(), brick.getLocX(), brick.getLocY(), 0);
+			
+			al_draw_bitmap(brick1.getBitMap(), brick1.getLocX(), brick1.getLocY(), 0);
+			al_draw_bitmap(brick2.getBitMap(), brick2.getLocX(), brick2.getLocY(), 0);
+			
+
+
 			al_draw_bitmap(player, player_x, player_y, 0);
 			al_draw_bitmap(ball, ball_x, ball_y, 100);
 			al_flip_display();
