@@ -201,7 +201,11 @@ int main(int argc, char **argv)
 		
 
 			}
-	
+
+			if (ball_y < BALL_SIZE_RADIUS) {
+				ball_dy = -ball_dy;
+			}
+
 			ball_x += ball_dx;
 			ball_y += ball_dy;
 
