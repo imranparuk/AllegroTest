@@ -1,14 +1,25 @@
 #include <stdio.h>
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
+#include <math.h>
 #include <iostream>
+#define PI 3.14159265
 
-const float FPS = 60;
+const float FPS = 25;
 const int SCREEN_W = 640;
 const int SCREEN_H = 480;
-const int BALL_SIZE = 20;
 
-const int PLAYER_SIZEX = 100;
+const int BALL_SIZE_RADIUS = 8;
+
+const int PLAYER_SIZEX = 120;
 const int PLAYER_SIZEY = 10;
+const int PLAYER_CENT = PLAYER_SIZEX / 2.0;
+
+float awayFromCent = 0;
+float reflectionConst = 0;
+float ballVel = 0;
+float ballAngle = 0;
+
 
 const int BRICK_SIZE = 20;
 
@@ -18,9 +29,11 @@ int lives = 10;
 bool destroyed = false;
 
 
+
 enum MYKEYS {
 	KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
 };
+
 
 int main(int argc, char **argv)
 {
@@ -33,7 +46,7 @@ int main(int argc, char **argv)
 
 
 	float player_x = SCREEN_W / 2.0 - PLAYER_SIZEX / 2.0;
-	float player_y = SCREEN_H-100;
+	float player_y = SCREEN_H-70;
 	float player_dx = 0; float player_dy = 0;
 
 	float brick_x = 500;
@@ -57,6 +70,12 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+	if (!al_init_primitives_addon())
+	{
+		fprintf(stderr, "failed to initialize primitives addon!\n");
+		return -1;
+	}
+
 	timer = al_create_timer(1.0 / FPS);
 	if (!timer) {
 		fprintf(stderr, "failed to create timer!\n");
@@ -70,7 +89,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	ball = al_create_bitmap(BALL_SIZE, BALL_SIZE);
+	ball = al_create_bitmap(BALL_SIZE_RADIUS, BALL_SIZE_RADIUS);
 	if (!ball) {
 		fprintf(stderr, "failed to create bouncer bitmap!\n");
 		al_destroy_display(display);
@@ -98,8 +117,9 @@ int main(int argc, char **argv)
 	al_set_target_bitmap(player);
 	al_clear_to_color(al_map_rgb(255, 0, 255));
 
-	al_set_target_bitmap(ball);
+	/*al_set_target_bitmap(ball);
 	al_clear_to_color(al_map_rgb(50, 50, 50));
+	*/
 
 	al_set_target_bitmap(brick);
 	al_clear_to_color(al_map_rgb(69, 10, 38));
@@ -135,32 +155,73 @@ int main(int argc, char **argv)
 		al_wait_for_event(event_queue, &ev);
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
-			if (key[KEY_LEFT] && player_x >= 4.0) {
-				player_x -= 4.0;
+			if (key[KEY_LEFT] /*&& player_x >= 4.0*/) {
+				player_x -= 6.0;
 			}
 
-			if (key[KEY_RIGHT] && player_x <= SCREEN_W - PLAYER_SIZEX - 4.0) {
-				player_x += 4.0;
+			if (key[KEY_RIGHT] /*&& player_x <= SCREEN_W - PLAYER_SIZEX - 4.0*/) {
+				player_x += 6.0;
 			}
-			if (ball_y > SCREEN_H - BALL_SIZE)
+
+			if (player_x > SCREEN_W )
 			{
-				std::cout << "Lives Left: " << --lives;
+				player_x = 0;
+			}
+
+			if (player_x < -PLAYER_SIZEX)
+			{
+				player_x = SCREEN_W;
+			}
+
+			if (ball_y > SCREEN_H - BALL_SIZE_RADIUS)
+			{
+				std::cout << "Lives Left: " << --lives << std::endl;
 				ball_x = 100;
 				ball_y = 100;
 				ball_dx = 4;
 				ball_dy = -4;
 			}
 
-			if (ball_x < 0 || ball_x > SCREEN_W - BALL_SIZE) {
+			if ((ball_x < BALL_SIZE_RADIUS || ball_x > SCREEN_W - BALL_SIZE_RADIUS) /*|| ((ball_y + BALL_SIZE_RADIUS > player_y) && ((ball_x + BALL_SIZE_RADIUS < player_x) || (ball_x - BALL_SIZE_RADIUS > player_x + PLAYER_SIZEX)))*/) {
 				ball_dx = -ball_dx;
 			}
 
+			if ((ball_y + BALL_SIZE_RADIUS >= player_y) && (ball_y + BALL_SIZE_RADIUS <= player_y + ball_dy) && (ball_x + BALL_SIZE_RADIUS > player_x) && (ball_x - BALL_SIZE_RADIUS < player_x + PLAYER_SIZEX))
+			{
+				/*awayFromCent = abs(player_x+PLAYER_CENT - ball_x);
+				reflectionConst = (awayFromCent / (PLAYER_CENT));
+				std::cout << "Reflection Const: " << reflectionConst << std::endl;
+				//dx = 4 dx = 4
+				/*ballVel = sqrt(pow(ball_dx, 2) + pow(ball_dy, 2));
+				ballAngle = atan(ball_dx / ball_dy);
+				std::cout << "Angle: " << ballAngle << std::endl;
 
-			if ((ball_y < 0) || ((ball_y+BALL_SIZE> player_y) && (ball_y<player_y+PLAYER_SIZEY) && (ball_x+BALL_SIZE> player_x) && (ball_x <player_x + PLAYER_SIZEX))) {
+				ballAngle *= reflectionConst;
+				*/
+				
+
+				/*ballAngle = atan(ball_dy / ball_dx);//**(180 / PI);
+				ballVel = sqrt(pow(ball_dx, 2) + pow(ball_dy, 2));
+				std::cout << "Angle: " << ballAngle << std::endl;*/
+				ball_dy  = -ball_dy;
+				//ballAngle = atan(ball_dy / ball_dx)*(180 / PI);
+				//std::cout << "New Angle: " << ballAngle << std::endl;
+
+				//ball_dx = ballVel*cos(ballAngle);
+			    //ball_dy = ballVel*sin(-ballAngle);
+			
+
+		
+
+			}
+
+			if (ball_y < BALL_SIZE_RADIUS) {
 				ball_dy = -ball_dy;
 			}
 
-			if (!(destroyed) && (ball_y + BALL_SIZE > brick_y) && (ball_y < brick_y + BRICK_SIZE) && (ball_x + BALL_SIZE > brick_x) && (ball_x < brick_x + BRICK_SIZE))
+		
+
+			if (!(destroyed) && (ball_y + BALL_SIZE_RADIUS > brick_y) && (ball_y - BALL_SIZE_RADIUS< brick_y + BRICK_SIZE) && (ball_x + BALL_SIZE_RADIUS > brick_x) && (ball_x - BALL_SIZE_RADIUS < brick_x + BRICK_SIZE))
 			{
 				destroyed = true;
 				ball_dx *= -1;
@@ -169,8 +230,10 @@ int main(int argc, char **argv)
 				al_clear_to_color(al_map_rgb(0, 0, 0));
 				al_set_target_bitmap(al_get_backbuffer(display));
 				al_flip_display();
-				std::cout << "Score: " << ++score;
+				std::cout << "Score: " << ++score << std::endl;
 			}
+
+			
 	
 			ball_x += ball_dx;
 			ball_y += ball_dy;
@@ -229,7 +292,10 @@ int main(int argc, char **argv)
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			al_draw_bitmap(brick, brick_x, brick_y, 0);
 			al_draw_bitmap(player, player_x, player_y, 0);
-			al_draw_bitmap(ball, ball_x, ball_y, 100);
+			//al_draw_bitmap(ball, ball_x, ball_y, 100);
+
+			al_draw_filled_circle(ball_x, ball_y, BALL_SIZE_RADIUS, al_map_rgb(50, 50, 50));
+
 			al_flip_display();
 		}
 	}

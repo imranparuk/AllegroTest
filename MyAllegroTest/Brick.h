@@ -1,11 +1,21 @@
-#pragma once
+/*#pragma once
+#include <allegro5/allegro.h>
+
 class Brick
 {
+	typedef struct Colour{
+		int red;
+		int green;
+		int blue;
+	};
+
 private:
-	int sizeX;
-	int sizeY;
-	int locationX;
-	int locationY;
+	const int sizeX;
+	const int sizeY;
+	const int locationX;
+	const int locationY;
+	bool destroyed;
+	Colour col;
 
 
 public:
@@ -15,6 +25,6 @@ public:
 	void setLocation();
 	void getLocation(int &, int &);
 
-
+	
 };
-
+*/
