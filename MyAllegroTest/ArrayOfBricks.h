@@ -11,13 +11,13 @@ class ArrayOfBricks
 public:
 	Brick *arr[32];
 
-	ArrayOfBricks(int n, int sX, int sY) :startX(sX), startY(sY),num(n)
+	ArrayOfBricks(int n, int sX, int sY,bool super = false) :startX(sX), startY(sY),num(n)
 	{
 		int j = sX;
 		for (int i = 0; i < n; i++)
 		{
-			arr[i] = new Brick(j,sY);
-			j += arr[i]->getSizeX() + 4;
+			arr[i] = new Brick(j,sY,super);
+			j += arr[i]->getSizeX() + 8;
 			if (!arr[i]->getBitMap())
 				fprintf(stderr, "Failed to create brick!\n");
 		}
@@ -34,5 +34,6 @@ public:
 	}
 
 	~ArrayOfBricks();
+
 };
 

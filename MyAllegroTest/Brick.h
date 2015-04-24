@@ -8,25 +8,36 @@ class Brick
 {
 private:
 	const int sizeX = 50;
-	const int sizeY = 10;
+	const int sizeY = 15;
 	const int locationX;
 	const int locationY;  
 	bool destroyed;
+	bool super;
+	int superLevel;
 	ALLEGRO_BITMAP *brick = NULL;
 	
 	
 public:
-	Brick(int lx=0, int ly=0) :locationX(lx), locationY(ly)
+	Brick(int lx=0, int ly=0,bool s = false) :locationX(lx), locationY(ly)
 	{ 
 		destroyed = false;
-		brick = al_create_bitmap(sizeX,sizeY); 
+		super = s;
+		superLevel = 3;
+		if (super)
+		{
+			brick = al_create_bitmap(sizeX, sizeY);
+			al_set_target_bitmap(brick);
+			al_clear_to_color(al_map_rgb(0, 0, 255));
+		}
+		else
+		{
+			brick = al_create_bitmap(sizeX, sizeY);
 		al_set_target_bitmap(brick);
 		al_clear_to_color(al_map_rgb(125, 246, 231));
-		fprintf(stderr, "Brick Created!\n");
+		}
 		if (!brick)
 		{
 			fprintf(stderr, "Failed to create player bitmap!\n");
-			//quit game
 		}
 	};
 	~Brick()
@@ -38,6 +49,8 @@ public:
 	int getSizeX();
 	int getSizeY();
 	bool isDestroyed();
+	int getSuperLevel();
+
 	void destroy(bool result);
 
 	ALLEGRO_BITMAP *getBitMap();
