@@ -7,8 +7,8 @@
 class Brick
 {
 private:
-	const int sizeX = 50;
-	const int sizeY = 10;
+	const int sizeX = 60;
+	const int sizeY = 15;
 	const int locationX;
 	const int locationY;  
 	bool destroyed;

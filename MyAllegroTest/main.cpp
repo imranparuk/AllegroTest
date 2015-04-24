@@ -101,7 +101,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	ArrayOfBricks b1(5, 200, 100), b2(7, 150, 120), b3(9, 100, 140,true), b4(7, 150, 160), b5(5, 200, 180);
+	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150,true), b4(6, 100, 175), b5(4, 150, 200);
 	ArrayOfBricks level[5] = { b1, b2, b3, b4, b5 };
 
 	Ball ball(BALL_SIZE_RADIUS, 100, 100, 4 ,4);
