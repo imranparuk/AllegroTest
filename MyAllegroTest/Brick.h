@@ -12,7 +12,7 @@ private:
 	const int locationX;
 	const int locationY;  
 	bool destroyed;
-	ALLEGRO_BITMAP *brick = NULL;
+	ALLEGRO_BITMAP *brick = NULL;//ahmad
 	
 	
 public:
