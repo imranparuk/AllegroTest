@@ -193,7 +193,7 @@ int main(int argc, char **argv)
 				std::cout << "Reflection Const: " << reflectionConst << std::endl;
 				//dx = 4 dx = 4
 				/*ballVel = sqrt(pow(ball_dx, 2) + pow(ball_dy, 2));
-				ballAngle = atan(ball_dx / ball_dy);
+				ballAngle = atan(ball_dx / ball_dy);S
 				std::cout << "Angle: " << ballAngle << std::endl;
 
 				ballAngle *= reflectionConst;
