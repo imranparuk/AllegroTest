@@ -220,21 +220,26 @@ int main(int argc, char **argv)
 			}*/
 
 			for (int j = 0; j < 5; j++)
+			{
 				for (int i = 0; i < level[j].getNum(); i++)
 				{
-				bool check = level[j].arr[i]->detectCollision(ball_x, ball_y, BALL_SIZE_RADIUS);
-				if (check && !level[j].arr[i]->isDestroyed())
-				{
-					level[j].arr[i]->destroy(true);
-					ball_dx *= -1;
-					ball_dy *= -1;
-					al_set_target_bitmap(level[j].arr[i]->getBitMap());
-					al_clear_to_color(al_map_rgb(0, 0, 0));
-					al_set_target_bitmap(al_get_backbuffer(display));
-					al_flip_display();
-					std::cout << "Score is 1: " << ++score;
+					bool checkHor = level[j].arr[i]->detectCollisionHorizontal(ball_x, ball_y, ball_dx, ball_dy, BALL_SIZE_RADIUS);
+					//bool checkVer = level[j].arr[i]->detectCollisionVertical(ball_x, ball_y, ball_dx, ball_dy, BALL_SIZE_RADIUS);
+					bool checkVer = false;
+					if ((checkHor || checkVer) && !level[j].arr[i]->isDestroyed())
+					{
+						if (checkHor) ball_dx = -ball_dx;
+						if (checkVer) ball_dy = -ball_dy;
+						level[j].arr[i]->destroy(true);
+						al_set_target_bitmap(level[j].arr[i]->getBitMap());
+						al_clear_to_color(al_map_rgb(0, 0, 0));
+						al_set_target_bitmap(al_get_backbuffer(display));
+						al_flip_display();
+						std::cout << "Score is 1: " << ++score;
+					}
 				}
-				}
+			}
+
 			
 			if (ball_y < BALL_SIZE_RADIUS) {
 				ball_dy = -ball_dy;

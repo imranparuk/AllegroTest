@@ -42,6 +42,7 @@ public:
 
 	ALLEGRO_BITMAP *getBitMap();
 
-	bool detectCollision(const int ball_x, const int ball_y, const int BALL_SIZE);
+	bool detectCollisionVertical(const int ball_x, const int ball_y, const int ball_dx, const int ball_dy, const int BALL_SIZE_RADIUS);
+	bool detectCollisionHorizontal(const int ball_x, const int ball_y, const int ball_dx, const int ball_dy, const int BALL_SIZE_RADIUS);
 
 };
