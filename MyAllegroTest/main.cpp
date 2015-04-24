@@ -10,7 +10,7 @@
 
 using namespace std;
 
-const float FPS = 45;
+const float FPS = 25;
 const int SCREEN_W = 640;
 const int SCREEN_H = 480;
 
@@ -204,7 +204,7 @@ int main(int argc, char **argv)
 							{
 								al_set_target_bitmap(level[j].arr[i]->getBitMap());
 								al_clear_to_color(al_map_rgb(0, 100, 255));
-								
+								std::cout << "Vertical: " << checkVer << " , Horizontal: " << checkHor << std::endl;
 								if (checkVer) ball.reflectY();
 								if (checkHor) ball.reflectX();
 							}
@@ -213,6 +213,7 @@ int main(int argc, char **argv)
 							{
 								al_set_target_bitmap(level[j].arr[i]->getBitMap());
 								al_clear_to_color(al_map_rgb(125, 246, 231));
+								std::cout << "Vertical: " << checkVer << " , Horizontal: " << checkHor << std::endl;
 
 								if (checkVer) ball.reflectY();
 								if (checkHor) ball.reflectX();
@@ -222,6 +223,7 @@ int main(int argc, char **argv)
 							{
 								al_set_target_bitmap(level[j].arr[i]->getBitMap());
 								al_clear_to_color(al_map_rgb(0, 0, 0));
+								std::cout << "Vertical: " << checkVer << " , Horizontal: " << checkHor << std::endl;
 
 								if (checkVer) ball.reflectY();
 								if (checkHor) ball.reflectX();
