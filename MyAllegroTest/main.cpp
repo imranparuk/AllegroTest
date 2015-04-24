@@ -15,7 +15,7 @@ const float FPS = 45;
 const int SCREEN_W = 640;
 const int SCREEN_H = 480;
 
-const int BALL_SIZE_RADIUS = 8;
+const int BALL_SIZE_RADIUS = 7;
 
 const int PLAYER_SIZEX = 120;
 const int PLAYER_SIZEY = 10;
