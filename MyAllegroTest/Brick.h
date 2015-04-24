@@ -7,18 +7,21 @@
 class Brick
 {
 private:
-	const int sizeX;
-	const int sizeY;
+	const int sizeX = 50;
+	const int sizeY = 10;
 	const int locationX;
-	const int locationY;
+	const int locationY;  
+	bool destroyed;
 	ALLEGRO_BITMAP *brick = NULL;
 	
+	
 public:
-	Brick(int sx, int sy, int lx, int ly) :sizeX(sx), sizeY(sy), locationX(lx), locationY(ly)
+	Brick(int lx=0, int ly=0) :locationX(lx), locationY(ly)
 	{ 
-		brick = al_create_bitmap(sx,sy); 
+		destroyed = false;
+		brick = al_create_bitmap(sizeX,sizeY); 
 		al_set_target_bitmap(brick);
-		al_clear_to_color(al_map_rgb(125, 246,231));
+		al_clear_to_color(al_map_rgb(125, 246, 231));
 		fprintf(stderr, "Brick Created!\n");
 		if (!brick)
 		{
@@ -28,13 +31,17 @@ public:
 	};
 	~Brick()
 	{
-		al_destroy_bitmap(this->brick);
 	};
 
 	int getLocX();
 	int getLocY();
 	int getSizeX();
 	int getSizeY();
+	bool isDestroyed();
+	void destroy(bool result);
 
 	ALLEGRO_BITMAP *getBitMap();
+
+	bool detectCollision(const int ball_x, const int ball_y, const int BALL_SIZE);
+
 };

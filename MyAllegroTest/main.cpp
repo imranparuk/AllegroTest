@@ -97,16 +97,13 @@ int main(int argc, char **argv)
 	}
 
 	Brick brick(20, 10, 500, 300);
-	Brick brick1(20, 10, 0, 0);
-	Brick brick2(20, 10, 200, 300);
-
-
 	if (!brick.getBitMap())
 	{
 		fprintf(stderr, "Failed to create brick!\n");
 		al_destroy_display(display);
 		al_destroy_timer(timer);
 	}
+
 
 	al_set_target_bitmap(player);
 	al_clear_to_color(al_map_rgb(255, 0, 255));
@@ -123,7 +120,6 @@ int main(int argc, char **argv)
 		al_destroy_bitmap(player);
 		al_destroy_bitmap(ball);
 		al_destroy_display(display);
-		//brick.~Brick();
 		al_destroy_timer(timer);
 		return -1;
 	}
@@ -146,12 +142,12 @@ int main(int argc, char **argv)
 		al_wait_for_event(event_queue, &ev);
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
-			if (key[KEY_LEFT] /*&& player_x >= 4.0*/) {
-				player_x -= 6.0;
+			if (key[KEY_LEFT] && player_x >= 4.0) {
+				player_x -= 4.0;
 			}
 
-			if (key[KEY_RIGHT] /*&& player_x <= SCREEN_W - PLAYER_SIZEX - 4.0*/) {
-				player_x += 6.0;
+			if (key[KEY_RIGHT] && player_x <= SCREEN_W - PLAYER_SIZEX - 4.0) {
+				player_x += 4.0;
 			}
 
 			if (player_x > SCREEN_W )
@@ -206,10 +202,19 @@ int main(int argc, char **argv)
 
 			}
 
-			if (ball_y < BALL_SIZE_RADIUS) {
-				ball_dy = -ball_dy;
+			if (!(destroyed) && (ball_y + BALL_SIZE > brick.getLocY()) && (ball_y < brick.getLocY() + brick.getSizeY()) && (ball_x + BALL_SIZE > brick.getLocX()) && (ball_x < brick.getLocX() + brick.getSizeY()))
+			{
+				destroyed = true;
+				ball_dx *= -1;
+				ball_dy *= -1;
+				al_set_target_bitmap(brick.getBitMap());
+				al_clear_to_color(al_map_rgb(0, 0, 0));
+				al_set_target_bitmap(al_get_backbuffer(display));
+				al_flip_display();
+				std::cout << "Score is 1: " << ++score;
 			}
-
+			}
+	
 			ball_x += ball_dx;
 			ball_y += ball_dy;
 
@@ -266,12 +271,6 @@ int main(int argc, char **argv)
 			redraw = false;
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			al_draw_bitmap(brick.getBitMap(), brick.getLocX(), brick.getLocY(), 0);
-			
-			al_draw_bitmap(brick1.getBitMap(), brick1.getLocX(), brick1.getLocY(), 0);
-			al_draw_bitmap(brick2.getBitMap(), brick2.getLocX(), brick2.getLocY(), 0);
-			
-
-
 			al_draw_bitmap(player, player_x, player_y, 0);
 			//al_draw_bitmap(ball, ball_x, ball_y, 100);
 
@@ -283,7 +282,7 @@ int main(int argc, char **argv)
 
 	al_destroy_bitmap(player);
 	al_destroy_bitmap(ball);
-	//brick.~Brick();
+	//destroy brick bitmaps
 	al_destroy_timer(timer);
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
