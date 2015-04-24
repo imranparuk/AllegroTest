@@ -4,6 +4,7 @@
 #include <math.h>
 #include <iostream>
 #include"Brick.h"
+#include "ArrayOfBricks.h"
 
 using namespace std;
 
@@ -107,6 +108,9 @@ int main(int argc, char **argv)
 		al_destroy_timer(timer);
 	}
 
+	ArrayOfBricks b1(5, 200, 100), b2(7, 150, 120), b3(9, 100, 140), b4(7, 150, 160), b5(5, 200, 180);
+	ArrayOfBricks level[5] = { b1, b2, b3, b4, b5 };
+
 
 	al_set_target_bitmap(player);
 	al_clear_to_color(al_map_rgb(255, 0, 255));
@@ -202,7 +206,7 @@ int main(int argc, char **argv)
 		
 
 			}
-
+			/*
 			if (!(destroyed) && (ball_y + BALL_SIZE_RADIUS > brick.getLocY()) && (ball_y < brick.getLocY() + brick.getSizeY()) && (ball_x + BALL_SIZE_RADIUS > brick.getLocX()) && (ball_x < brick.getLocX() + brick.getSizeY()))
 			{
 				destroyed = true;
@@ -213,7 +217,24 @@ int main(int argc, char **argv)
 				al_set_target_bitmap(al_get_backbuffer(display));
 				al_flip_display();
 				std::cout << "Score is 1: " << ++score;
-			}
+			}*/
+
+			for (int j = 0; j < 5; j++)
+				for (int i = 0; i < level[j].getNum(); i++)
+				{
+				bool check = level[j].arr[i]->detectCollision(ball_x, ball_y, BALL_SIZE_RADIUS);
+				if (check && !level[j].arr[i]->isDestroyed())
+				{
+					level[j].arr[i]->destroy(true);
+					ball_dx *= -1;
+					ball_dy *= -1;
+					al_set_target_bitmap(level[j].arr[i]->getBitMap());
+					al_clear_to_color(al_map_rgb(0, 0, 0));
+					al_set_target_bitmap(al_get_backbuffer(display));
+					al_flip_display();
+					std::cout << "Score is 1: " << ++score;
+				}
+				}
 			
 			if (ball_y < BALL_SIZE_RADIUS) {
 				ball_dy = -ball_dy;
@@ -276,6 +297,9 @@ int main(int argc, char **argv)
 			al_draw_bitmap(brick.getBitMap(), brick.getLocX(), brick.getLocY(), 0);
 			al_draw_bitmap(player, player_x, player_y, 0);
 			//al_draw_bitmap(ball, ball_x, ball_y, 100);
+			for (int j = 0; j < 5; j++)
+				for (int i = 0; i < level[j].getNum(); i++)
+					al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
 
 			al_draw_filled_circle(ball_x, ball_y, BALL_SIZE_RADIUS, al_map_rgb(50, 50, 50));
 
