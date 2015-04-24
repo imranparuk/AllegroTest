@@ -3,7 +3,10 @@
 #include <allegro5/allegro_primitives.h>
 #include <math.h>
 #include <iostream>
-#include "Brick.h"
+#include"Brick.h"
+
+using namespace std;
+
 
 const float FPS = 60;
 const int SCREEN_W = 640;
