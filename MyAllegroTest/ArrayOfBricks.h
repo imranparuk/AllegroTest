@@ -11,7 +11,6 @@ class ArrayOfBricks
 public:
 	Brick *arr[32];
 
-
 	ArrayOfBricks(int n, int sX, int sY) :startX(sX), startY(sY),num(n)
 	{
 		int j = sX;
