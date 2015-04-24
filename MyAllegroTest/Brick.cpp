@@ -23,7 +23,7 @@ int Brick::getSizeY()
 {
 	return sizeY;
 };
-
+//#IMAMADIR
 bool Brick::detectCollisionVertical(const int ball_x, const int ball_y, const int ball_dx, const int ball_dy, const int BALL_SIZE_RADIUS)
 {
    int temp_dy = abs(ball_dy);
