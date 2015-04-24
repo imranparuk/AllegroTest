@@ -10,7 +10,7 @@ Ball::Ball(float rad = 0, int sx = 0, int sy = 0, float dx = 0, float dy = 0)
 
 	ball = al_create_bitmap(radius, radius);
 	al_set_target_bitmap(ball);
-	al_clear_to_color(al_map_rgb(255, 0, 0));
+	al_clear_to_color(al_map_rgb(255, 233, 0));
 
 	if (!ball)
 	{
