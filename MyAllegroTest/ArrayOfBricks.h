@@ -29,6 +29,11 @@ public:
 		}
 	};
 
+	int getNum()
+	{
+		return num;
+	}
+
 	~ArrayOfBricks();
 };
 

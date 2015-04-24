@@ -26,7 +26,7 @@ int Brick::getSizeY()
 
 bool Brick::detectCollision(const int ball_x, const int ball_y, const int BALL_SIZE)
 {
-	if ((ball_y + BALL_SIZE > locationY) && (ball_y < locationY + sizeY) && (ball_x + BALL_SIZE > locationX) && (ball_x < locationX + sizeX))
+	if ((ball_y + BALL_SIZE > locationY) && (ball_y - BALL_SIZE < locationY + sizeY) && (ball_x + BALL_SIZE > locationX) && (ball_x - BALL_SIZE< locationX + sizeX))
 		return true;
 	else
 		return false;

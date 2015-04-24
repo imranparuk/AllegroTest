@@ -86,15 +86,8 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	Brick brick(500, 300);
-	if (!brick.getBitMap())
-	{
-		fprintf(stderr, "Failed to create brick!\n");
-		al_destroy_display(display);
-		al_destroy_timer(timer);
-	} 
-
-	ArrayOfBricks b(10, 100, 100);
+	ArrayOfBricks b1(5, 200, 100),b2(7, 150, 120),b3(9,100,140),b4(7,150,160),b5(5,200,180);
+	ArrayOfBricks level[5] = { b1, b2,b3,b4,b5};
 
 
 	al_set_target_bitmap(player);
@@ -111,7 +104,6 @@ int main(int argc, char **argv)
 		al_destroy_bitmap(player);
 		al_destroy_bitmap(ball);
 		al_destroy_display(display);
-		brick.~Brick();
 		al_destroy_timer(timer);
 		return -1;
 	}
@@ -135,11 +127,11 @@ int main(int argc, char **argv)
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
 			if (key[KEY_LEFT] && player_x >= 4.0) {
-				player_x -= 4.0;
+				player_x -= 7.0;
 			}
 
 			if (key[KEY_RIGHT] && player_x <= SCREEN_W - PLAYER_SIZEX - 4.0) {
-				player_x += 4.0;
+				player_x += 7.0;
 			}
 			if (ball_y > SCREEN_H - BALL_SIZE)
 			{
@@ -159,27 +151,16 @@ int main(int argc, char **argv)
 				ball_dy = -ball_dy;
 			}
 
-			if (!(destroyed) && (ball_y + BALL_SIZE > brick.getLocY()) && (ball_y < brick.getLocY() + brick.getSizeY()) && (ball_x + BALL_SIZE > brick.getLocX()) && (ball_x < brick.getLocX() + brick.getSizeY()))
+			for (int j = 0; j < 5;j++)
+			for (int i = 0; i < level[j].getNum(); i++)
 			{
-				destroyed = true;
-				ball_dx *= -1;
-				ball_dy *= -1;
-				al_set_target_bitmap(brick.getBitMap());
-				al_clear_to_color(al_map_rgb(0, 0, 0));
-				al_set_target_bitmap(al_get_backbuffer(display));
-				al_flip_display();
-				std::cout << "Score is 1: " << ++score;
-			}
-
-			for (int i = 0; i < 10; i++)
-			{
-				bool check = b.arr[i]->detectCollision(ball_x,ball_y,BALL_SIZE);
-				if (check && !b.arr[i]->isDestroyed())
+				bool check = level[j].arr[i]->detectCollision(ball_x, ball_y, BALL_SIZE);
+				if (check && !level[j].arr[i]->isDestroyed())
 				{
-					b.arr[i]->destroy(true);
+					level[j].arr[i]->destroy(true);
 					ball_dx *= -1;
 					ball_dy *= -1;
-					al_set_target_bitmap(b.arr[i]->getBitMap());
+					al_set_target_bitmap(level[j].arr[i]->getBitMap());
 					al_clear_to_color(al_map_rgb(0, 0, 0));
 					al_set_target_bitmap(al_get_backbuffer(display));
 					al_flip_display();
@@ -242,9 +223,9 @@ int main(int argc, char **argv)
 			
 			redraw = false;
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-			al_draw_bitmap(brick.getBitMap(), brick.getLocX(), brick.getLocY(), 0);
-			for (int i = 0; i < 10; i++)
-				al_draw_bitmap(b.arr[i]->getBitMap(),b.arr[i]->getLocX(),b.arr[i]->getLocY(),0);
+			for (int j = 0; j < 5; j++)
+				for (int i = 0; i < level[j].getNum(); i++)
+					al_draw_bitmap(level[j].arr[i]->getBitMap(),level[j].arr[i]->getLocX(),level[j].arr[i]->getLocY(),0);
 			al_draw_bitmap(player, player_x, player_y, 0);
 			al_draw_bitmap(ball, ball_x, ball_y, 100);
 			al_flip_display();
@@ -253,7 +234,7 @@ int main(int argc, char **argv)
 
 	al_destroy_bitmap(player);
 	al_destroy_bitmap(ball);
-	//brick.~Brick();
+	//destroy brick bitmaps
 	al_destroy_timer(timer);
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
