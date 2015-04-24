@@ -219,7 +219,22 @@ int main(int argc, char **argv)
 				std::cout << "Score is 1: " << ++score;
 			}*/
 
-
+			for (int j = 0; j < 5; j++)
+				for (int i = 0; i < level[j].getNum(); i++)
+				{
+				bool check = level[j].arr[i]->detectCollision(ball_x, ball_y, BALL_SIZE_RADIUS);
+				if (check && !level[j].arr[i]->isDestroyed())
+				{
+					level[j].arr[i]->destroy(true);
+					ball_dx *= -1;
+					ball_dy *= -1;
+					al_set_target_bitmap(level[j].arr[i]->getBitMap());
+					al_clear_to_color(al_map_rgb(0, 0, 0));
+					al_set_target_bitmap(al_get_backbuffer(display));
+					al_flip_display();
+					std::cout << "Score is 1: " << ++score;
+				}
+				}
 			
 	
 			ball_x += ball_dx;
