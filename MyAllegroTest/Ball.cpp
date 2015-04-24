@@ -88,3 +88,8 @@ void Ball::restart(int cx, int cy, float dx, float dy)
 	deltaX = dx;
 	deltaY = dy;
 }
+
+void Ball::drawCircle(int r, int g, int b)
+{
+	al_draw_filled_circle(getCenter_X(), getCenter_Y(), getRadius(), al_map_rgb(r, g, b));
+}

@@ -39,17 +39,12 @@ int main(int argc, char **argv)
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
-	//ALLEGRO_BITMAP *ball = NULL;
 	ALLEGRO_BITMAP *player = NULL;
 
 	float player_x = SCREEN_W / 2.0 - PLAYER_SIZEX / 2.0;
 	float player_y = SCREEN_H-70;
 	float player_dx = 0; float player_dy = 0;
-
-	/*float ball_x = 0;
-	float ball_y = 0;
-	float ball_dx = 4.0, ball_dy = 4.0;*/
-
+	
 	bool key[4] = { false, false, false, false };
 	bool redraw = true;
 	bool doexit = false;
@@ -84,13 +79,6 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	/*ball = al_create_bitmap(BALL_SIZE_RADIUS, BALL_SIZE_RADIUS);
-	if (!ball) {
-		fprintf(stderr, "failed to create bouncer bitmap!\n");
-		al_destroy_display(display);
-		al_destroy_timer(timer);
-		return -1;
-	}*/
 
 	player = al_create_bitmap(PLAYER_SIZEX, PLAYER_SIZEY);
 	if (!player)
@@ -163,8 +151,7 @@ int main(int argc, char **argv)
 			{
 				player_x = SCREEN_W;
 			}
-
-			//
+			
 			if (ball.getCenter_Y() > SCREEN_H - BALL_SIZE_RADIUS)
 			{
 				std::cout << "Lives Left: " << --lives << std::endl;
@@ -255,7 +242,7 @@ int main(int argc, char **argv)
 							al_clear_to_color(al_map_rgb(0, 0, 0));
 							al_set_target_bitmap(al_get_backbuffer(display));
 							al_flip_display();
-							std::cout << "Score is 1: " << ++score;
+							std::cout << "Score is : " << ++score << std::endl;
 						}
 					}
 					/*
@@ -339,8 +326,7 @@ int main(int argc, char **argv)
 					al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
 
 
-			al_draw_filled_circle(ball.getCenter_X(), ball.getCenter_Y(), ball.getRadius(), al_map_rgb(255, 0, 0));
-
+			ball.drawCircle(255, 0, 0);
 			al_flip_display();
 		}
 		

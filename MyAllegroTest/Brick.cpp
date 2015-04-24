@@ -35,14 +35,14 @@ bool Brick::detectCollisionVertical(const int ball_x, const int ball_y, const in
 {
    int temp_dy = abs(ball_dy);
 
-   if ((ball_y + BALL_SIZE_RADIUS >= locationY) && (ball_y + BALL_SIZE_RADIUS <= locationY + temp_dy) && (ball_x /*+ BALL_SIZE_RADIUS*/ > locationX) && (ball_x /*- BALL_SIZE_RADIUS*/ < locationX + sizeX))
+   if ((ball_y + BALL_SIZE_RADIUS >= locationY) && (ball_y + BALL_SIZE_RADIUS <= locationY + temp_dy) && (ball_x + BALL_SIZE_RADIUS >= locationX) && (ball_x - BALL_SIZE_RADIUS <= locationX + sizeX))
    {
 	   if (super)
 		   superLevel--;
 
 		return true;
    }
-   else if ((ball_y - BALL_SIZE_RADIUS <= locationY + sizeY) && (ball_y - BALL_SIZE_RADIUS >= locationY + sizeY - temp_dy) && (ball_x /*+ BALL_SIZE_RADIUS*/ > locationX) && (ball_x /*- BALL_SIZE_RADIUS*/ < locationX + sizeX))
+   else if ((ball_y - BALL_SIZE_RADIUS <= locationY + sizeY) && (ball_y - BALL_SIZE_RADIUS >= locationY + sizeY - temp_dy) && (ball_x + BALL_SIZE_RADIUS >= locationX) && (ball_x - BALL_SIZE_RADIUS <= locationX + sizeX))
    {
 	   if (super)
 		   superLevel--;
@@ -58,14 +58,14 @@ bool Brick::detectCollisionHorizontal(const int ball_x, const int ball_y, const 
 	int temp_dx = abs(ball_dx);
 	int temp_dy = abs(ball_dy);
 
-	if ((ball_x + BALL_SIZE_RADIUS >= locationX) && (ball_x + BALL_SIZE_RADIUS <= locationX + temp_dx) && (ball_y + BALL_SIZE_RADIUS > locationY + temp_dy) && (ball_y - BALL_SIZE_RADIUS < locationY + sizeY))
+	if ((ball_x + BALL_SIZE_RADIUS >= locationX) && (ball_x + BALL_SIZE_RADIUS <= locationX + temp_dx) && (ball_y >= locationY) && (ball_y  <= locationY + sizeY))
 	{
 		if (super)
 			superLevel--;
 
 		return true;
 	}
-	else if ((ball_x - BALL_SIZE_RADIUS <= locationX + sizeX) && (ball_x + BALL_SIZE_RADIUS >= locationX + sizeX - temp_dx) && (ball_y + BALL_SIZE_RADIUS > locationY + temp_dy) && (ball_y - BALL_SIZE_RADIUS < locationY + sizeY))
+	else if ((ball_x - BALL_SIZE_RADIUS <= locationX + sizeX) && (ball_x + BALL_SIZE_RADIUS >= locationX + sizeX - temp_dx) && (ball_y >= locationY) && (ball_y <= locationY + sizeY))
 	{
 		if (super)
 			superLevel--;
@@ -77,32 +77,6 @@ bool Brick::detectCollisionHorizontal(const int ball_x, const int ball_y, const 
 };
 
 
-/*bool Brick::detectCollisionVertical(const int ball_x, const int ball_y, const int ball_dx, const int ball_dy, const int BALL_SIZE_RADIUS)
-{
-   int temp_dy = abs(ball_dy);
-
-   if ((ball_y + BALL_SIZE_RADIUS >= locationY) && (ball_y + BALL_SIZE_RADIUS <= locationY + temp_dy) && (ball_x > locationX) && (ball_x < locationX + sizeX))
-	  return true;
-   else if ((ball_y - BALL_SIZE_RADIUS <= locationY + sizeY) && (ball_y - BALL_SIZE_RADIUS >= locationY + sizeY - temp_dy) && (ball_x  > locationX) && (ball_x  < locationX + sizeX))
-	   return true;
-   else
-	   return false;
-
-};
-
-bool Brick::detectCollisionHorizontal(const int ball_x, const int ball_y, const int ball_dx, const int ball_dy, const int BALL_SIZE_RADIUS)
-{
-	int temp_dx = abs(ball_dx);
-	int temp_dy = abs(ball_dy);
-
-	if ((ball_x + BALL_SIZE_RADIUS >= locationX) && (ball_x + BALL_SIZE_RADIUS <= locationX + temp_dx) && (ball_y + BALL_SIZE_RADIUS >= locationY) && (ball_y - BALL_SIZE_RADIUS <= locationY + sizeY))
-		return true;
-	else if ((ball_x - BALL_SIZE_RADIUS <= locationX + sizeX) && (ball_x + BALL_SIZE_RADIUS >= locationX + sizeX - temp_dx) && (ball_y + BALL_SIZE_RADIUS >= locationY) && (ball_y - BALL_SIZE_RADIUS <= locationY + sizeY))
-		return true;
-	else
-		return false;
-
-}; */
 bool Brick::isDestroyed()
 {
 	return destroyed;

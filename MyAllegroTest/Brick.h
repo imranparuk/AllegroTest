@@ -14,7 +14,7 @@ private:
 	bool destroyed;
 	bool super;
 	int superLevel;
-	ALLEGRO_BITMAP *brick = NULL;//ahmad
+	ALLEGRO_BITMAP *brick = NULL;
 	
 	
 public:

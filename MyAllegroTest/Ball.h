@@ -32,6 +32,7 @@ public:
 	void reflectY();
 	void reflectX();
 	void restart(int, int, float, float);
+	void drawCircle(int, int, int);
 
 	float getRadius();
 	ALLEGRO_BITMAP *getBitMap();
