@@ -8,13 +8,13 @@ class Brick
 {
 private:
 	const int sizeX = 50;
-	const int sizeY = 10;
+	const int sizeY = 15;
 	const int locationX;
 	const int locationY;  
 	bool destroyed;
 	bool super;
 	int superLevel;
-	ALLEGRO_BITMAP *brick = NULL;//ahmad
+	ALLEGRO_BITMAP *brick = NULL;
 	
 	
 public:
