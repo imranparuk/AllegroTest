@@ -3,8 +3,10 @@
 #include <allegro5/allegro_primitives.h>
 #include <math.h>
 #include <iostream>
+
 #include "Brick.h"
 #include "ArrayOfBricks.h"
+#include "Ball.h"
 
 using namespace std;
 
@@ -37,16 +39,16 @@ int main(int argc, char **argv)
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
-	ALLEGRO_BITMAP *ball = NULL;
+	//ALLEGRO_BITMAP *ball = NULL;
 	ALLEGRO_BITMAP *player = NULL;
 
 	float player_x = SCREEN_W / 2.0 - PLAYER_SIZEX / 2.0;
 	float player_y = SCREEN_H-70;
 	float player_dx = 0; float player_dy = 0;
 
-	float ball_x = 100;
-	float ball_y = 10;
-	float ball_dx = 4.0, ball_dy = 4.0;
+	/*float ball_x = 0;
+	float ball_y = 0;
+	float ball_dx = 4.0, ball_dy = 4.0;*/
 
 	bool key[4] = { false, false, false, false };
 	bool redraw = true;
@@ -82,13 +84,13 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	ball = al_create_bitmap(BALL_SIZE_RADIUS, BALL_SIZE_RADIUS);
+	/*ball = al_create_bitmap(BALL_SIZE_RADIUS, BALL_SIZE_RADIUS);
 	if (!ball) {
 		fprintf(stderr, "failed to create bouncer bitmap!\n");
 		al_destroy_display(display);
 		al_destroy_timer(timer);
 		return -1;
-	}
+	}*/
 
 	player = al_create_bitmap(PLAYER_SIZEX, PLAYER_SIZEY);
 	if (!player)
@@ -101,6 +103,8 @@ int main(int argc, char **argv)
 
 	ArrayOfBricks b1(5, 200, 100), b2(7, 150, 120), b3(9, 100, 140,true), b4(7, 150, 160), b5(5, 200, 180);
 	ArrayOfBricks level[5] = { b1, b2, b3, b4, b5 };
+
+	Ball ball(BALL_SIZE_RADIUS, 100, 100, 4 ,4);
 
 
 	al_set_target_bitmap(player);
@@ -116,7 +120,8 @@ int main(int argc, char **argv)
 	if (!event_queue) {
 		fprintf(stderr, "failed to create event_queue!\n");
 		al_destroy_bitmap(player);
-		al_destroy_bitmap(ball);
+		//al_destroy_bitmap(ball);
+
 		al_destroy_display(display);
 		al_destroy_timer(timer);
 		return -1;
@@ -136,6 +141,7 @@ int main(int argc, char **argv)
 
 	while (!doexit)
 	{
+		
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 
@@ -158,20 +164,18 @@ int main(int argc, char **argv)
 				player_x = SCREEN_W;
 			}
 
-			if (ball_y > SCREEN_H - BALL_SIZE_RADIUS)
+			//
+			if (ball.getCenter_Y() > SCREEN_H - BALL_SIZE_RADIUS)
 			{
 				std::cout << "Lives Left: " << --lives << std::endl;
-				ball_x = 100;
-				ball_y = 100;
-				ball_dx = 4;
-				ball_dy = -4;
+				ball.restart(100, 100, 4, -4);
 			}
 
-			if ((ball_x < BALL_SIZE_RADIUS || ball_x > SCREEN_W - BALL_SIZE_RADIUS) /*|| ((ball_y + BALL_SIZE_RADIUS > player_y) && ((ball_x + BALL_SIZE_RADIUS < player_x) || (ball_x - BALL_SIZE_RADIUS > player_x + PLAYER_SIZEX)))*/) {
-				ball_dx = -ball_dx;
+			if ((ball.getCenter_X() < BALL_SIZE_RADIUS || ball.getCenter_X() > SCREEN_W - BALL_SIZE_RADIUS) /*|| ((ball_y + BALL_SIZE_RADIUS > player_y) && ((ball_x + BALL_SIZE_RADIUS < player_x) || (ball_x - BALL_SIZE_RADIUS > player_x + PLAYER_SIZEX)))*/) {
+				ball.reflectX();
 			}
 
-			if ((ball_y + BALL_SIZE_RADIUS >= player_y) && (ball_y + BALL_SIZE_RADIUS <= player_y + ball_dy) && (ball_x + BALL_SIZE_RADIUS > player_x) && (ball_x - BALL_SIZE_RADIUS < player_x + PLAYER_SIZEX))
+			if ((ball.getCenter_Y() + BALL_SIZE_RADIUS >= player_y) && (ball.getCenter_Y() + BALL_SIZE_RADIUS <= player_y + ball.getDelta_Y()) && (ball.getCenter_X() + BALL_SIZE_RADIUS > player_x) && (ball.getCenter_X() - BALL_SIZE_RADIUS < player_x + PLAYER_SIZEX))
 			{
 				/*awayFromCent = abs(player_x+PLAYER_CENT - ball_x);
 				reflectionConst = (awayFromCent / (PLAYER_CENT));
@@ -188,7 +192,7 @@ int main(int argc, char **argv)
 				/*ballAngle = atan(ball_dy / ball_dx);//**(180 / PI);
 				ballVel = sqrt(pow(ball_dx, 2) + pow(ball_dy, 2));
 				std::cout << "Angle: " << ballAngle << std::endl;*/
-				ball_dy  = -ball_dy;
+				ball.reflectY();
 				//ballAngle = atan(ball_dy / ball_dx)*(180 / PI);
 				//std::cout << "New Angle: " << ballAngle << std::endl;
 
@@ -202,8 +206,8 @@ int main(int argc, char **argv)
 			{
 				for (int i = 0; i < level[j].getNum(); i++)
 				{
-					bool checkVer = level[j].arr[i]->detectCollisionVertical(ball_x, ball_y, ball_dx, ball_dy, BALL_SIZE_RADIUS);
-					bool checkHor = level[j].arr[i]->detectCollisionHorizontal(ball_x, ball_y, ball_dx, ball_dy, BALL_SIZE_RADIUS);
+					bool checkVer = level[j].arr[i]->detectCollisionVertical(ball.getCenter_X(), ball.getCenter_Y(), ball.getDelta_X(), ball.getDelta_Y(), BALL_SIZE_RADIUS);
+					bool checkHor = level[j].arr[i]->detectCollisionHorizontal(ball.getCenter_X(), ball.getCenter_Y(), ball.getDelta_X(), ball.getDelta_Y(), BALL_SIZE_RADIUS);
 
 					if (level[j].arr[i]->getSuperLevel() != 3)//this means the collsion was against a super brick
 					{
@@ -214,8 +218,8 @@ int main(int argc, char **argv)
 								al_set_target_bitmap(level[j].arr[i]->getBitMap());
 								al_clear_to_color(al_map_rgb(0, 100, 255));
 
-								if (checkVer) ball_dy = -ball_dy;
-								if (checkHor) ball_dx = -ball_dx;
+								if (checkVer) ball.reflectY();
+								if (checkHor) ball.reflectX();
 							}
 
 							if (level[j].arr[i]->getSuperLevel() == 1)
@@ -223,8 +227,8 @@ int main(int argc, char **argv)
 								al_set_target_bitmap(level[j].arr[i]->getBitMap());
 								al_clear_to_color(al_map_rgb(125, 246, 231));
 
-								if (checkVer) ball_dy = -ball_dy;
-								if (checkHor) ball_dx = -ball_dx;
+								if (checkVer) ball.reflectY();
+								if (checkHor) ball.reflectX();
 							}
 
 							if (level[j].arr[i]->getSuperLevel() == 0)
@@ -232,8 +236,8 @@ int main(int argc, char **argv)
 								al_set_target_bitmap(level[j].arr[i]->getBitMap());
 								al_clear_to_color(al_map_rgb(0, 0, 0));
 
-								if (checkVer) ball_dy = -ball_dy;
-								if (checkHor) ball_dx = -ball_dx;
+								if (checkVer) ball.reflectY();
+								if (checkHor) ball.reflectX();
 								level[j].arr[i]->destroy(true);
 							}
 							al_set_target_bitmap(al_get_backbuffer(display));
@@ -244,8 +248,8 @@ int main(int argc, char **argv)
 					{
 						if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed())
 						{
-							if (checkVer) ball_dy = -ball_dy;
-							if (checkHor) ball_dx = -ball_dx;
+							if (checkVer) ball.reflectY();
+							if (checkHor) ball.reflectX();
 							level[j].arr[i]->destroy(true);
 							al_set_target_bitmap(level[j].arr[i]->getBitMap());
 							al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -257,25 +261,24 @@ int main(int argc, char **argv)
 					/*
 					if ((checkVer||checkHor) && !level[j].arr[i]->isDestroyed())
 					{
-						//if (checkHor) ball_dx = -ball_dx;
-						if (checkVer) ball_dy = -ball_dy;
-						if (checkHor) ball_dx = -ball_dx;
+						if (checkVer) ball.reflectY();
+						if (checkHor) ball.reflectX();
 						level[j].arr[i]->destroy(true);
 						al_set_target_bitmap(level[j].arr[i]->getBitMap());
 						al_clear_to_color(al_map_rgb(0, 0, 0));
 						al_set_target_bitmap(al_get_backbuffer(display));
 						al_flip_display();
-						std::cout << "Score is 1: " << ++score;
+						std::cout << "Score is: " << ++score << std::endl;
 					}*/
 				}
 			}
 
 			
-			if (ball_y < BALL_SIZE_RADIUS) {
-				ball_dy = -ball_dy;
+			if (ball.getCenter_Y() < BALL_SIZE_RADIUS) {
+				ball.reflectY();
 			}
-			ball_x += ball_dx;
-			ball_y += ball_dy;
+
+			ball.makeMove();
 
 			redraw = true;
 		}
@@ -330,19 +333,21 @@ int main(int argc, char **argv)
 			redraw = false;
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			al_draw_bitmap(player, player_x, player_y, 0);
-			//al_draw_bitmap(ball, ball_x, ball_y, 100);
+
 			for (int j = 0; j < 5; j++)
 				for (int i = 0; i < level[j].getNum(); i++)
 					al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
 
-			al_draw_filled_circle(ball_x, ball_y, BALL_SIZE_RADIUS, al_map_rgb(50, 50, 50));
+
+			al_draw_filled_circle(ball.getCenter_X(), ball.getCenter_Y(), ball.getRadius(), al_map_rgb(255, 0, 0));
 
 			al_flip_display();
 		}
+		
 	}
 
 	al_destroy_bitmap(player);
-	al_destroy_bitmap(ball);
+	//al_destroy_bitmap(ball);
 	//destroy brick bitmaps
 	al_destroy_timer(timer);
 	al_destroy_display(display);
