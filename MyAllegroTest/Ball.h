@@ -2,11 +2,10 @@
 class Ball
 {
 private:
-	int sizeX;
-	int sizeY;
+	int radius;
 
-	int locationX;
-	int locationY;
+	int CenterX;
+	int CenterY;
 
 	int deltaX;
 	int deltaY;
