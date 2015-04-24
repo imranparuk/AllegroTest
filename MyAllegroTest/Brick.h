@@ -23,9 +23,18 @@ public:
 		destroyed = false;
 		super = s;
 		superLevel = 3;
-		brick = al_create_bitmap(sizeX,sizeY); 
-		al_set_target_bitmap(brick);
-		al_clear_to_color(al_map_rgb(125, 246, 231));
+		if (super)
+		{
+			brick = al_create_bitmap(sizeX, sizeY);
+			al_set_target_bitmap(brick);
+			al_clear_to_color(al_map_rgb(0, 0, 255));
+		}
+		else
+		{
+			brick = al_create_bitmap(sizeX, sizeY);
+			al_set_target_bitmap(brick);
+			al_clear_to_color(al_map_rgb(125, 246, 231));
+		}
 		if (!brick)
 		{
 			fprintf(stderr, "Failed to create player bitmap!\n");

@@ -212,7 +212,7 @@ int main(int argc, char **argv)
 							if (level[j].arr[i]->getSuperLevel() == 2)
 							{
 								al_set_target_bitmap(level[j].arr[i]->getBitMap());
-								al_clear_to_color(al_map_rgb(0, 255, 0));
+								al_clear_to_color(al_map_rgb(0, 100, 255));
 
 								if (checkVer) ball_dy = -ball_dy;
 								if (checkHor) ball_dx = -ball_dx;
