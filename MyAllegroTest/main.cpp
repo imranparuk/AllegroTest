@@ -99,7 +99,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	Brick brick(20, 10, 500, 300);
+	Brick brick(500, 300);
 	if (!brick.getBitMap())
 	{
 		fprintf(stderr, "Failed to create brick!\n");
@@ -199,13 +199,11 @@ int main(int argc, char **argv)
 
 				//ball_dx = ballVel*cos(ballAngle);
 			    //ball_dy = ballVel*sin(-ballAngle);c
-			
-
 		
 
 			}
 
-			if (!(destroyed) && (ball_y + BALL_SIZE > brick.getLocY()) && (ball_y < brick.getLocY() + brick.getSizeY()) && (ball_x + BALL_SIZE > brick.getLocX()) && (ball_x < brick.getLocX() + brick.getSizeY()))
+			if (!(destroyed) && (ball_y + BALL_SIZE_RADIUS > brick.getLocY()) && (ball_y < brick.getLocY() + brick.getSizeY()) && (ball_x + BALL_SIZE_RADIUS > brick.getLocX()) && (ball_x < brick.getLocX() + brick.getSizeY()))
 			{
 				destroyed = true;
 				ball_dx *= -1;
@@ -216,7 +214,7 @@ int main(int argc, char **argv)
 				al_flip_display();
 				std::cout << "Score is 1: " << ++score;
 			}
-			}
+			
 	
 			ball_x += ball_dx;
 			ball_y += ball_dy;
