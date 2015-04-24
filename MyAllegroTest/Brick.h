@@ -12,13 +12,17 @@ private:
 	const int locationX;
 	const int locationY;  
 	bool destroyed;
+	bool super;
+	int superLevel;
 	ALLEGRO_BITMAP *brick = NULL;//ahmad
 	
 	
 public:
-	Brick(int lx=0, int ly=0) :locationX(lx), locationY(ly)
+	Brick(int lx=0, int ly=0,bool s = false) :locationX(lx), locationY(ly)
 	{ 
 		destroyed = false;
+		super = s;
+		superLevel = 1;
 		brick = al_create_bitmap(sizeX,sizeY); 
 		al_set_target_bitmap(brick);
 		al_clear_to_color(al_map_rgb(125, 246, 231));
