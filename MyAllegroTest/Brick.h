@@ -22,11 +22,10 @@ public:
 	{ 
 		destroyed = false;
 		super = s;
-		superLevel = 1;
+		superLevel = 3;
 		brick = al_create_bitmap(sizeX,sizeY); 
 		al_set_target_bitmap(brick);
 		al_clear_to_color(al_map_rgb(125, 246, 231));
-		fprintf(stderr, "Brick Created!\n");
 		if (!brick)
 		{
 			fprintf(stderr, "Failed to create player bitmap!\n");
@@ -42,6 +41,8 @@ public:
 	int getSizeX();
 	int getSizeY();
 	bool isDestroyed();
+	int getSuperLevel();
+
 	void destroy(bool result);
 
 	ALLEGRO_BITMAP *getBitMap();

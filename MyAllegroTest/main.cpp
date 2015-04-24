@@ -3,11 +3,10 @@
 #include <allegro5/allegro_primitives.h>
 #include <math.h>
 #include <iostream>
-#include"Brick.h"
+#include "Brick.h"
 #include "ArrayOfBricks.h"
 
 using namespace std;
-
 
 const float FPS = 45;
 const int SCREEN_W = 640;
@@ -100,7 +99,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	ArrayOfBricks b1(5, 200, 100), b2(7, 150, 120), b3(9, 100, 140), b4(7, 150, 160), b5(5, 200, 180);
+	ArrayOfBricks b1(5, 200, 100), b2(7, 150, 120), b3(9, 100, 140,true), b4(7, 150, 160), b5(5, 200, 180);
 	ArrayOfBricks level[5] = { b1, b2, b3, b4, b5 };
 
 
@@ -206,6 +205,56 @@ int main(int argc, char **argv)
 					bool checkVer = level[j].arr[i]->detectCollisionVertical(ball_x, ball_y, ball_dx, ball_dy, BALL_SIZE_RADIUS);
 					bool checkHor = level[j].arr[i]->detectCollisionHorizontal(ball_x, ball_y, ball_dx, ball_dy, BALL_SIZE_RADIUS);
 
+					if (level[j].arr[i]->getSuperLevel() != 3)//this means the collsion was against a super brick
+					{
+						if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed())
+						{
+							if (level[j].arr[i]->getSuperLevel() == 2)
+							{
+								al_set_target_bitmap(level[j].arr[i]->getBitMap());
+								al_clear_to_color(al_map_rgb(0, 255, 0));
+
+								if (checkVer) ball_dy = -ball_dy;
+								if (checkHor) ball_dx = -ball_dx;
+							}
+
+							if (level[j].arr[i]->getSuperLevel() == 1)
+							{
+								al_set_target_bitmap(level[j].arr[i]->getBitMap());
+								al_clear_to_color(al_map_rgb(125, 246, 231));
+
+								if (checkVer) ball_dy = -ball_dy;
+								if (checkHor) ball_dx = -ball_dx;
+							}
+
+							if (level[j].arr[i]->getSuperLevel() == 0)
+							{
+								al_set_target_bitmap(level[j].arr[i]->getBitMap());
+								al_clear_to_color(al_map_rgb(0, 0, 0));
+
+								if (checkVer) ball_dy = -ball_dy;
+								if (checkHor) ball_dx = -ball_dx;
+								level[j].arr[i]->destroy(true);
+							}
+							al_set_target_bitmap(al_get_backbuffer(display));
+							al_flip_display();
+						}
+					}
+					else
+					{
+						if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed())
+						{
+							if (checkVer) ball_dy = -ball_dy;
+							if (checkHor) ball_dx = -ball_dx;
+							level[j].arr[i]->destroy(true);
+							al_set_target_bitmap(level[j].arr[i]->getBitMap());
+							al_clear_to_color(al_map_rgb(0, 0, 0));
+							al_set_target_bitmap(al_get_backbuffer(display));
+							al_flip_display();
+							std::cout << "Score is 1: " << ++score;
+						}
+					}
+					/*
 					if ((checkVer||checkHor) && !level[j].arr[i]->isDestroyed())
 					{
 						//if (checkHor) ball_dx = -ball_dx;
@@ -217,7 +266,7 @@ int main(int argc, char **argv)
 						al_set_target_bitmap(al_get_backbuffer(display));
 						al_flip_display();
 						std::cout << "Score is 1: " << ++score;
-					}
+					}*/
 				}
 			}
 
