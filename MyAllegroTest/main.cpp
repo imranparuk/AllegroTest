@@ -204,7 +204,7 @@ int main(int argc, char **argv)
 							{
 								al_set_target_bitmap(level[j].arr[i]->getBitMap());
 								al_clear_to_color(al_map_rgb(0, 100, 255));
-
+								
 								if (checkVer) ball.reflectY();
 								if (checkHor) ball.reflectX();
 							}
