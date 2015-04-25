@@ -7,7 +7,7 @@
 class Brick
 {
 private:
-	const int sizeX = 50;
+	const int sizeX = 60;
 	const int sizeY = 15;
 	const int locationX;
 	const int locationY;  
@@ -32,8 +32,8 @@ public:
 		else
 		{
 			brick = al_create_bitmap(sizeX, sizeY);
-		al_set_target_bitmap(brick);
-		al_clear_to_color(al_map_rgb(125, 246, 231));
+			al_set_target_bitmap(brick);
+			al_clear_to_color(al_map_rgb(125, 246, 231));
 		}
 		if (!brick)
 		{
@@ -42,6 +42,7 @@ public:
 	};
 	~Brick()
 	{
+		al_destroy_bitmap(brick);
 	};
 
 	int getLocX();

@@ -9,7 +9,7 @@ class ArrayOfBricks
 
 
 public:
-	Brick *arr[32];
+	Brick *arr[9];
 
 	ArrayOfBricks(int n, int sX, int sY,bool super = false) :startX(sX), startY(sY),num(n)
 	{
@@ -22,7 +22,7 @@ public:
 				fprintf(stderr, "Failed to create brick!\n");
 		}
 		
-		for (int i = n; i < 32; i++)
+		for (int i = n; i < 9; i++)
 		{
 			arr[i] = NULL;
 		}
@@ -33,7 +33,11 @@ public:
 		return num;
 	}
 
-	~ArrayOfBricks();
+	~ArrayOfBricks()
+	{
+		//for (int i = 0; i < 9; i++)
+			//delete arr[i];
+	}
 
 };
 
