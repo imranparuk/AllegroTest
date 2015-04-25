@@ -185,14 +185,14 @@ int main(int argc, char **argv)
 				std::cout << "Here2 " << ball.getDelta_Y() << std::endl;
 
 			}
-
 			if ((ball.getCenter_Y() + ball.getRadius() >= player_y) && (ball.getCenter_Y() + ball.getRadius() <= player_y + ball.getDelta_Y()) && (ball.getCenter_X() + ball.getRadius() > player_x) && (ball.getCenter_X() - ball.getRadius() < player_x + PLAYER_SIZEX))
 			{
-				
+				//fuck the seperating the thing into 3 parts, we can dala like this if your way doesnt work
+
 				awayFromCent = player_x + PLAYER_CENT - ball.getCenter_X();
 				reflectionConst = (awayFromCent / (PLAYER_CENT));
 
-				offsetAngle = 27*reflectionConst;
+				offsetAngle = 45*reflectionConst; //max offset 45 degrees
 				radAngle = (PI / 180)*offsetAngle;
 
 				ball.reboundOffPlayer(radAngle);
