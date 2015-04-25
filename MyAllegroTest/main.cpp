@@ -143,6 +143,7 @@ int main(int argc, char **argv)
 		al_wait_for_event(event_queue, &ev);
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
+		
 			if (score > 20)
 			{
 				ball.setSuperBall(true);
@@ -172,7 +173,7 @@ int main(int argc, char **argv)
 				ball.restart(100, 100, 4, -4);
 			}
 
-			if ((float)ball.getCenter_Y() - ball.getRadius() < 0 && ball.getDelta_Y() <= 0) 
+			if ((ball.getCenter_Y() - ball.getRadius()) <= 0 && ball.getDelta_Y() <= 0) 
 			{
 				ball.reflectY();
 			}
@@ -192,7 +193,7 @@ int main(int argc, char **argv)
 				awayFromCent = player_x + PLAYER_CENT - ball.getCenter_X();
 				reflectionConst = (awayFromCent / (PLAYER_CENT));
 
-				offsetAngle = 45*reflectionConst; //max offset 45 degrees
+				offsetAngle = 30*reflectionConst; //max offset 45 degrees
 				radAngle = (PI / 180)*offsetAngle;
 
 				ball.reboundOffPlayer(radAngle);

@@ -12,8 +12,8 @@ class Ball
 private:
 	float radius;
 
-	int CenterX;
-	int CenterY;
+	float CenterX;
+	float CenterY;
 
 	float deltaX;
 	float deltaY;
@@ -23,11 +23,11 @@ private:
 
 public:
 	
-	Ball(float, int, int, float, float, bool);
+	Ball(float, float, float, float, float, bool);
 	~Ball();
 
-	int getCenter_X();
-	int getCenter_Y();
+	float getCenter_X();
+	float getCenter_Y();
 	void setCenter(int, int);
 
 	float getDelta_X();

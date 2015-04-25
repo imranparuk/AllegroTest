@@ -1,6 +1,6 @@
 #include "Ball.h"
 
-Ball::Ball(float rad = 0, int sx = 0, int sy = 0, float dx = 0, float dy = 0, bool super = false)
+Ball::Ball(float rad = 0, float sx = 0, float sy = 0, float dx = 0, float dy = 0, bool super = false)
 {
 	superBall = super;
 	radius = rad;
@@ -24,12 +24,12 @@ Ball::~Ball()
 {
 }
 
-int Ball::getCenter_X()
+float Ball::getCenter_X()
 {
 	return CenterX;
 }
 
-int Ball::getCenter_Y()
+float Ball::getCenter_Y()
 {
 	return CenterY;
 }
