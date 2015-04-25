@@ -101,15 +101,13 @@ int main(int argc, char **argv)
 	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150,true), b4(6, 100, 175), b5(4, 150, 200);
 	ArrayOfBricks level[5] = { b1, b2, b3, b4, b5 };
 
-	Ball ball(BALL_SIZE_RADIUS, 500, 100, 4 ,-4, false);
+	Ball ball(BALL_SIZE_RADIUS, player_x + PLAYER_SIZEX / 2, player_y, 4, -4, false);
 
 
 	al_set_target_bitmap(player);
 	al_clear_to_color(al_map_rgb(255, 0, 255));
 
-	/*al_set_target_bitmap(ball);
-	al_clear_to_color(al_map_rgb(50, 50, 50));
-	*/
+
 
 	al_set_target_bitmap(al_get_backbuffer(display));
 
@@ -144,7 +142,7 @@ int main(int argc, char **argv)
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
 		
-			if (score > 20)
+			if (score > 5)
 			{
 				ball.setSuperBall(true);
 			}
@@ -170,7 +168,7 @@ int main(int argc, char **argv)
 			if (ball.getCenter_Y() > SCREEN_H - ball.getRadius())
 			{
 				std::cout << "Lives Left: " << --lives << std::endl;
-				ball.restart(100, 100, 4, -4);
+				ball.restart(player_x + PLAYER_SIZEX/2, player_y, 4, -4);
 			}
 
 			if ((ball.getCenter_Y() - ball.getRadius()) <= 0 && ball.getDelta_Y() <= 0) 
@@ -183,12 +181,9 @@ int main(int argc, char **argv)
 			if (((ball.getCenter_X() - ball.getRadius() < 0) && ball.getDelta_X() <= 0) || (ball.getCenter_X() + ball.getRadius() > SCREEN_W && ball.getDelta_X() >= 0) /*|| ((ball_y + BALL_SIZE_RADIUS > player_y) && ((ball_x + BALL_SIZE_RADIUS < player_x) || (ball_x - BALL_SIZE_RADIUS > player_x + PLAYER_SIZEX)))*/) {
 				ball.reflectX();
 				
-				std::cout << "Here2 " << ball.getDelta_Y() << std::endl;
-
 			}
 			if ((ball.getCenter_Y() + ball.getRadius() >= player_y) && (ball.getCenter_Y() + ball.getRadius() <= player_y + ball.getDelta_Y()) && (ball.getCenter_X() + ball.getRadius() > player_x) && (ball.getCenter_X() - ball.getRadius() < player_x + PLAYER_SIZEX))
 			{
-				//fuck the seperating the thing into 3 parts, we can dala like this if your way doesnt work
 
 				awayFromCent = player_x + PLAYER_CENT - ball.getCenter_X();
 				reflectionConst = (awayFromCent / (PLAYER_CENT));
