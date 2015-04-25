@@ -225,6 +225,8 @@ int main(int argc, char **argv)
 					bool checkVer = level[j].arr[i]->detectCollisionVertical(ball.getCenter_X(), ball.getCenter_Y(), ball.getDelta_X(), ball.getDelta_Y(), BALL_SIZE_RADIUS);
 					bool checkHor = level[j].arr[i]->detectCollisionHorizontal(ball.getCenter_X(), ball.getCenter_Y(), ball.getDelta_X(), ball.getDelta_Y(), BALL_SIZE_RADIUS);
 
+					if (level[j].arr[i]->getSuperLevel() != 3)//this means the collsion was against a super brick
+					{
 						if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed())
 						{
 							if (ball.isSuperBall()) level[j].arr[i]->setSuperLevel(0);
@@ -240,11 +242,6 @@ int main(int argc, char **argv)
 
 							if (level[j].arr[i]->getSuperLevel() == 1)
 							{
-							case 2:
-								al_set_target_bitmap(level[j].arr[i]->getBitMap());
-								al_clear_to_color(al_map_rgb(0, 150, 255));
-								break;
-							case 1:
 								al_set_target_bitmap(level[j].arr[i]->getBitMap());
 								al_clear_to_color(al_map_rgb(125, 246, 231));
 								std::cout << "Vertical: " << checkVer << " , Horizontal: " << checkHor << std::endl;
@@ -261,9 +258,11 @@ int main(int argc, char **argv)
 
 								if (checkVer) ball.reflectY();
 								if (checkHor) ball.reflectX();
-								
+
 								level[j].arr[i]->destroy(true);
-								break;
+							}
+							al_set_target_bitmap(al_get_backbuffer(display));
+							al_flip_display();
 						}
 					}
 					else
@@ -275,14 +274,23 @@ int main(int argc, char **argv)
 							level[j].arr[i]->destroy(true);
 							al_set_target_bitmap(level[j].arr[i]->getBitMap());
 							al_clear_to_color(al_map_rgb(0, 0, 0));
-						}
-
+							al_set_target_bitmap(al_get_backbuffer(display));
+							al_flip_display();
 							std::cout << "Score is : " << ++score << std::endl;
-						if (checkVer) ball.reflectY();
-						if (checkHor) ball.reflectX();
-						al_set_target_bitmap(al_get_backbuffer(display));
-						al_flip_display();
+						}
 					}
+					/*
+					if ((checkVer||checkHor) && !level[j].arr[i]->isDestroyed())
+					{
+					if (checkVer) ball.reflectY();
+					if (checkHor) ball.reflectX();
+					level[j].arr[i]->destroy(true);
+					al_set_target_bitmap(level[j].arr[i]->getBitMap());
+					al_clear_to_color(al_map_rgb(0, 0, 0));
+					al_set_target_bitmap(al_get_backbuffer(display));
+					al_flip_display();
+					std::cout << "Score is: " << ++score << std::endl;
+					}*/
 				}
 			}
 
