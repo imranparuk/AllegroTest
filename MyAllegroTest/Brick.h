@@ -42,6 +42,7 @@ public:
 	};
 	~Brick()
 	{
+		al_destroy_bitmap(brick);
 	};
 
 	int getLocX();
