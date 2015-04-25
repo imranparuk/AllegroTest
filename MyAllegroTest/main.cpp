@@ -8,9 +8,11 @@
 #include "ArrayOfBricks.h"
 #include "Ball.h"
 
+#define PI 3.14159265359
+
 using namespace std;
 
-const float FPS = 25;
+const float FPS = 50;
 const int SCREEN_W = 640;
 const int SCREEN_H = 480;
 
@@ -21,6 +23,13 @@ const int PLAYER_SIZEY = 10;
 const int PLAYER_CENT = PLAYER_SIZEX / 2.0;
 
 const int BRICK_SIZE = 20;
+
+float ballAngle = 0;
+float offsetAngle = 0;
+float ballVel = 0;
+float radAngle = 0;
+float awayFromCent = 0;
+float reflectionConst = 0;
 
 int score = 0;
 int lives = 10;
@@ -92,7 +101,7 @@ int main(int argc, char **argv)
 	ArrayOfBricks b1(5, 200, 100), b2(7, 150, 120), b3(9, 100, 140,true), b4(7, 150, 160), b5(5, 200, 180);
 	ArrayOfBricks level[5] = { b1, b2, b3, b4, b5 };
 
-	Ball ball(BALL_SIZE_RADIUS, 100, 100, 4 ,4);
+	Ball ball(BALL_SIZE_RADIUS, 500, 100, 4 ,-4, false);
 
 
 	al_set_target_bitmap(player);
@@ -134,6 +143,11 @@ int main(int argc, char **argv)
 		al_wait_for_event(event_queue, &ev);
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
+			if (score > 20)
+			{
+				ball.setSuperBall(true);
+			}
+
 			if (key[KEY_LEFT] && player_x >= 4.0) {
 				player_x -= 5.0;
 			}
@@ -151,41 +165,56 @@ int main(int argc, char **argv)
 			{
 				player_x = SCREEN_W;
 			}
-			
-			if (ball.getCenter_Y() > SCREEN_H - BALL_SIZE_RADIUS)
+
+			if (ball.getCenter_Y() > SCREEN_H - ball.getRadius())
 			{
 				std::cout << "Lives Left: " << --lives << std::endl;
 				ball.restart(100, 100, 4, -4);
 			}
 
-			if ((ball.getCenter_X() < BALL_SIZE_RADIUS || ball.getCenter_X() > SCREEN_W - BALL_SIZE_RADIUS) /*|| ((ball_y + BALL_SIZE_RADIUS > player_y) && ((ball_x + BALL_SIZE_RADIUS < player_x) || (ball_x - BALL_SIZE_RADIUS > player_x + PLAYER_SIZEX)))*/) {
-				ball.reflectX();
+			if ((float)ball.getCenter_Y() - ball.getRadius() < 0 && ball.getDelta_Y() <= 0) 
+			{
+				ball.reflectY();
 			}
 
-			if ((ball.getCenter_Y() + BALL_SIZE_RADIUS >= player_y) && (ball.getCenter_Y() + BALL_SIZE_RADIUS <= player_y + ball.getDelta_Y()) && (ball.getCenter_X() + BALL_SIZE_RADIUS > player_x) && (ball.getCenter_X() - BALL_SIZE_RADIUS < player_x + PLAYER_SIZEX))
-			{
-				/*awayFromCent = abs(player_x+PLAYER_CENT - ball_x);
-				reflectionConst = (awayFromCent / (PLAYER_CENT));
-				std::cout << "Reflection Const: " << reflectionConst << std::endl;
-				//dx = 4 dx = 4
-				/*ballVel = sqrt(pow(ball_dx, 2) + pow(ball_dy, 2));
-				ballAngle = atan(ball_dx / ball_dy);S
-				std::cout << "Angle: " << ballAngle << std::endl;
 
-				ballAngle *= reflectionConst;
+			
+			if (((ball.getCenter_X() - ball.getRadius() < 0) && ball.getDelta_X() <= 0) || (ball.getCenter_X() + ball.getRadius() > SCREEN_W && ball.getDelta_X() >= 0) /*|| ((ball_y + BALL_SIZE_RADIUS > player_y) && ((ball_x + BALL_SIZE_RADIUS < player_x) || (ball_x - BALL_SIZE_RADIUS > player_x + PLAYER_SIZEX)))*/) {
+				ball.reflectX();
+				
+				std::cout << "Here2 " << ball.getDelta_Y() << std::endl;
+
+			}
+
+			if ((ball.getCenter_Y() + ball.getRadius() >= player_y) && (ball.getCenter_Y() + ball.getRadius() <= player_y + ball.getDelta_Y()) && (ball.getCenter_X() + ball.getRadius() > player_x) && (ball.getCenter_X() - ball.getRadius() < player_x + PLAYER_SIZEX))
+			{
+				
+				awayFromCent = player_x + PLAYER_CENT - ball.getCenter_X();
+				reflectionConst = (awayFromCent / (PLAYER_CENT));
+
+				offsetAngle = 27*reflectionConst;
+				radAngle = (PI / 180)*offsetAngle;
+
+				ball.reboundOffPlayer(radAngle);
+				
+				/*
+				Ay dont delete this 
+				ballVel = ball.getBallVelocity();
+				ballAngle = ball.getBallAngle();
+				
+				std::cout << "Angle: " << ballAngle*(180 / PI) << std::endl;
+
+				float tempdX = ballVel*cos(ballAngle + radAngle);
+				float tempdY = ballVel*sin(-(ballAngle + radAngle));
+				
+				std::cout << "Temps: " << tempdX << " , " << tempdY << std::endl;
+				ball.setVelocity(tempdX, tempdY);
+			
+				float ballAngle2 = ball.getBallAngle();
+
+				std::cout << "New Angle: " << ballAngle2*(180 / PI) << std::endl;
 				*/
 				
-
-				/*ballAngle = atan(ball_dy / ball_dx);//**(180 / PI);
-				ballVel = sqrt(pow(ball_dx, 2) + pow(ball_dy, 2));
-				std::cout << "Angle: " << ballAngle << std::endl;*/
-				ball.reflectY();
-				//ballAngle = atan(ball_dy / ball_dx)*(180 / PI);
-				//std::cout << "New Angle: " << ballAngle << std::endl;
-
-				//ball_dx = ballVel*cos(ballAngle);
-			    //ball_dy = ballVel*sin(-ballAngle);c
-		
 
 			}
 
@@ -200,6 +229,7 @@ int main(int argc, char **argv)
 					{
 						if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed())
 						{
+							if (ball.isSuperBall()) level[j].arr[i]->setSuperLevel(0);
 							if (level[j].arr[i]->getSuperLevel() == 2)
 							{
 								al_set_target_bitmap(level[j].arr[i]->getBitMap());
@@ -207,6 +237,7 @@ int main(int argc, char **argv)
 								std::cout << "Vertical: " << checkVer << " , Horizontal: " << checkHor << std::endl;
 								if (checkVer) ball.reflectY();
 								if (checkHor) ball.reflectX();
+
 							}
 
 							if (level[j].arr[i]->getSuperLevel() == 1)
@@ -227,6 +258,7 @@ int main(int argc, char **argv)
 
 								if (checkVer) ball.reflectY();
 								if (checkHor) ball.reflectX();
+								
 								level[j].arr[i]->destroy(true);
 							}
 							al_set_target_bitmap(al_get_backbuffer(display));
@@ -237,8 +269,8 @@ int main(int argc, char **argv)
 					{
 						if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed())
 						{
-							if (checkVer) ball.reflectY();
-							if (checkHor) ball.reflectX();
+							if (checkVer && !ball.isSuperBall()) ball.reflectY();
+							if (checkHor && !ball.isSuperBall()) ball.reflectX();
 							level[j].arr[i]->destroy(true);
 							al_set_target_bitmap(level[j].arr[i]->getBitMap());
 							al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -263,9 +295,7 @@ int main(int argc, char **argv)
 			}
 
 			
-			if (ball.getCenter_Y() < BALL_SIZE_RADIUS) {
-				ball.reflectY();
-			}
+			
 
 			ball.makeMove();
 
@@ -327,8 +357,8 @@ int main(int argc, char **argv)
 				for (int i = 0; i < level[j].getNum(); i++)
 					al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
 
-
-			ball.drawCircle(255, 0, 0);
+			if (ball.isSuperBall())	ball.drawBall(255, 255, 0);
+			else ball.drawBall(255, 0, 0);
 			al_flip_display();
 		}
 		

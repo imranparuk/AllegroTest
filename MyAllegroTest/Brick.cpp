@@ -87,4 +87,7 @@ void Brick::destroy(bool result)
 	this->destroyed = result;
 }
 
-
+void Brick::setSuperLevel(int level)
+{
+	superLevel = level;
+}

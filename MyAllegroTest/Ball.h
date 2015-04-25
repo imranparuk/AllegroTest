@@ -3,6 +3,9 @@
 #include"allegro5/allegro.h"
 #include <allegro5/allegro_primitives.h>
 #include <iostream>
+#include <math.h>
+
+#define PI 3.14159265359
 
 class Ball
 {
@@ -16,8 +19,11 @@ private:
 	float deltaY;
 	ALLEGRO_BITMAP *ball = NULL;
 
+	bool superBall;
+
 public:
-	Ball(float, int, int, float, float);
+	
+	Ball(float, int, int, float, float, bool);
 	~Ball();
 
 	int getCenter_X();
@@ -28,11 +34,18 @@ public:
 	float getDelta_Y();
 	void setVelocity(float , float );
 
+	void setSuperBall(bool);
+	bool isSuperBall();
+
 	void makeMove();
 	void reflectY();
 	void reflectX();
 	void restart(int, int, float, float);
-	void drawCircle(int, int, int);
+	void drawBall(int, int, int);
+
+	float getBallVelocity();
+	float getBallAngle();
+	void  reboundOffPlayer(float);
 
 	float getRadius();
 	ALLEGRO_BITMAP *getBitMap();

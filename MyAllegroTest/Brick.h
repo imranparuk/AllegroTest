@@ -50,6 +50,7 @@ public:
 	int getSizeY();
 	bool isDestroyed();
 	int getSuperLevel();
+	void setSuperLevel(int);
 
 	void destroy(bool result);
 

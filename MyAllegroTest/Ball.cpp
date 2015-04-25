@@ -1,7 +1,8 @@
 #include "Ball.h"
 
-Ball::Ball(float rad = 0, int sx = 0, int sy = 0, float dx = 0, float dy = 0)
+Ball::Ball(float rad = 0, int sx = 0, int sy = 0, float dx = 0, float dy = 0, bool super = false)
 {
+	superBall = super;
 	radius = rad;
 	CenterX = sx;
 	CenterY = sy;
@@ -10,7 +11,7 @@ Ball::Ball(float rad = 0, int sx = 0, int sy = 0, float dx = 0, float dy = 0)
 
 	ball = al_create_bitmap(radius, radius);
 	al_set_target_bitmap(ball);
-	al_clear_to_color(al_map_rgb(255, 233, 0));
+	al_clear_to_color(al_map_rgb(255, 0, 0));
 
 	if (!ball)
 	{
@@ -89,7 +90,39 @@ void Ball::restart(int cx, int cy, float dx, float dy)
 	deltaY = dy;
 }
 
-void Ball::drawCircle(int r, int g, int b)
+void Ball::drawBall(int r, int g, int b)
 {
 	al_draw_filled_circle(getCenter_X(), getCenter_Y(), getRadius(), al_map_rgb(r, g, b));
+}
+
+bool Ball::isSuperBall()
+{
+	return superBall;
+}
+
+void Ball::setSuperBall(bool state)
+{
+	superBall = state;
+}
+
+float Ball::getBallVelocity()
+{
+	return sqrt(pow(deltaX, 2) + pow(deltaY, 2));
+}
+
+float Ball::getBallAngle()
+{
+	float tempRet = atan(deltaY / deltaX);
+	if (tempRet > 0) return tempRet;
+	else return tempRet + PI;
+	return tempRet;
+}
+
+void Ball::reboundOffPlayer(float offset)
+{
+	float tempBallVel = getBallVelocity();
+	float tempBallAngle = getBallAngle();
+	if (tempBallAngle + offset > 170 * (PI / 180)) offset -= 30 * (PI / 180);
+	deltaX = tempBallVel*cos(tempBallAngle + offset);
+	deltaY = tempBallVel*sin(-(tempBallAngle + offset));
 }
