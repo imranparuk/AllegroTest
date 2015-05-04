@@ -156,6 +156,7 @@ int main(int argc, char **argv)
 			if (ball.getCenter_Y() > SCREEN_H - ball.getRadius())
 			{
 				//std::cout << "Lives Left: " << --lives << std::endl;
+				lives--;
 				ball.restart(player.getLocX() + player.getSizeX() / 2, player.getLocY(), 4, -4);
 			}
 
