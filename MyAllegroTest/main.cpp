@@ -24,7 +24,6 @@ const int BALL_SIZE_RADIUS = 7;
 
 const int PLAYER_SIZEX = 120;
 const int PLAYER_SIZEY = 10;
-//const int PLAYER_CENT = PLAYER_SIZEX / 2.0;
 
 const int BRICK_SIZE = 20;
 
@@ -52,12 +51,6 @@ int main(int argc, char **argv)
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
-	//ALLEGRO_BITMAP *player = NULL; //player being created
-//	Player player(PLAYER_SIZEX, PLAYER_SIZEY);
-
-	//float player_x = SCREEN_W / 2.0 - PLAYER_SIZEX / 2.0;
-	//float player_y = SCREEN_H-70;
-	//float player_dx = 0; float player_dy = 0;
 	
 	bool key[4] = { false, false, false, false };
 	bool redraw = true;
@@ -93,28 +86,12 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-
-	/*player = al_create_bitmap(PLAYER_SIZEX, PLAYER_SIZEY);//actual player made
-	if (!player)
-	{
-		fprintf(stderr, "Failed to create player bitmap!\n");
-		al_destroy_display(display);
-		al_destroy_timer(timer);
-		return -1;
-	}*/
-
 	Player player(PLAYER_SIZEX, PLAYER_SIZEY);
 
 	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150,true), b4(6, 100, 175), b5(4, 150, 200);
 	ArrayOfBricks level[5] = { b1, b2, b3, b4, b5 };
 
 	Ball ball(BALL_SIZE_RADIUS, player.getLocX() + player.getSizeX() / 2, player.getLocY(), 4, -4, false);
-
-
-
-
-	//al_set_target_bitmap(player);//viewing the player
-	//al_clear_to_color(al_map_rgb(255, 0, 255));
 
 
 	al_set_target_bitmap(al_get_backbuffer(display));
@@ -190,17 +167,6 @@ int main(int argc, char **argv)
 
 				ball.reboundOffPlayer(radAngle);
 			}
-			/*
-			if ((ball.getCenter_Y() + ball.getRadius() >= player_y) && (ball.getCenter_Y() + ball.getRadius() <= player_y + ball.getDelta_Y()) && (ball.getCenter_X() + ball.getRadius() > player_x) && (ball.getCenter_X() - ball.getRadius() < player_x + PLAYER_SIZEX))
-			{
-
-				awayFromCent = player_x + PLAYER_CENT - ball.getCenter_X();
-				reflectionConst = (awayFromCent / (PLAYER_CENT));
-
-				offsetAngle = 30*reflectionConst; //max offset 45 degrees
-				radAngle = (PI / 180)*offsetAngle;
-
-				ball.reboundOffPlayer(radAngle);
 				
 				/*
 				Ay dont delete this 
@@ -220,7 +186,6 @@ int main(int argc, char **argv)
 				std::cout << "New Angle: " << ballAngle2*(180 / PI) << std::endl;
 				*/
 		
-			//}
 
 			for (int j = 0; j < 5; j++)
 			{
@@ -283,18 +248,6 @@ int main(int argc, char **argv)
 							std::cout << "Score is : " << ++score << std::endl;
 						}
 					}
-					/*
-					if ((checkVer||checkHor) && !level[j].arr[i]->isDestroyed())
-					{
-					if (checkVer) ball.reflectY();
-					if (checkHor) ball.reflectX();
-					level[j].arr[i]->destroy(true);
-					al_set_target_bitmap(level[j].arr[i]->getBitMap());
-					al_clear_to_color(al_map_rgb(0, 0, 0));
-					al_set_target_bitmap(al_get_backbuffer(display));
-					al_flip_display();
-					std::cout << "Score is: " << ++score << std::endl;
-					}*/
 				}
 			}
 
