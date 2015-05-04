@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
+#include "allegro5/allegro_image.h"
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 
@@ -44,7 +45,7 @@ int score = 0;
 int lives = 10;
 
 bool destroyed = false;
-bool demo = true;
+bool demo = false;
 
 
 enum MYKEYS {
@@ -59,6 +60,7 @@ int main(int argc, char **argv)
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_SAMPLE *sample = NULL;
+	ALLEGRO_BITMAP *bc = NULL;
 
 
 	bool key[4] = { false, false, false, false };
@@ -85,6 +87,10 @@ int main(int argc, char **argv)
 		fprintf(stderr, "failed to reserve samples!\n");
 		return -1;
 	}
+	if (!al_init_image_addon()) {
+		fprintf(stderr, "failed to image addon!\n");
+		return 0;
+	}
 
 	sample = al_load_sample("oursound.wav");
 
@@ -92,8 +98,6 @@ int main(int argc, char **argv)
 		printf("Audio clip sample not loaded!\n");
 		return -1;
 	}
-
-
 
 
 	if (!al_install_keyboard()) {
@@ -113,17 +117,30 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	display = al_create_display(SCREEN_W, SCREEN_H);
+	if (!al_init_image_addon()) {
+		fprintf(stderr, "Failed to initialize image addon!\n");
+	}
 
+	display = al_create_display(SCREEN_W, SCREEN_H);
 	if (!display) {
 		fprintf(stderr, "failed to create display!\n");
 		al_destroy_timer(timer);
 		return -1;
 	}
 
+	bc = al_load_bitmap("background.bmp");
+	if (!bc) {
+		fprintf(stderr, "failed to create background!\n");
+		al_destroy_timer(timer);
+		return -1;
+	}
+
+	al_draw_bitmap(bc, 200, 200, 0);
+
+	//al_set_target_bitmap(al_get_backbuffer(display));
+	al_flip_display();
+
 	al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);//plays
-
-
 
 
 	Player player(PLAYER_SIZEX, PLAYER_SIZEY);

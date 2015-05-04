@@ -35,7 +35,7 @@ public:
 			al_draw_bitmap(brick, locationX, locationY, 0);
 			//brick = al_create_bitmap(sizeX, sizeY);
 			//al_set_target_bitmap(brick);
-			al_clear_to_color(al_map_rgb(0, 0, 255));
+			//al_clear_to_color(al_map_rgb(0, 0, 255));
 		}
 		else
 		{
