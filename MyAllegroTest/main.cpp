@@ -244,8 +244,19 @@ int main(int argc, char **argv)
 
 							if (level[j].arr[i]->getSuperLevel() == 0)
 							{
-								al_set_target_bitmap(level[j].arr[i]->getBitMap());
-								al_clear_to_color(al_map_rgb(0, 0, 0));
+
+								for (int k = 1; k < 10; k++)
+								{
+									string num = to_string(k);
+									string naam = "ani" + num + ".bmp";
+									level[j].arr[i]->brick = al_load_bitmap(naam.c_str());
+									al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
+									std::cout <<  naam << std::endl;
+									al_rest(0.0001);
+								}
+
+								//al_set_target_bitmap(level[j].arr[i]->getBitMap());
+								//al_clear_to_color(al_map_rgb(0, 0, 0));
 								std::cout << "Vertical: " << checkVer << " , Horizontal: " << checkHor << std::endl;
 
 								if (checkVer) ball.reflectY();
@@ -264,8 +275,19 @@ int main(int argc, char **argv)
 							if (checkVer && !ball.isSuperBall()) ball.reflectY();
 							if (checkHor && !ball.isSuperBall()) ball.reflectX();
 							level[j].arr[i]->destroy(true);
-							al_set_target_bitmap(level[j].arr[i]->getBitMap());
-							al_clear_to_color(al_map_rgb(0, 0, 0));
+
+							for (int k = 1; k < 10; k++)
+							{
+								string num = to_string(k);
+								string naam = "ani" + num + ".bmp";
+								level[j].arr[i]->brick = al_load_bitmap(naam.c_str());
+								al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
+								std::cout << naam << std::endl;
+								al_rest(0.0001);
+							}
+
+							//al_set_target_bitmap(level[j].arr[i]->getBitMap());
+							//al_clear_to_color(al_map_rgb(0, 0, 0));
 							al_set_target_bitmap(al_get_backbuffer(display));
 							al_flip_display();
 							std::cout << "Score is : " << ++score << std::endl;
