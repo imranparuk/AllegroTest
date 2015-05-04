@@ -121,7 +121,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);//plays
+	al_play_sample(sample, 0.5, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);//plays
 
 
 
