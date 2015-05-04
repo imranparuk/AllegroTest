@@ -6,6 +6,7 @@
 
 #include <math.h>
 #include <iostream>
+#include <string>
 
 #include "Brick.h"
 #include "ArrayOfBricks.h"
@@ -101,22 +102,22 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	/*
+	
 	al_init_font_addon(); 
 	al_init_ttf_addon();
-	ALLEGRO_FONT *font = al_load_ttf_font("CFNuclearWar-Regular.ttf", 50, 0);
+	ALLEGRO_FONT *font = al_load_ttf_font("CFNuclearWar-Regular.ttf", 30, 0);
 	
 	if (!font){
 		fprintf(stderr, "Could not load Font \n");
 		return -1;
 	}
 
-	al_draw_text(font, al_map_rgb(255, 0, 40), 400, 400, ALLEGRO_ALIGN_CENTRE, "IMRAN!");
-
+	//al_draw_text(font, al_map_rgb(255, 0, 40), 400, 400, ALLEGRO_ALIGN_CENTRE, "GAME OVER");
+	
 	al_flip_display();
 
-	al_rest(10.0);
-	*/
+	//al_rest(10.0);
+	
 	
 
 	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150,true), b4(6, 100, 175), b5(4, 150, 200);
@@ -369,7 +370,14 @@ int main(int argc, char **argv)
 		
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			al_draw_bitmap(player, player_x, player_y, 0);
-
+			ALLEGRO_COLOR gery = al_map_rgb(100, 100, 100);
+			string scoretxt = to_string(score);
+			string livestxt = to_string(lives);
+			al_draw_text(font, gery, 100, 5, ALLEGRO_ALIGN_CENTRE, "SCORE: ");
+			al_draw_text(font, al_map_rgb(255, 0, 40), 170, 5, ALLEGRO_ALIGN_CENTRE, scoretxt.c_str());
+			al_draw_text(font, al_map_rgb(255, 0, 40), 300, 5, ALLEGRO_ALIGN_CENTRE, "LIVES: ");
+			al_draw_text(font, al_map_rgb(255, 0, 40), 400, 5, ALLEGRO_ALIGN_CENTRE, livestxt.c_str());
+			al_flip_display();
 			for (int j = 0; j < 5; j++)
 				for (int i = 0; i < level[j].getNum(); i++)
 					al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
