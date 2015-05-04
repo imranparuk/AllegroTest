@@ -1,6 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include"allegro5/allegro.h"
+#include"allegro5/allegro_image.h"
 #include <iostream>
 
 
@@ -25,20 +26,27 @@ public:
 		superLevel = 3;
 		if (super)
 		{
+			//brick = al_load_bitmap("");
 			brick = al_create_bitmap(sizeX, sizeY);
 			al_set_target_bitmap(brick);
 			al_clear_to_color(al_map_rgb(0, 0, 255));
 		}
 		else
 		{
-			brick = al_create_bitmap(sizeX, sizeY);
-			al_set_target_bitmap(brick);
-			al_clear_to_color(al_map_rgb(125, 246, 231));
+			if (!al_init_image_addon()) {
+				fprintf(stderr, "Failed to initialize image addon!\n");
+			}
+			brick = al_load_bitmap("final.bmp");
+			al_draw_bitmap(brick, locationX, locationY,0);
+			//brick = al_create_bitmap(sizeX, sizeY);
+			//al_set_target_bitmap(brick);
+			//al_clear_to_color(al_map_rgb(125, 246, 231));
 		}
 		if (!brick)
 		{
 			fprintf(stderr, "Failed to create player bitmap!\n");
 		}
+
 	};
 	~Brick()
 	{
