@@ -40,6 +40,7 @@ int score = 0;
 int lives = 10;
 
 bool destroyed = false;
+ALLEGRO_FONT *font = al_load_ttf_font("CFNuclearWar-Regular.ttf", 72, 0);
 
 
 
@@ -93,6 +94,10 @@ int main(int argc, char **argv)
 	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150,true), b4(6, 100, 175), b5(4, 150, 200);
 	ArrayOfBricks level[5] = { b1, b2, b3, b4, b5 };
 
+	if (!font){
+		fprintf(stderr, "Could not load font.\n");
+		return -1;
+	}
 	Ball ball(BALL_SIZE_RADIUS, player.getLocX() + player.getSizeX() / 2, player.getLocY(), 4, -4, false);
 
 
@@ -302,7 +307,8 @@ int main(int argc, char **argv)
 			redraw = false;
 		
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-			al_draw_bitmap(player, player_x, player_y, 0);
+			//al_draw_bitmap(player, player_x, player_y, 0);
+			al_draw_bitmap(player.getBitMap(), player.getLocX(), player.getLocY(),0);
 			ALLEGRO_COLOR gery = al_map_rgb(100, 100, 100);
 			string scoretxt = to_string(score);
 			string livestxt = to_string(lives);
