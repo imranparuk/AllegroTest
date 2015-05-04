@@ -15,10 +15,12 @@ private:
 	bool destroyed;
 	bool super;
 	int superLevel;
-	ALLEGRO_BITMAP *brick = NULL;
+//	ALLEGRO_BITMAP *brick = NULL;
 	
 	
 public:
+	ALLEGRO_BITMAP *brick = NULL;
+
 	Brick(int lx=0, int ly=0,bool s = false) :locationX(lx), locationY(ly)
 	{ 
 		destroyed = false;
@@ -60,6 +62,7 @@ public:
 	bool isDestroyed();
 	int getSuperLevel();
 	void setSuperLevel(int);
+	//void setBitmap(ALLEGRO_BITMAP );
 
 	void destroy(bool result);
 

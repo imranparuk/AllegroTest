@@ -135,7 +135,7 @@ int main(int argc, char **argv)
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
 		
-			if (score > 5)
+			if (score > 15)
 				ball.setSuperBall(true);
 
 			if (key[KEY_LEFT] /*&& player.getLocX() >= 4.0*/) 
@@ -215,8 +215,15 @@ int main(int argc, char **argv)
 							if (ball.isSuperBall()) level[j].arr[i]->setSuperLevel(0);
 							if (level[j].arr[i]->getSuperLevel() == 2)
 							{
-								al_set_target_bitmap(level[j].arr[i]->getBitMap());
-								al_clear_to_color(al_map_rgb(0, 100, 255));
+
+								//if (!al_init_image_addon()) {
+									//fprintf(stderr, "Failed to initialize image addon!\n");
+								//}
+
+								level[j].arr[i]->brick = al_load_bitmap("second.bmp");
+								al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
+								//al_set_target_bitmap(level[j].arr[i]->getBitMap());
+								//al_clear_to_color(al_map_rgb(0, 100, 255));
 								std::cout << "Vertical: " << checkVer << " , Horizontal: " << checkHor << std::endl;
 								if (checkVer) ball.reflectY();
 								if (checkHor) ball.reflectX();
@@ -225,8 +232,10 @@ int main(int argc, char **argv)
 
 							if (level[j].arr[i]->getSuperLevel() == 1)
 							{
-								al_set_target_bitmap(level[j].arr[i]->getBitMap());
-								al_clear_to_color(al_map_rgb(125, 246, 231));
+								level[j].arr[i]->brick = al_load_bitmap("final.bmp");
+								al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
+								//al_set_target_bitmap(level[j].arr[i]->getBitMap());
+								//al_clear_to_color(al_map_rgb(125, 246, 231));
 								std::cout << "Vertical: " << checkVer << " , Horizontal: " << checkHor << std::endl;
 
 								if (checkVer) ball.reflectY();
