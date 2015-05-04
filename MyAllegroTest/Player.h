@@ -18,7 +18,7 @@ private:
 
 	int centre = sizeX / 2;
 
-	ALLEGRO_BITMAP *player = NULL;
+	ALLEGRO_BITMAP *p = NULL;
 	
 public:
 	Player(int sX, int sY)
@@ -26,26 +26,31 @@ public:
 		sizeX = sX; 
 		sizeY = sY; 
 
-		player = al_create_bitmap(sizeX, sizeY);//actual player made
-		al_set_target_bitmap(player);//viewing the player
+		p = al_create_bitmap(sizeX, sizeY);//actual player made
+		al_set_target_bitmap(p);//viewing the player
 		al_clear_to_color(al_map_rgb(255, 0, 255));
-
-		if (!player)
+		if (!p)
 		{
 			fprintf(stderr, "Failed to create player bitmap!\n");
 		}
 	};
-	~Player();
+
+	~Player()
+	{
+		al_destroy_bitmap(p);
+	};
 
 	int getLocX();
 	int getLocY();
 	int getSizeX();
 	int getSizeY();
+
 	void setSize(int , int );
 	void moveLeft();
 	void moveRight();
 	void detectBallCollsion(Ball );
 
+	ALLEGRO_BITMAP *Player::getBitMap();
 
 };
 

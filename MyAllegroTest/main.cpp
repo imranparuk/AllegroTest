@@ -3,10 +3,11 @@
 #include <allegro5/allegro_primitives.h>
 #include <math.h>
 #include <iostream>
-
 #include "Brick.h"
 #include "ArrayOfBricks.h"
 #include "Ball.h"
+#include "Player.h"
+
 
 #define PI 3.14159265359
 
@@ -20,7 +21,7 @@ const int BALL_SIZE_RADIUS = 7;
 
 const int PLAYER_SIZEX = 120;
 const int PLAYER_SIZEY = 10;
-const int PLAYER_CENT = PLAYER_SIZEX / 2.0;
+//const int PLAYER_CENT = PLAYER_SIZEX / 2.0;
 
 const int BRICK_SIZE = 20;
 
@@ -48,11 +49,12 @@ int main(int argc, char **argv)
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
-	ALLEGRO_BITMAP *player = NULL; //player being created
+	//ALLEGRO_BITMAP *player = NULL; //player being created
+//	Player player(PLAYER_SIZEX, PLAYER_SIZEY);
 
-	float player_x = SCREEN_W / 2.0 - PLAYER_SIZEX / 2.0;
-	float player_y = SCREEN_H-70;
-	float player_dx = 0; float player_dy = 0;
+	//float player_x = SCREEN_W / 2.0 - PLAYER_SIZEX / 2.0;
+	//float player_y = SCREEN_H-70;
+	//float player_dx = 0; float player_dy = 0;
 	
 	bool key[4] = { false, false, false, false };
 	bool redraw = true;
@@ -89,23 +91,27 @@ int main(int argc, char **argv)
 	}
 
 
-	player = al_create_bitmap(PLAYER_SIZEX, PLAYER_SIZEY);//actual player made
+	/*player = al_create_bitmap(PLAYER_SIZEX, PLAYER_SIZEY);//actual player made
 	if (!player)
 	{
 		fprintf(stderr, "Failed to create player bitmap!\n");
 		al_destroy_display(display);
 		al_destroy_timer(timer);
 		return -1;
-	}
+	}*/
+
+	Player player(PLAYER_SIZEX, PLAYER_SIZEY);
 
 	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150,true), b4(6, 100, 175), b5(4, 150, 200);
 	ArrayOfBricks level[5] = { b1, b2, b3, b4, b5 };
 
-	Ball ball(BALL_SIZE_RADIUS, player_x + PLAYER_SIZEX / 2, player_y, 4, -4, false);
+	Ball ball(BALL_SIZE_RADIUS, player.getLocX() + player.getSizeX() / 2, player.getLocY(), 4, -4, false);
 
 
-	al_set_target_bitmap(player);//viewing the player
-	al_clear_to_color(al_map_rgb(255, 0, 255));
+
+
+	//al_set_target_bitmap(player);//viewing the player
+	//al_clear_to_color(al_map_rgb(255, 0, 255));
 
 
 	al_set_target_bitmap(al_get_backbuffer(display));
@@ -113,9 +119,8 @@ int main(int argc, char **argv)
 	event_queue = al_create_event_queue();
 	if (!event_queue) {
 		fprintf(stderr, "failed to create event_queue!\n");
-		al_destroy_bitmap(player);
+		//al_destroy_bitmap(player);
 		//al_destroy_bitmap(ball);
-
 		al_destroy_display(display);
 		al_destroy_timer(timer);
 		return -1;
@@ -137,19 +142,15 @@ int main(int argc, char **argv)
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
 		
 			if (score > 5)
-			{
 				ball.setSuperBall(true);
-			}
+			
+			if (key[KEY_LEFT] && player.getLocX() >= 4.0) 
+				player.moveLeft();
 
-			if (key[KEY_LEFT] && player_x >= 4.0) {
-				player_x -= 7.0;
-			}
-
-			if (key[KEY_RIGHT] && player_x <= SCREEN_W - PLAYER_SIZEX - 4.0) {
-				player_x += 7.0;
-			}
-
-			if (player_x > SCREEN_W )
+			if (key[KEY_RIGHT] && player.getLocX() <= SCREEN_W - PLAYER_SIZEX - 4.0) 
+				player.moveRight();
+			
+			/*if (player_x > SCREEN_W )
 			{
 				player_x = 0;
 			}
@@ -157,12 +158,12 @@ int main(int argc, char **argv)
 			if (player_x < -PLAYER_SIZEX)
 			{
 				player_x = SCREEN_W;
-			}
+			}*/
 			
 			if (ball.getCenter_Y() > SCREEN_H - ball.getRadius())
 			{
 				std::cout << "Lives Left: " << --lives << std::endl;
-				ball.restart(player_x + PLAYER_SIZEX/2, player_y, 4, -4);
+				ball.restart(player.getLocX() + player.getSizeX() / 2, player.getLocY(), 4, -4);
 			}
 
 			if ((ball.getCenter_Y() - ball.getRadius()) <= 0 && ball.getDelta_Y() <= 0) 
@@ -170,12 +171,14 @@ int main(int argc, char **argv)
 				ball.reflectY();
 			}
 
-
 			
 			if (((ball.getCenter_X() - ball.getRadius() < 0) && ball.getDelta_X() <= 0) || (ball.getCenter_X() + ball.getRadius() > SCREEN_W && ball.getDelta_X() >= 0) /*|| ((ball_y + BALL_SIZE_RADIUS > player_y) && ((ball_x + BALL_SIZE_RADIUS < player_x) || (ball_x - BALL_SIZE_RADIUS > player_x + PLAYER_SIZEX)))*/) {
 				ball.reflectX();
 				
 			}
+
+			player.detectBallCollsion(ball);
+			/*
 			if ((ball.getCenter_Y() + ball.getRadius() >= player_y) && (ball.getCenter_Y() + ball.getRadius() <= player_y + ball.getDelta_Y()) && (ball.getCenter_X() + ball.getRadius() > player_x) && (ball.getCenter_X() - ball.getRadius() < player_x + PLAYER_SIZEX))
 			{
 
@@ -204,9 +207,8 @@ int main(int argc, char **argv)
 
 				std::cout << "New Angle: " << ballAngle2*(180 / PI) << std::endl;
 				*/
-		
-
-			}
+	
+			//}
 
 			for (int j = 0; j < 5; j++)
 			{
@@ -340,7 +342,8 @@ int main(int argc, char **argv)
 			
 			redraw = false;
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-			al_draw_bitmap(player, player_x, player_y, 0);
+			//al_draw_bitmap(player, player_x, player_y, 0);
+			al_draw_bitmap(player.getBitMap(), player.getLocX(), player.getLocY(), 0);
 
 			for (int j = 0; j < 5; j++)
 				for (int i = 0; i < level[j].getNum(); i++)
@@ -353,7 +356,7 @@ int main(int argc, char **argv)
 		
 	}
 
-	al_destroy_bitmap(player);
+	//al_destroy_bitmap(player);
 	//al_destroy_bitmap(ball);
 	//destroy brick bitmaps
 	al_destroy_timer(timer);

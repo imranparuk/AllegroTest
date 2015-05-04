@@ -1,9 +1,5 @@
 #include "Player.h"
 
-Player::~Player()
-{
-}
-
 int Player::getLocX()
 {
 	return locationX;
@@ -34,7 +30,7 @@ void Player::moveLeft()
 
 void Player::moveRight()
 {
-	locationY += 7;
+	locationX += 7;
 };
 
 void Player::detectBallCollsion(Ball ball)
@@ -52,4 +48,9 @@ void Player::detectBallCollsion(Ball ball)
 
 	}
 };
+
+ALLEGRO_BITMAP *Player::getBitMap()
+{
+	return p;
+}
 
