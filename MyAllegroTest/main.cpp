@@ -148,11 +148,11 @@ int main(int argc, char **argv)
 			}
 
 			if (key[KEY_LEFT] && player_x >= 4.0) {
-				player_x -= 5.0;
+				player_x -= 7.0;
 			}
 
 			if (key[KEY_RIGHT] && player_x <= SCREEN_W - PLAYER_SIZEX - 4.0) {
-				player_x += 5.0;
+				player_x += 7.0;
 			}
 
 			if (player_x > SCREEN_W )
