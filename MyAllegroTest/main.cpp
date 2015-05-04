@@ -4,6 +4,10 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
+
+
 #include <math.h>
 #include <iostream>
 #include <string>
@@ -49,10 +53,13 @@ enum MYKEYS {
 
 
 int main(int argc, char **argv)
+
 {
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
+	ALLEGRO_SAMPLE *sample = NULL;
+
 
 	bool key[4] = { false, false, false, false };
 	bool redraw = true;
@@ -62,6 +69,32 @@ int main(int argc, char **argv)
 		fprintf(stderr, "failed to initialize allegro!\n");
 		return -1;
 	}
+
+	if (!al_install_audio()){
+		fprintf(stderr, "failed to initialize audio!\n");
+		return -1;
+	}
+
+	if (!al_init_acodec_addon()) {
+		fprintf(stderr, "failed to initialize audio codecs!\n");
+		return -1;
+
+	}
+
+	if (!al_reserve_samples(1)){
+		fprintf(stderr, "failed to reserve samples!\n");
+		return -1;
+	}
+
+	sample = al_load_sample("oursound.wav");
+
+	if (!sample) {
+		printf("Audio clip sample not loaded!\n");
+		return -1;
+	}
+
+
+
 
 	if (!al_install_keyboard()) {
 		fprintf(stderr, "failed to initialize the keyboard!\n");
@@ -87,6 +120,11 @@ int main(int argc, char **argv)
 		al_destroy_timer(timer);
 		return -1;
 	}
+
+	al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);//plays
+
+
+
 
 	Player player(PLAYER_SIZEX, PLAYER_SIZEY);
 
@@ -363,6 +401,7 @@ int main(int argc, char **argv)
 	al_destroy_timer(timer);
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
+	al_destroy_sample(sample);
 
 	return 0;
 }
