@@ -186,7 +186,7 @@ int main(int argc, char **argv)
 				std::cout << "New Angle: " << ballAngle2*(180 / PI) << std::endl;
 				*/
 		
-
+			//cleaning code here
 			for (int j = 0; j < 5; j++)
 			{
 				for (int i = 0; i < level[j].getNum(); i++)
