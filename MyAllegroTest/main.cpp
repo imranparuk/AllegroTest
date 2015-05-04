@@ -184,7 +184,7 @@ int main(int argc, char **argv)
 					 }
 					 else if (button = 2)
 					 {
-						 exit(1);
+						 main();
 					 }
 				}
 			}
