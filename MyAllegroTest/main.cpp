@@ -276,7 +276,8 @@ int main(int argc, char **argv)
 								al_flip_display();
 								std::cout << "Score is : " << ++score << std::endl;
 								bricksDes += 1;
-								std::cout << bricksDes;
+								
+								
 							}
 						}
 
@@ -361,9 +362,11 @@ int main(int argc, char **argv)
 
 				for (int j = 0; j < 5; j++)
 				{
+					
 					for (int i = 0; i < level[j].getNum(); i++)
 					{
 						al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);	
+						
 					}
 				}
 				
