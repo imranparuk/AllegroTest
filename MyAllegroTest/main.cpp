@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
-	ALLEGRO_BITMAP *player = NULL;
+	ALLEGRO_BITMAP *player = NULL; //player being created
 
 	float player_x = SCREEN_W / 2.0 - PLAYER_SIZEX / 2.0;
 	float player_y = SCREEN_H-70;
@@ -89,7 +89,7 @@ int main(int argc, char **argv)
 	}
 
 
-	player = al_create_bitmap(PLAYER_SIZEX, PLAYER_SIZEY);
+	player = al_create_bitmap(PLAYER_SIZEX, PLAYER_SIZEY);//actual player made
 	if (!player)
 	{
 		fprintf(stderr, "Failed to create player bitmap!\n");
@@ -104,11 +104,8 @@ int main(int argc, char **argv)
 	Ball ball(BALL_SIZE_RADIUS, player_x + PLAYER_SIZEX / 2, player_y, 4, -4, false);
 
 
-	al_set_target_bitmap(player);
+	al_set_target_bitmap(player);//viewing the player
 	al_clear_to_color(al_map_rgb(255, 0, 255));
-
-
-
 	al_set_target_bitmap(al_get_backbuffer(display));
 
 	event_queue = al_create_event_queue();
@@ -123,15 +120,10 @@ int main(int argc, char **argv)
 	}
 
 	al_register_event_source(event_queue, al_get_display_event_source(display));
-
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
-
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
-
 	al_clear_to_color(al_map_rgb(0, 0, 0));
-
 	al_flip_display();
-
 	al_start_timer(timer);
 
 	while (!doexit)
