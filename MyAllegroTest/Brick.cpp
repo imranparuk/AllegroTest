@@ -34,14 +34,14 @@ bool Brick::detectCollisionVertical(const int ball_x, const int ball_y, const in
 {
    int temp_dy = abs(ball_dy);
 
-   if ((ball_y + BALL_SIZE_RADIUS >= locationY) && (ball_y + BALL_SIZE_RADIUS <= locationY + temp_dy) && (ball_x + BALL_SIZE_RADIUS > locationX) && (ball_x - BALL_SIZE_RADIUS < locationX + sizeX))
+   if ((ball_dy > 0) && (ball_y + BALL_SIZE_RADIUS >= locationY) && (ball_y + BALL_SIZE_RADIUS <= locationY + temp_dy) && (ball_x + BALL_SIZE_RADIUS > locationX) && (ball_x - BALL_SIZE_RADIUS < locationX + sizeX))
    {
 	   if (super)
 		   superLevel--;
 
 		return true;
    }
-   else if ((ball_y - BALL_SIZE_RADIUS <= locationY + sizeY) && (ball_y - BALL_SIZE_RADIUS >= locationY + sizeY - temp_dy) && (ball_x + BALL_SIZE_RADIUS > locationX) && (ball_x - BALL_SIZE_RADIUS < locationX + sizeX))
+   else if ((ball_dy < 0) && (ball_y - BALL_SIZE_RADIUS <= locationY + sizeY) && (ball_y - BALL_SIZE_RADIUS >= locationY + sizeY - temp_dy) && (ball_x + BALL_SIZE_RADIUS > locationX) && (ball_x - BALL_SIZE_RADIUS < locationX + sizeX))
    {
 	   if (super)
 		   superLevel--;
@@ -57,14 +57,14 @@ bool Brick::detectCollisionHorizontal(const int ball_x, const int ball_y, const 
 	int temp_dx = abs(ball_dx);
 	int temp_dy = abs(ball_dy);
 
-	if ((ball_x + BALL_SIZE_RADIUS >= locationX) && (ball_x + BALL_SIZE_RADIUS <= locationX + temp_dx) && (ball_y >= locationY) && (ball_y  <= locationY + sizeY))
+	if ((ball_dx > 0) && (ball_x + BALL_SIZE_RADIUS >= locationX) && (ball_x + BALL_SIZE_RADIUS <= locationX + temp_dx) && (ball_y >= locationY) && (ball_y  <= locationY + sizeY))
 	{
 		if (super)
 			superLevel--;
 
 	   return true;
 	}
-	else if ((ball_x - BALL_SIZE_RADIUS <= locationX + sizeX) && (ball_x + BALL_SIZE_RADIUS >= locationX + sizeX - temp_dx) && (ball_y >= locationY) && (ball_y <= locationY + sizeY))
+	else if ((ball_dx < 0) && (ball_x - BALL_SIZE_RADIUS <= locationX + sizeX) && (ball_x + BALL_SIZE_RADIUS >= locationX + sizeX - temp_dx) && (ball_y >= locationY) && (ball_y <= locationY + sizeY))
 	{
 		if (super)
 			superLevel--;

@@ -48,7 +48,7 @@ public:
 	void setSize(int , int );
 	void moveLeft();
 	void moveRight();
-	void detectBallCollsion(Ball );
+	bool detectBallCollsion(Ball );
 
 	ALLEGRO_BITMAP *Player::getBitMap();
 

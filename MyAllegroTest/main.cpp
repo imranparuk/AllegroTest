@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+
 #include <math.h>
 #include <iostream>
 #include "Brick.h"
@@ -143,19 +146,19 @@ int main(int argc, char **argv)
 		
 			if (score > 5)
 				ball.setSuperBall(true);
-			
+
 			if (key[KEY_LEFT] && player.getLocX() >= 4.0) 
 				player.moveLeft();
 
 			if (key[KEY_RIGHT] && player.getLocX() <= SCREEN_W - PLAYER_SIZEX - 4.0) 
 				player.moveRight();
-			
+
 			/*if (player_x > SCREEN_W )
 			{
-				player_x = 0;
+				//player_x = 0;
 			}
 
-			if (player_x < -PLAYER_SIZEX)
+			if (player_x <= 0)
 			{
 				player_x = SCREEN_W;
 			}*/
@@ -171,13 +174,22 @@ int main(int argc, char **argv)
 				ball.reflectY();
 			}
 
-			
+
 			if (((ball.getCenter_X() - ball.getRadius() < 0) && ball.getDelta_X() <= 0) || (ball.getCenter_X() + ball.getRadius() > SCREEN_W && ball.getDelta_X() >= 0) /*|| ((ball_y + BALL_SIZE_RADIUS > player_y) && ((ball_x + BALL_SIZE_RADIUS < player_x) || (ball_x - BALL_SIZE_RADIUS > player_x + PLAYER_SIZEX)))*/) {
 				ball.reflectX();
 				
 			}
 
-			player.detectBallCollsion(ball);
+			if (player.detectBallCollsion(ball))
+			{
+				float awayFromCent = player.getLocX() + (player.getSizeX() / 2) - ball.getCenter_X();
+				float reflectionConst = (awayFromCent / (player.getSizeX() / 2));
+
+				float offsetAngle = 30 * reflectionConst; //max offset 45 degrees
+				float radAngle = (PI / 180)*offsetAngle;
+
+				ball.reboundOffPlayer(radAngle);
+			}
 			/*
 			if ((ball.getCenter_Y() + ball.getRadius() >= player_y) && (ball.getCenter_Y() + ball.getRadius() <= player_y + ball.getDelta_Y()) && (ball.getCenter_X() + ball.getRadius() > player_x) && (ball.getCenter_X() - ball.getRadius() < player_x + PLAYER_SIZEX))
 			{
@@ -207,7 +219,7 @@ int main(int argc, char **argv)
 
 				std::cout << "New Angle: " << ballAngle2*(180 / PI) << std::endl;
 				*/
-	
+		
 			//}
 
 			for (int j = 0; j < 5; j++)
@@ -341,6 +353,7 @@ int main(int argc, char **argv)
 		if (redraw && al_is_event_queue_empty(event_queue)) {
 			
 			redraw = false;
+		
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			//al_draw_bitmap(player, player_x, player_y, 0);
 			al_draw_bitmap(player.getBitMap(), player.getLocX(), player.getLocY(), 0);

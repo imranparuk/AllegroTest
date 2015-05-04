@@ -33,20 +33,21 @@ void Player::moveRight()
 	locationX += 7;
 };
 
-void Player::detectBallCollsion(Ball ball)
+bool Player::detectBallCollsion(Ball ball)
 {
 	if ((ball.getCenter_Y() + ball.getRadius() >= locationY) && (ball.getCenter_Y() + ball.getRadius() <= locationY + ball.getDelta_Y()) && (ball.getCenter_X() + ball.getRadius() > locationX) && (ball.getCenter_X() - ball.getRadius() < locationX + sizeX))
 	{
+		return true;
 
-		float awayFromCent = locationX + centre - ball.getCenter_X();
-		float reflectionConst = (awayFromCent / (centre));
+		//float awayFromCent = locationX + centre - ball.getCenter_X();
+		//float reflectionConst = (awayFromCent / (centre));
 
-		float offsetAngle = 30 * reflectionConst; //max offset 45 degrees
-		float radAngle = (PI / 180)*offsetAngle;
+		//float offsetAngle = 30 * reflectionConst; //max offset 45 degrees
+		//float radAngle = (PI / 180)*offsetAngle;
 
-		ball.reboundOffPlayer(radAngle);
-
+		//ball.reboundOffPlayer(radAngle);
 	}
+	return false;
 };
 
 ALLEGRO_BITMAP *Player::getBitMap()
