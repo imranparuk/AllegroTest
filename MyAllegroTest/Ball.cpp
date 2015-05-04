@@ -122,8 +122,8 @@ void Ball::reboundOffPlayer(float offset)
 {
 	float tempBallVel = getBallVelocity();
 	float tempBallAngle = getBallAngle();
-	if (tempBallAngle + offset > 150 * (PI / 180)) offset -= 40 * (PI / 180);
-	if (tempBallAngle - offset < -150 * (PI / 180)) offset += 40 * (PI / 180);
+	if (tempBallAngle + offset > 160 * (PI / 180)) offset -= 40 * (PI / 180);
+	if (tempBallAngle - offset < -160 * (PI / 180)) offset += 40 * (PI / 180);
 	deltaX = tempBallVel*cos(tempBallAngle + offset);
 	deltaY = tempBallVel*sin(-(tempBallAngle + offset));
 }

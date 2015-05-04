@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+
 #include <math.h>
 #include <iostream>
 
@@ -98,6 +101,24 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+	/*
+	al_init_font_addon(); 
+	al_init_ttf_addon();
+	ALLEGRO_FONT *font = al_load_ttf_font("CFNuclearWar-Regular.ttf", 50, 0);
+	
+	if (!font){
+		fprintf(stderr, "Could not load Font \n");
+		return -1;
+	}
+
+	al_draw_text(font, al_map_rgb(255, 0, 40), 400, 400, ALLEGRO_ALIGN_CENTRE, "IMRAN!");
+
+	al_flip_display();
+
+	al_rest(10.0);
+	*/
+	
+
 	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150,true), b4(6, 100, 175), b5(4, 150, 200);
 	ArrayOfBricks level[5] = { b1, b2, b3, b4, b5 };
 
@@ -155,14 +176,14 @@ int main(int argc, char **argv)
 				player_x += 7.0;
 			}
 
-			if (player_x > SCREEN_W )
+			if (player_x + PLAYER_SIZEX >= SCREEN_W )
 			{
-				player_x = 0;
+				//player_x = 0;
 			}
 
-			if (player_x < -PLAYER_SIZEX)
+			if (player_x <= 0)
 			{
-				player_x = SCREEN_W;
+				//player_x = SCREEN_W;
 			}
 			
 			if (ball.getCenter_Y() > SCREEN_H - ball.getRadius())
@@ -345,6 +366,7 @@ int main(int argc, char **argv)
 		if (redraw && al_is_event_queue_empty(event_queue)) {
 			
 			redraw = false;
+		
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			al_draw_bitmap(player, player_x, player_y, 0);
 
