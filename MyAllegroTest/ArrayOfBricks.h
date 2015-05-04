@@ -17,7 +17,7 @@ public:
 		for (int i = 0; i < n; i++)
 		{
 			arr[i] = new Brick(j,sY,super);
-			j += arr[i]->getSizeX() + 8;
+			j += arr[i]->getSizeX() + 13;
 			if (!arr[i]->getBitMap())
 				fprintf(stderr, "Failed to create brick!\n");
 		}
