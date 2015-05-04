@@ -40,7 +40,7 @@ int score = 0;
 int lives = 10;
 
 bool destroyed = false;
-
+bool demo = false;
 
 
 enum MYKEYS {
@@ -138,11 +138,16 @@ int main(int argc, char **argv)
 			if (score > 15)
 				ball.setSuperBall(true);
 
-			if (key[KEY_LEFT]) 
+			if (key[KEY_LEFT] && !demo) 
 				player.moveLeft();
 
-			if (key[KEY_RIGHT]) 
+			if (key[KEY_RIGHT] && !demo) 
 				player.moveRight();
+
+			if (demo)
+			{
+					player.setLocationX(ball.getCenter_X() - player.getSizeX() / 2);
+			}
 
 			if (player.getLocX() + 0.5*player.getSizeX() > SCREEN_W  && key[KEY_RIGHT])
 			{
