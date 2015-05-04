@@ -142,7 +142,7 @@ int main(int argc, char **argv)
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
 		
-			if (score > 5)
+			if (score > 50)
 			{
 				ball.setSuperBall(true);
 			}
