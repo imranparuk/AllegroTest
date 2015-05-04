@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_native_dialog.h>
 #include <math.h>
 #include <iostream>
 
@@ -32,7 +35,7 @@ float awayFromCent = 0;
 float reflectionConst = 0;
 
 int score = 0;
-int lives = 10;
+int lives = 2;
 
 bool destroyed = false;
 
@@ -87,7 +90,7 @@ int main(int argc, char **argv)
 		al_destroy_timer(timer);
 		return -1;
 	}
-
+	
 
 	player = al_create_bitmap(PLAYER_SIZEX, PLAYER_SIZEY);
 	if (!player)
@@ -129,7 +132,7 @@ int main(int argc, char **argv)
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 
 	al_clear_to_color(al_map_rgb(0, 0, 0));
-
+	
 	al_flip_display();
 
 	al_start_timer(timer);
@@ -169,6 +172,21 @@ int main(int argc, char **argv)
 			{
 				std::cout << "Lives Left: " << --lives << std::endl;
 				ball.restart(player_x + PLAYER_SIZEX/2, player_y, 4, -4);
+				if (lives == 0)
+				{
+					 int button = al_show_native_message_box(display,"Warning","GAME OVER","RESTART?",NULL,ALLEGRO_MESSAGEBOX_YES_NO);
+					 if (button == 1)
+					 {
+						 lives = 2;
+						 score = 0;
+						 
+						 	
+					 }
+					 else if (button = 2)
+					 {
+						 exit(1);
+					 }
+				}
 			}
 
 			if ((ball.getCenter_Y() - ball.getRadius()) <= 0 && ball.getDelta_Y() <= 0) 
@@ -347,6 +365,18 @@ int main(int argc, char **argv)
 			redraw = false;
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			al_draw_bitmap(player, player_x, player_y, 0);
+			/*ALLEGRO_COLOR dark_gray = al_map_rgb(100, 100, 100);
+			ALLEGRO_FONT *font = al_load_ttf_font("Arial.ttf", 18, ALLEGRO_TTF_NO_KERNING);
+          al_draw_filled_rectangle(0, 0, 640, 30, dark_gray);//bottom bar
+			string scoreTxt = score + "";
+			string livesTxt = lives + "";
+			al_draw_text(font, al_map_rgb(255, 255, 255), 40, 0, ALLEGRO_ALIGN_CENTRE, "Score:");
+			al_draw_text(font, al_map_rgb(255, 255, 255), 80, 0, ALLEGRO_ALIGN_CENTRE, scoreTxt.c_str());
+			al_draw_text(font, al_map_rgb(255, 255, 255), 300, 0, ALLEGRO_ALIGN_CENTRE, "Lives remaining:");
+			al_draw_text(font, al_map_rgb(255, 255, 255), 400, 0, ALLEGRO_ALIGN_CENTRE, livesTxt.c_str());
+*/
+
+
 
 			for (int j = 0; j < 5; j++)
 				for (int i = 0; i < level[j].getNum(); i++)
