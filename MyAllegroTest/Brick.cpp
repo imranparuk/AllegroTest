@@ -90,3 +90,4 @@ void Brick::setSuperLevel(int level)
 {
 	superLevel = level;
 }
+
