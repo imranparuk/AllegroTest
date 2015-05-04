@@ -41,7 +41,6 @@ int lives = 10;
 
 bool destroyed = false;
 
-ALLEGRO_COLOR grey = al_map_rgb(100, 100, 100);
 
 
 enum MYKEYS {
@@ -135,13 +134,14 @@ int main(int argc, char **argv)
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
 		
+
 			if (score > 15)
 				ball.setSuperBall(true);
 
-			if (key[KEY_LEFT] /*&& player.getLocX() >= 4.0*/) 
+			if (key[KEY_LEFT]) 
 				player.moveLeft();
 
-			if (key[KEY_RIGHT] /*&& player.getLocX() <= SCREEN_W - PLAYER_SIZEX - 4.0*/) 
+			if (key[KEY_RIGHT]) 
 				player.moveRight();
 
 			if (player.getLocX() + 0.5*player.getSizeX() > SCREEN_W  && key[KEY_RIGHT])
@@ -156,7 +156,8 @@ int main(int argc, char **argv)
 			
 			if (ball.getCenter_Y() > SCREEN_H - ball.getRadius())
 			{
-				std::cout << "Lives Left: " << --lives << std::endl;
+				//std::cout << "Lives Left: " << --lives << std::endl;
+				lives--;
 				ball.restart(player.getLocX() + player.getSizeX() / 2, player.getLocY(), 4, -4);
 			}
 
@@ -224,7 +225,7 @@ int main(int argc, char **argv)
 								al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
 								//al_set_target_bitmap(level[j].arr[i]->getBitMap());
 								//al_clear_to_color(al_map_rgb(0, 100, 255));
-								std::cout << "Vertical: " << checkVer << " , Horizontal: " << checkHor << std::endl;
+								//std::cout << "Vertical: " << checkVer << " , Horizontal: " << checkHor << std::endl;
 								if (checkVer) ball.reflectY();
 								if (checkHor) ball.reflectX();
 
@@ -236,7 +237,7 @@ int main(int argc, char **argv)
 								al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
 								//al_set_target_bitmap(level[j].arr[i]->getBitMap());
 								//al_clear_to_color(al_map_rgb(125, 246, 231));
-								std::cout << "Vertical: " << checkVer << " , Horizontal: " << checkHor << std::endl;
+								//std::cout << "Vertical: " << checkVer << " , Horizontal: " << checkHor << std::endl;
 
 								if (checkVer) ball.reflectY();
 								if (checkHor) ball.reflectX();
@@ -251,7 +252,6 @@ int main(int argc, char **argv)
 									string naam = "ani" + num + ".bmp";
 									level[j].arr[i]->brick = al_load_bitmap(naam.c_str());
 									al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
-									std::cout <<  naam << std::endl;
 									//al_rest(0.0001);
 								}
 
@@ -261,7 +261,7 @@ int main(int argc, char **argv)
 
 								if (checkVer) ball.reflectY();
 								if (checkHor) ball.reflectX();
-
+								score++;
 								level[j].arr[i]->destroy(true);
 							}
 							al_set_target_bitmap(al_get_backbuffer(display));
@@ -282,7 +282,6 @@ int main(int argc, char **argv)
 								string naam = "ani" + num + ".bmp";
 								level[j].arr[i]->brick = al_load_bitmap(naam.c_str());
 								al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
-								std::cout << naam << std::endl;
 								//al_rest(0.0001);
 							}
 
@@ -290,7 +289,8 @@ int main(int argc, char **argv)
 							//al_clear_to_color(al_map_rgb(0, 0, 0));
 							al_set_target_bitmap(al_get_backbuffer(display));
 							al_flip_display();
-							std::cout << "Score is : " << ++score << std::endl;
+							score++;
+							//std::cout << "Score is : " << ++score << std::endl;
 						}
 					}
 
@@ -364,7 +364,7 @@ int main(int argc, char **argv)
 			al_draw_text(font, grey, 100, 5, ALLEGRO_ALIGN_CENTRE, "SCORE: ");
 			al_draw_text(font, grey, 170, 5, ALLEGRO_ALIGN_CENTRE, scoretxt.c_str());
 			al_draw_text(font, al_map_rgb(255, 0, 40), 300, 5, ALLEGRO_ALIGN_CENTRE, "LIVES: ");
-			al_draw_text(font, al_map_rgb(255, 0, 40), 360, 5, ALLEGRO_ALIGN_CENTRE, livestxt.c_str());
+			al_draw_text(font, al_map_rgb(255, 0, 40), 400, 5, ALLEGRO_ALIGN_CENTRE, livestxt.c_str());
 			
 			for (int j = 0; j < 5; j++)
 				for (int i = 0; i < level[j].getNum(); i++)
