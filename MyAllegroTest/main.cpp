@@ -120,26 +120,26 @@ int main(int argc, char **argv)
 		al_wait_for_event(event_queue, &ev);
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
-		
+
 			if (score > 5)
 				ball.setSuperBall(true);
 
-			if (key[KEY_LEFT] && player.getLocX() >= 4.0) 
+			if (key[KEY_LEFT] /*&& player.getLocX() >= 4.0*/) 
 				player.moveLeft();
 
-			if (key[KEY_RIGHT] && player.getLocX() <= SCREEN_W - PLAYER_SIZEX - 4.0) 
+			if (key[KEY_RIGHT] /*&& player.getLocX() <= SCREEN_W - PLAYER_SIZEX - 4.0*/) 
 				player.moveRight();
 
-			/*if (player_x > SCREEN_W )
+			if (player.getLocX() + 0.5*player.getSizeX() > SCREEN_W  && key[KEY_RIGHT])
 			{
-				//player_x = 0;
+				player.setLocationX(0);
 			}
 
-			if (player_x <= 0)
+			if (player.getLocX() < -0.5*player.getSizeX() && key[KEY_LEFT])
 			{
-				player_x = SCREEN_W;
-			}*/
-			
+				player.setLocationX(SCREEN_W);
+			}
+
 			if (ball.getCenter_Y() > SCREEN_H - ball.getRadius())
 			{
 				std::cout << "Lives Left: " << --lives << std::endl;

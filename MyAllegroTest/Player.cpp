@@ -49,6 +49,18 @@ bool Player::detectBallCollsion(Ball ball)
 	}
 	return false;
 };
+void Player::setLocationX(int x)
+{
+	locationX = x;
+
+}
+void Player::setLocationY(int y)
+{
+	locationY = y;
+}
+
+
+
 
 ALLEGRO_BITMAP *Player::getBitMap()
 {
