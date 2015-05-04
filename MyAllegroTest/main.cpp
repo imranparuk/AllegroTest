@@ -252,7 +252,7 @@ int main(int argc, char **argv)
 									level[j].arr[i]->brick = al_load_bitmap(naam.c_str());
 									al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
 									std::cout <<  naam << std::endl;
-									al_rest(0.0001);
+									//al_rest(0.0001);
 								}
 
 								//al_set_target_bitmap(level[j].arr[i]->getBitMap());
@@ -283,7 +283,7 @@ int main(int argc, char **argv)
 								level[j].arr[i]->brick = al_load_bitmap(naam.c_str());
 								al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
 								std::cout << naam << std::endl;
-								al_rest(0.0001);
+								//al_rest(0.0001);
 							}
 
 							//al_set_target_bitmap(level[j].arr[i]->getBitMap());

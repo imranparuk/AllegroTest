@@ -28,9 +28,13 @@ public:
 		superLevel = 3;
 		if (super)
 		{
-			//brick = al_load_bitmap("");
-			brick = al_create_bitmap(sizeX, sizeY);
-			al_set_target_bitmap(brick);
+			if (!al_init_image_addon()) {
+				fprintf(stderr, "Failed to initialize image addon!\n");
+			}
+			brick = al_load_bitmap("super.bmp");
+			al_draw_bitmap(brick, locationX, locationY, 0);
+			//brick = al_create_bitmap(sizeX, sizeY);
+			//al_set_target_bitmap(brick);
 			al_clear_to_color(al_map_rgb(0, 0, 255));
 		}
 		else
