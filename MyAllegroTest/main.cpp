@@ -106,6 +106,8 @@ int main(int argc, char **argv)
 
 	al_set_target_bitmap(player);//viewing the player
 	al_clear_to_color(al_map_rgb(255, 0, 255));
+
+
 	al_set_target_bitmap(al_get_backbuffer(display));
 
 	event_queue = al_create_event_queue();

@@ -1,5 +1,6 @@
 #pragma once
 #include <stdio.h>
+#include "Ball.h"
 #include"allegro5/allegro.h"
 #include <iostream>
 
@@ -26,6 +27,9 @@ public:
 		sizeY = sY; 
 
 		player = al_create_bitmap(sizeX, sizeY);//actual player made
+		al_set_target_bitmap(player);//viewing the player
+		al_clear_to_color(al_map_rgb(255, 0, 255));
+
 		if (!player)
 		{
 			fprintf(stderr, "Failed to create player bitmap!\n");
@@ -37,6 +41,10 @@ public:
 	int getLocY();
 	int getSizeX();
 	int getSizeY();
+	void setSize(int , int );
+	void moveLeft();
+	void moveRight();
+	void detectBallCollsion(Ball );
 
 
 };
