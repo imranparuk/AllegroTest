@@ -41,6 +41,7 @@ int lives = 10;
 
 bool destroyed = false;
 
+ALLEGRO_COLOR grey = al_map_rgb(100, 100, 100);
 
 
 enum MYKEYS {
@@ -325,13 +326,14 @@ int main(int argc, char **argv)
 			//al_draw_bitmap(player, player_x, player_y, 0);
 			al_draw_bitmap(player.getBitMap(), player.getLocX(), player.getLocY(),0);
 			
-			ALLEGRO_COLOR gery = al_map_rgb(100, 100, 100);
 			string scoretxt = to_string(score);
 			string livestxt = to_string(lives);
-			al_draw_text(font, gery, 100, 5, ALLEGRO_ALIGN_CENTRE, "SCORE: ");
-			al_draw_text(font, al_map_rgb(255, 0, 40), 170, 5, ALLEGRO_ALIGN_CENTRE, scoretxt.c_str());
+			ALLEGRO_COLOR grey = al_map_rgb(100, 100, 100);
+
+			al_draw_text(font, grey, 100, 5, ALLEGRO_ALIGN_CENTRE, "SCORE: ");
+			al_draw_text(font, grey, 170, 5, ALLEGRO_ALIGN_CENTRE, scoretxt.c_str());
 			al_draw_text(font, al_map_rgb(255, 0, 40), 300, 5, ALLEGRO_ALIGN_CENTRE, "LIVES: ");
-			al_draw_text(font, al_map_rgb(255, 0, 40), 400, 5, ALLEGRO_ALIGN_CENTRE, livestxt.c_str());
+			al_draw_text(font, al_map_rgb(255, 0, 40), 360, 5, ALLEGRO_ALIGN_CENTRE, livestxt.c_str());
 			
 			for (int j = 0; j < 5; j++)
 				for (int i = 0; i < level[j].getNum(); i++)
