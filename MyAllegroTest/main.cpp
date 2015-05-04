@@ -40,7 +40,6 @@ int score = 0;
 int lives = 10;
 
 bool destroyed = false;
-ALLEGRO_FONT *font = al_load_ttf_font("CFNuclearWar-Regular.ttf", 72, 0);
 
 
 
@@ -94,10 +93,14 @@ int main(int argc, char **argv)
 	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150,true), b4(6, 100, 175), b5(4, 150, 200);
 	ArrayOfBricks level[5] = { b1, b2, b3, b4, b5 };
 
-	if (!font){
-		fprintf(stderr, "Could not load font.\n");
-		return -1;
-	}
+	//ALLEGRO_FONT *font = al_load_ttf_font("CFNuclearWar-Regular.ttf", 100, 0);
+
+//	if (!font){
+	//	fprintf(stderr, "Could not load font.\n");
+	//	return -1;
+	//}
+	
+	
 	Ball ball(BALL_SIZE_RADIUS, player.getLocX() + player.getSizeX() / 2, player.getLocY(), 4, -4, false);
 
 
@@ -201,52 +204,61 @@ int main(int argc, char **argv)
 					bool checkVer = level[j].arr[i]->detectCollisionVertical(ball.getCenter_X(), ball.getCenter_Y(), ball.getDelta_X(), ball.getDelta_Y(), BALL_SIZE_RADIUS);
 					bool checkHor = level[j].arr[i]->detectCollisionHorizontal(ball.getCenter_X(), ball.getCenter_Y(), ball.getDelta_X(), ball.getDelta_Y(), BALL_SIZE_RADIUS);
 
+					if (level[j].arr[i]->getSuperLevel() != 3)//this means the collsion was against a super brick
+					{
 						if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed())
 						{
-						if (level[j].arr[i]->getSuperLevel() != 3)
+							if (ball.isSuperBall()) level[j].arr[i]->setSuperLevel(0);
+							if (level[j].arr[i]->getSuperLevel() == 2)
 							{
-							switch (level[j].arr[i]->getSuperLevel())
-							{
-							case 2:
 								al_set_target_bitmap(level[j].arr[i]->getBitMap());
 								al_clear_to_color(al_map_rgb(0, 100, 255));
-
-								break;
-
-							case 1:
-								al_set_target_bitmap(level[j].arr[i]->getBitMap());
-								al_clear_to_color(al_map_rgb(125, 246, 231));
-
-								break;
-
-							case 0:
-								al_set_target_bitmap(level[j].arr[i]->getBitMap());
-								al_clear_to_color(al_map_rgb(0, 0, 0));
-
-								level[j].arr[i]->destroy(true);
-								break;
-							}
+								std::cout << "Vertical: " << checkVer << " , Horizontal: " << checkHor << std::endl;
 								if (checkVer) ball.reflectY();
 								if (checkHor) ball.reflectX();
 
+							}
+
+							if (level[j].arr[i]->getSuperLevel() == 1)
+							{
+								al_set_target_bitmap(level[j].arr[i]->getBitMap());
+								al_clear_to_color(al_map_rgb(125, 246, 231));
+								std::cout << "Vertical: " << checkVer << " , Horizontal: " << checkHor << std::endl;
+
+								if (checkVer) ball.reflectY();
+								if (checkHor) ball.reflectX();
+							}
+
+							if (level[j].arr[i]->getSuperLevel() == 0)
+							{
+								al_set_target_bitmap(level[j].arr[i]->getBitMap());
+								al_clear_to_color(al_map_rgb(0, 0, 0));
+								std::cout << "Vertical: " << checkVer << " , Horizontal: " << checkHor << std::endl;
+
+								if (checkVer) ball.reflectY();
+								if (checkHor) ball.reflectX();
+
+								level[j].arr[i]->destroy(true);
+							}
+							al_set_target_bitmap(al_get_backbuffer(display));
+							al_flip_display();
+						}
 					}
 					else
 					{
+						if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed())
+						{
 							if (checkVer && !ball.isSuperBall()) ball.reflectY();
 							if (checkHor && !ball.isSuperBall()) ball.reflectX();
 							level[j].arr[i]->destroy(true);
-
 							al_set_target_bitmap(level[j].arr[i]->getBitMap());
 							al_clear_to_color(al_map_rgb(0, 0, 0));
-
+							al_set_target_bitmap(al_get_backbuffer(display));
+							al_flip_display();
 							std::cout << "Score is : " << ++score << std::endl;
 						}
-
-
-					al_set_target_bitmap(al_get_backbuffer(display));
-					al_flip_display();
-
 					}
+
 				}
 			}
 
@@ -309,6 +321,7 @@ int main(int argc, char **argv)
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			//al_draw_bitmap(player, player_x, player_y, 0);
 			al_draw_bitmap(player.getBitMap(), player.getLocX(), player.getLocY(),0);
+			/*
 			ALLEGRO_COLOR gery = al_map_rgb(100, 100, 100);
 			string scoretxt = to_string(score);
 			string livestxt = to_string(lives);
@@ -316,7 +329,7 @@ int main(int argc, char **argv)
 			al_draw_text(font, al_map_rgb(255, 0, 40), 170, 5, ALLEGRO_ALIGN_CENTRE, scoretxt.c_str());
 			al_draw_text(font, al_map_rgb(255, 0, 40), 300, 5, ALLEGRO_ALIGN_CENTRE, "LIVES: ");
 			al_draw_text(font, al_map_rgb(255, 0, 40), 400, 5, ALLEGRO_ALIGN_CENTRE, livestxt.c_str());
-			al_flip_display();
+			*/
 			for (int j = 0; j < 5; j++)
 				for (int i = 0; i < level[j].getNum(); i++)
 					al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
