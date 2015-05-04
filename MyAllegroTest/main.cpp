@@ -93,12 +93,15 @@ int main(int argc, char **argv)
 	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150,true), b4(6, 100, 175), b5(4, 150, 200);
 	ArrayOfBricks level[5] = { b1, b2, b3, b4, b5 };
 
-	//ALLEGRO_FONT *font = al_load_ttf_font("CFNuclearWar-Regular.ttf", 100, 0);
+	al_init_font_addon();
+	al_init_ttf_addon();
 
-//	if (!font){
-	//	fprintf(stderr, "Could not load font.\n");
-	//	return -1;
-	//}
+	ALLEGRO_FONT *font = al_load_ttf_font("CFNuclearWar-Regular.ttf", 32, 0);
+
+	if (!font){
+		fprintf(stderr, "Could not load font.\n");
+		return -1;
+	}
 	
 	
 	Ball ball(BALL_SIZE_RADIUS, player.getLocX() + player.getSizeX() / 2, player.getLocY(), 4, -4, false);
@@ -321,7 +324,7 @@ int main(int argc, char **argv)
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			//al_draw_bitmap(player, player_x, player_y, 0);
 			al_draw_bitmap(player.getBitMap(), player.getLocX(), player.getLocY(),0);
-			/*
+			
 			ALLEGRO_COLOR gery = al_map_rgb(100, 100, 100);
 			string scoretxt = to_string(score);
 			string livestxt = to_string(lives);
@@ -329,7 +332,7 @@ int main(int argc, char **argv)
 			al_draw_text(font, al_map_rgb(255, 0, 40), 170, 5, ALLEGRO_ALIGN_CENTRE, scoretxt.c_str());
 			al_draw_text(font, al_map_rgb(255, 0, 40), 300, 5, ALLEGRO_ALIGN_CENTRE, "LIVES: ");
 			al_draw_text(font, al_map_rgb(255, 0, 40), 400, 5, ALLEGRO_ALIGN_CENTRE, livestxt.c_str());
-			*/
+			
 			for (int j = 0; j < 5; j++)
 				for (int i = 0; i < level[j].getNum(); i++)
 					al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
@@ -344,6 +347,7 @@ int main(int argc, char **argv)
 	//al_destroy_bitmap(player);
 	//al_destroy_bitmap(ball);
 	//destroy brick bitmaps
+	al_destroy_font(font);
 	al_destroy_timer(timer);
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
