@@ -22,6 +22,8 @@ private:
 
 	ALLEGRO_BITMAP *pUp = NULL;
 
+	bool start = false;
+
 
 public:
 	powerUp(float, float, float, float, float, float);
@@ -38,11 +40,12 @@ public:
 	void playerPowerUp(Player *);
 	void ballPowerUp(Ball *);
 
-	bool detectCollision(Player *);
+	bool detectCollision(Player );
 
 	void makeMove();
 
-	void setBitmap(ALLEGRO_BITMAP *);
+	//void setBitmap(ALLEGRO_BITMAP *, bool);
+	void enableBitmap();
 	ALLEGRO_BITMAP *getBitmap();
 };
 

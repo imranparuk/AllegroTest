@@ -16,6 +16,7 @@
 #include "ArrayOfBricks.h"
 #include "Ball.h"
 #include "Player.h"
+#include "powerUp.h"
 
 
 #define PI 3.14159265359
@@ -61,7 +62,6 @@ int main(int argc, char **argv)
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_SAMPLE *sample = NULL;
 	ALLEGRO_SAMPLE *SAMMY = NULL;
-
 
 	bool key[4] = { false, false, false, false };
 	bool redraw = true;
@@ -133,12 +133,11 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-
 	Player player(PLAYER_SIZEX, PLAYER_SIZEY, PLAYER_SIZEX + 100);
 	//Player superPlayer(PLAYER_SIZEX + 100, PLAYER_SIZEY);
 
-	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150, true), b4(6, 100, 175), b5(4, 150, 200);
-	ArrayOfBricks level[5] = { b1, b2, b3, b4, b5 };
+	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150, 0, true), b4(6, 100, 175), b5(4, 150, 200), powerBrick1(1, 320, 70, 1), powerBrick2(1, 320, 230, 1);
+	ArrayOfBricks level[7] = { powerBrick1, b1, b2, b3, b4, b5, powerBrick2 };
 
 	al_init_font_addon();
 	al_init_ttf_addon();
@@ -151,9 +150,15 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Could not load font.\n");
 		return -1;
 	}
-
-
+	
+	
 	Ball ball(BALL_SIZE_RADIUS, player.getLocX() + player.getSizeX() / 2, player.getLocY(), BALL_VEL, -BALL_VEL, false);
+
+	if (!al_init_image_addon()) {
+		fprintf(stderr, "Failed to initialize image addon!\n");
+	}
+
+	powerUp powerUp1(20,20,4,0.2,10,0);
 
 
 	al_set_target_bitmap(al_get_backbuffer(display));
@@ -179,8 +184,8 @@ int main(int argc, char **argv)
 
 	bool menu = true;
 	
-		while (menu)
-		{
+	while (menu)
+	{
 		int startx = 230;
 		int starty = 150;
 
@@ -213,7 +218,7 @@ int main(int argc, char **argv)
 		{
 			exit(1);
 		}
-		
+
 }
 	while (!doexit)
 	{
@@ -224,10 +229,11 @@ int main(int argc, char **argv)
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
 		
 
-			if (score > 1)
+			if (score > 3)
 			{
-				ball.setSuperBall(true);
-				player.setSuperPlayer(true);
+				//ball.setSuperBall(true);
+				//player.setSuperPlayer(true);
+				//powerUp1.enableBitmap();
 			}
 		
 			if (key[KEY_LEFT] && !demo) 
@@ -284,7 +290,6 @@ int main(int argc, char **argv)
 			}
 
 			
-				
 				/*
 				Ay dont delete this 
 				ballVel = ball.getBallVelocity();
@@ -304,7 +309,7 @@ int main(int argc, char **argv)
 				*/
 		
 			//cleaning code here
-			for (int j = 0; j < 5; j++)
+			for (int j = 0; j < 8; j++)
 			{
 				for (int i = 0; i < level[j].getNum(); i++)
 				{
@@ -315,9 +320,6 @@ int main(int argc, char **argv)
 					{
 						if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed())
 						{
-
-
-
 							if (ball.isSuperBall()) level[j].arr[i]->setSuperLevel(0);
 							if (level[j].arr[i]->getSuperLevel() == 2)
 							{
@@ -400,6 +402,26 @@ int main(int argc, char **argv)
 							score++;
 							//std::cout << "Score is : " << ++score << std::endl;
 						}
+						if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed() && level[j].arr[i]->isPowerUp())
+						{
+							if (checkVer && !ball.isSuperBall()) ball.reflectY();
+							if (checkHor && !ball.isSuperBall()) ball.reflectX();
+							level[j].arr[i]->destroy(true);
+
+							al_play_sample(SAMMY, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
+
+							al_set_target_bitmap(level[j].arr[i]->getBitMap());
+							al_clear_to_color(al_map_rgb(0, 0, 0));
+
+							powerUp1.enableBitmap();
+
+							al_set_target_bitmap(al_get_backbuffer(display));
+							al_flip_display();
+							score++;
+
+							//std::cout << "Score is : " << ++score << std::endl;
+						}
+
 					}
 
 				}
@@ -407,7 +429,7 @@ int main(int argc, char **argv)
 
 			
 			
-
+			powerUp1.makeMove();
 			ball.makeMove();
 			redraw = true;
 		}
@@ -470,6 +492,9 @@ int main(int argc, char **argv)
 			//al_draw_bitmap(player, player_x, player_y, 0);
 			al_draw_bitmap(player.getBitMap(), player.getLocX(), player.getLocY(),0);
 			
+			if (powerUp1.getBitmap() != NULL)
+				al_draw_bitmap(powerUp1.getBitmap(), powerUp1.getLocationX(), powerUp1.getLocationY(), 0);
+			
 			string scoretxt = to_string(score);
 			string livestxt = to_string(lives);
 			ALLEGRO_COLOR grey = al_map_rgb(100, 100, 100);
@@ -479,7 +504,7 @@ int main(int argc, char **argv)
 			al_draw_text(font, al_map_rgb(255, 0, 40), 300, 5, ALLEGRO_ALIGN_CENTRE, "LIVES: ");
 			al_draw_text(font, al_map_rgb(255, 0, 40), 400, 5, ALLEGRO_ALIGN_CENTRE, livestxt.c_str());
 			
-			for (int j = 0; j < 5; j++)
+			for (int j = 0; j < 7; j++)
 				for (int i = 0; i < level[j].getNum(); i++)
 					al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
 

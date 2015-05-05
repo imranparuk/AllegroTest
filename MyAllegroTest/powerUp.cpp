@@ -1,3 +1,8 @@
+#include <stdio.h>
+#include"allegro5/allegro.h"
+#include <allegro5/allegro_primitives.h>
+#include <iostream>
+#include <math.h>
 #include "powerUp.h"
 
 
@@ -10,14 +15,8 @@ powerUp::powerUp(float sx = 0, float sy = 0, float dy = 0, float ay = 0, float l
 	locationX = lx;
 	locationY = ly;
 
-	pUp = al_create_bitmap(sx, sy);
-	//al_set_target_bitmap(ball);
-	//al_clear_to_color(al_map_rgb(255, 0, 0));
 
-	if (!pUp)
-	{
-		fprintf(stderr, "Failed to create power up bitmap!\n");
-	}
+	
 }
 
 float powerUp::getLocationX()
@@ -42,8 +41,11 @@ float powerUp::getDeltaY()
 
 void powerUp::makeMove()
 {
-	deltaY += accelY;
-	locationY += deltaY;
+	if (start == true)
+	{
+		deltaY += accelY;
+		locationY += deltaY;
+	}
 }
 
 void powerUp::playerPowerUp(Player *Player)
@@ -57,13 +59,12 @@ void powerUp::ballPowerUp(Ball *ball)
 }
 
 
-
-bool powerUp::detectCollision(Player *Player)
+bool powerUp::detectCollision(Player player)
 {
 
 	int temp_dy = abs(deltaY);
 
-	if ((deltaY > 0) && (locationY + sizeY >= Player->getLocY()) && (locationY + sizeY <= Player->getLocY() + temp_dy) && (locationX + sizeX > Player->getLocX()) && (locationX < Player->getLocX() +Player->getSizeX()))
+	if ((deltaY > 0) && (locationY + sizeY >= player.getLocY()) && (locationY + sizeY <= player.getLocY() + temp_dy) && (locationX + sizeX > player.getLocX()) && (locationX < player.getLocX() +player.getSizeX()))
 	{
 		return true;
 	}
@@ -77,9 +78,15 @@ ALLEGRO_BITMAP *powerUp::getBitmap()
 	return pUp;
 }
 
-void powerUp::setBitmap(ALLEGRO_BITMAP *bmp)
+void powerUp::enableBitmap()
 {
-	pUp = bmp;
+		pUp = al_create_bitmap(sizeX, sizeY);
+		if (!pUp)
+		{
+			fprintf(stderr, "Failed to create power up bitmap!\n");
+		}
+		al_set_target_bitmap(pUp);
+		al_clear_to_color(al_map_rgb(255, 0, 0));
 }
 
 powerUp::~powerUp()
