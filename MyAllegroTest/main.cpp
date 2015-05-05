@@ -145,7 +145,7 @@ int main(int argc, char **argv)
 	Player player(PLAYER_SIZEX, PLAYER_SIZEY, PLAYER_SIZEX + 100);
 	//Player superPlayer(PLAYER_SIZEX + 100, PLAYER_SIZEY);
 
-	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150, 0, true), b4(6, 100, 175), b5(4, 150, 200), powerBrick1(1, 320, 70, 1), powerBrick2(1, 320, 230, 1);
+	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8,50, 150, 0, true), b4(6, 100, 175), b5(4, 150, 200), powerBrick1(1, 320, 70, 1), powerBrick2(1, 320, 230, 1);
 	ArrayOfBricks level[7] = { powerBrick1, b1, b2, b3, b4, b5, powerBrick2 };
 
 	al_init_font_addon();
