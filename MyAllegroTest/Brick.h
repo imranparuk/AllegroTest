@@ -15,17 +15,19 @@ private:
 	bool destroyed;
 	bool super;
 	int superLevel;
+	int puBrick;
 //	ALLEGRO_BITMAP *brick = NULL;
 	
 	
 public:
 	ALLEGRO_BITMAP *brick = NULL;
 
-	Brick(int lx=0, int ly=0,bool s = false) :locationX(lx), locationY(ly)
+	Brick(int lx=0, int ly=0,int pU = 0, bool s = false) :locationX(lx), locationY(ly)
 	{ 
 		destroyed = false;
 		super = s;
 		superLevel = 3;
+		puBrick = pU;
 		if (super)
 		{
 			if (!al_init_image_addon()) {
@@ -63,6 +65,7 @@ public:
 	int getLocY();
 	int getSizeX();
 	int getSizeY();
+	bool isPowerUp();
 	bool isDestroyed();
 	int getSuperLevel();
 	void setSuperLevel(int);
