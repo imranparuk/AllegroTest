@@ -4,10 +4,8 @@
 #include "allegro5/allegro_image.h"
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
-
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
-
 
 #include <math.h>
 #include <iostream>
@@ -32,14 +30,14 @@ const int BALL_SIZE_RADIUS = 7;
 const int PLAYER_SIZEX = 120;
 const int PLAYER_SIZEY = 10;
 
-const int BRICK_SIZE = 20;
+//const int BRICK_SIZE = 20;
 
-float ballAngle = 0;
-float offsetAngle = 0;
-float ballVel = 0;
-float radAngle = 0;
-float awayFromCent = 0;
-float reflectionConst = 0;
+//float ballAngle = 0;
+//float offsetAngle = 0;
+//float ballVel = 0;
+//float radAngle = 0;
+//float awayFromCent = 0;
+//float reflectionConst = 0;
 
 int score = 0;
 int lives = 10;
@@ -60,8 +58,7 @@ int main(int argc, char **argv)
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_SAMPLE *sample = NULL;
-	ALLEGRO_BITMAP *bc = NULL;
-
+	ALLEGRO_BITMAP *bg = NULL;
 
 	bool key[4] = { false, false, false, false };
 	bool redraw = true;
@@ -80,25 +77,17 @@ int main(int argc, char **argv)
 	if (!al_init_acodec_addon()) {
 		fprintf(stderr, "failed to initialize audio codecs!\n");
 		return -1;
-
 	}
 
 	if (!al_reserve_samples(1)){
 		fprintf(stderr, "failed to reserve samples!\n");
 		return -1;
 	}
+
 	if (!al_init_image_addon()) {
 		fprintf(stderr, "failed to image addon!\n");
 		return 0;
 	}
-
-	sample = al_load_sample("oursound.wav");
-
-	if (!sample) {
-		printf("Audio clip sample not loaded!\n");
-		return -1;
-	}
-
 
 	if (!al_install_keyboard()) {
 		fprintf(stderr, "failed to initialize the keyboard!\n");
@@ -111,14 +100,16 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+	sample = al_load_sample("oursound.wav");
+	if (!sample) {
+		printf("Audio clip sample not loaded!\n");
+		return -1;
+	}
+
 	timer = al_create_timer(1.0 / FPS);
 	if (!timer) {
 		fprintf(stderr, "failed to create timer!\n");
 		return -1;
-	}
-
-	if (!al_init_image_addon()) {
-		fprintf(stderr, "Failed to initialize image addon!\n");
 	}
 
 	display = al_create_display(SCREEN_W, SCREEN_H);
@@ -128,20 +119,14 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	bc = al_load_bitmap("background.bmp");
-	if (!bc) {
+	bg = al_load_bitmap("super.bmp");
+	if (!bg) {
 		fprintf(stderr, "failed to create background!\n");
 		al_destroy_timer(timer);
 		return -1;
 	}
 
-	al_draw_bitmap(bc, 200, 200, 0);
-
-	//al_set_target_bitmap(al_get_backbuffer(display));
-	al_flip_display();
-
 	al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);//plays
-
 
 	Player player(PLAYER_SIZEX, PLAYER_SIZEY);
 
@@ -150,7 +135,6 @@ int main(int argc, char **argv)
 
 	al_init_font_addon();
 	al_init_ttf_addon();
-
 	ALLEGRO_FONT *font = al_load_ttf_font("CFNuclearWar-Regular.ttf", 32, 0);
 
 	if (!font){
@@ -158,8 +142,9 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	
-	
 	Ball ball(BALL_SIZE_RADIUS, player.getLocX() + player.getSizeX() / 2, player.getLocY(), 4, -4, false);
+
+	al_draw_bitmap(bg, 0, 0, 0);
 
 
 	al_set_target_bitmap(al_get_backbuffer(display));
@@ -167,8 +152,6 @@ int main(int argc, char **argv)
 	event_queue = al_create_event_queue();
 	if (!event_queue) {
 		fprintf(stderr, "failed to create event_queue!\n");
-		//al_destroy_bitmap(player);
-		//al_destroy_bitmap(ball);
 		al_destroy_display(display);
 		al_destroy_timer(timer);
 		return -1;
@@ -182,14 +165,12 @@ int main(int argc, char **argv)
 	al_start_timer(timer);
 
 	while (!doexit)
-	{
-		
+	{	
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
 		
-
 			if (score > 15)
 				ball.setSuperBall(true);
 
@@ -201,7 +182,7 @@ int main(int argc, char **argv)
 
 			if (demo)
 			{
-					player.setLocationX(ball.getCenter_X() - player.getSizeX() / 2);
+				player.setLocationX(ball.getCenter_X() - player.getSizeX() / 2);
 			}
 
 			if (player.getLocX() + 0.5*player.getSizeX() > SCREEN_W  && key[KEY_RIGHT])
@@ -412,9 +393,11 @@ int main(int argc, char **argv)
 		if (redraw && al_is_event_queue_empty(event_queue)) {
 			
 			redraw = false;
+
+			al_draw_bitmap(bg, 0, 0, 0);
+			//al_set_target_bitmap(al_get_backbuffer(display));
 		
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-			//al_draw_bitmap(player, player_x, player_y, 0);
 			al_draw_bitmap(player.getBitMap(), player.getLocX(), player.getLocY(),0);
 			
 			string scoretxt = to_string(score);
@@ -432,6 +415,7 @@ int main(int argc, char **argv)
 
 			if (ball.isSuperBall())	ball.drawBall(255, 255, 0);
 			else ball.drawBall(255, 0, 0);
+
 			al_flip_display();
 		}
 		
