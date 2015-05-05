@@ -168,7 +168,8 @@ restart:
 		fprintf(stderr, "Failed to initialize image addon!\n");
 	}
 
-	powerUp powerUp1(20,20,4,0.2,10,0);
+	powerUp powerUp1(20,20,4,0.04,320,70);
+	powerUp powerUp2(20, 20, 4, 0.04, 320, 230);
 
 
 	al_set_target_bitmap(al_get_backbuffer(display));
@@ -305,9 +306,18 @@ restart:
 			if (powerUp1.detectCollision(&player))
 			{
 				powerUp1.ballPowerUp(&ball);
-				powerUp1.playerPowerUp(&player);
+				al_set_target_bitmap(powerUp1.getBitmap());
+				al_clear_to_color(al_map_rgb(0, 0, 0));
+				al_set_target_bitmap(al_get_backbuffer(display));
+				al_flip_display();
 			}
 
+			if (powerUp2.detectCollision(&player))
+			{
+				powerUp1.playerPowerUp(&player);
+				//al_set_target_bitmap(powerUp1.getBitmap());
+				//al_clear_to_color(al_map_rgb(0, 0, 0));
+			}
 				
 				/*
 				Ay dont delete this 
@@ -433,20 +443,18 @@ restart:
 							al_set_target_bitmap(level[j].arr[i]->getBitMap());
 							al_clear_to_color(al_map_rgb(0, 0, 0));
 							powerUp1.enableBitmap();
-
+							powerUp2.enableBitmap();
+							//ensure that the powerups are only enabled when hitting the bricks... this is a problem, try using flags.
 							al_set_target_bitmap(al_get_backbuffer(display));
 							al_flip_display();
 							score++;
-
-							//std::cout << "Score is : " << ++score << std::endl;
 						}
 
 					}
 			}
-
-			
 			
 			powerUp1.makeMove();
+			powerUp2.makeMove();
 			ball.makeMove();
 			redraw = true;
 		}
