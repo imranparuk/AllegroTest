@@ -62,6 +62,8 @@ int main(int argc, char **argv)
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_SAMPLE *sample = NULL;
 	ALLEGRO_SAMPLE *SAMMY = NULL;
+	ALLEGRO_SAMPLE *thunder = NULL;
+
 
 	bool key[4] = { false, false, false, false };
 	bool redraw = true;
@@ -83,19 +85,26 @@ int main(int argc, char **argv)
 
 	}
 
-	if (!al_reserve_samples(2)){
+	if (!al_reserve_samples(3)){
 		fprintf(stderr, "failed to reserve samples!\n");
 		return -1;
 	}
 
 	sample = al_load_sample("oursound.wav");
 	SAMMY = al_load_sample("bloop.wav");
+	thunder = al_load_sample("thunder.wav");
+
 	if (!sample) {
 		printf("Audio clip sample not loaded!\n");
 		return -1;
 	}
 
 	if (!SAMMY) {
+		printf("Audio clip sample not loaded!\n");
+		return -1;
+	}
+
+	if (!thunder) {
 		printf("Audio clip sample not loaded!\n");
 		return -1;
 	}
@@ -126,7 +135,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);//plays
+	al_play_sample(sample, 0.5, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);//plays
 
 	if (!al_install_mouse()) {
 		fprintf(stderr, "failed to initialize the mouse!\n");
@@ -261,6 +270,8 @@ int main(int argc, char **argv)
 			{
 				//std::cout << "Lives Left: " << --lives << std::endl;
 				lives--;
+				al_play_sample(thunder, 2, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+
 				player.setSuperPlayer(false);
 				ball.restart(player.getLocX() + player.getSizeX() / 2, player.getLocY(), BALL_VEL, -BALL_VEL, false);
 
@@ -369,7 +380,7 @@ int main(int argc, char **argv)
 								if (checkVer) ball.reflectY();
 								if (checkHor) ball.reflectX();
 								score++;
-								al_play_sample(SAMMY, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
+								al_play_sample(SAMMY, 0.5, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
 
 								level[j].arr[i]->destroy(true);
 							}
@@ -393,7 +404,7 @@ int main(int argc, char **argv)
 								al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
 								//al_rest(0.0001);
 							}
-							al_play_sample(SAMMY, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
+							al_play_sample(SAMMY, 0.5, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
 
 							//al_set_target_bitmap(level[j].arr[i]->getBitMap());
 							//al_clear_to_color(al_map_rgb(0, 0, 0));
