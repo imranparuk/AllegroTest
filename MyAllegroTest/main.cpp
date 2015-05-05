@@ -206,9 +206,12 @@ int main(int argc, char **argv)
 			{
 				exit(1);
 			}
-
+			
 		}
-
+		if (ec.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+		{
+			exit(1);
+		}
 	}
 
 	while (!doexit)
