@@ -41,7 +41,7 @@ float powerUp::getDeltaY()
 
 void powerUp::makeMove()
 {
-	if (start == true)
+	if (pUp != NULL)
 	{
 		deltaY += accelY;
 		locationY += deltaY;
@@ -83,8 +83,10 @@ void powerUp::enableBitmap()
 		{
 			fprintf(stderr, "Failed to create power up bitmap!\n");
 		}
+
 		al_set_target_bitmap(pUp);
 		al_clear_to_color(al_map_rgb(255, 0, 0));
+		std::cout << "Hello";
 }
 
 powerUp::~powerUp()

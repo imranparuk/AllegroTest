@@ -31,7 +31,7 @@ int Brick::getSuperLevel()
 
 bool Brick::isPowerUp()
 {
-	if (puBrick)
+	if (puBrick == 1)
 		return true;
 	return false;
 }
