@@ -68,7 +68,7 @@ bool powerUp::detectCollision(Player *player)
 		return true;
 	else
 		return false;
-
+		
 }
 
 ALLEGRO_BITMAP *powerUp::getBitmap()
