@@ -91,17 +91,22 @@ int main(int argc, char **argv)
 			al_destroy_timer(timer);
 			return -1;
 		}
-
-		Player player(PLAYER_SIZEX, PLAYER_SIZEY);
-
-		ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150, true), b4(6, 100, 175), b5(4, 150, 200);
-		ArrayOfBricks level[5] = { b1, b2, b3, b4, b5 };
-
+		if (!al_install_mouse()) {
+			fprintf(stderr, "failed to initialize the mouse!\n");
+			return -1;
+		}
 		al_init_font_addon();
 		al_init_ttf_addon();
 
 		ALLEGRO_FONT *font = al_load_ttf_font("CFNuclearWar-Regular.ttf", 32, 0);
 		ALLEGRO_FONT *font1 = al_load_ttf_font("CFNuclearWar-Regular.ttf", 72, 0);
+		ALLEGRO_FONT *font2 = al_load_ttf_font("CFNuclearWar-Regular.ttf", 30, 0);
+		Player player(PLAYER_SIZEX, PLAYER_SIZEY);
+
+		ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150, true), b4(6, 100, 175), b5(4, 150, 200);
+		ArrayOfBricks level[5] = { b1, b2, b3, b4, b5 };
+
+		
 		if (!font){
 			fprintf(stderr, "Could not load font.\n");
 			return -1;
@@ -122,13 +127,47 @@ int main(int argc, char **argv)
 			al_destroy_timer(timer);
 			return -1;
 		}
+		
+		
 
 		al_register_event_source(event_queue, al_get_display_event_source(display));
 		al_register_event_source(event_queue, al_get_timer_event_source(timer));
 		al_register_event_source(event_queue, al_get_keyboard_event_source());
+		al_register_event_source(event_queue, al_get_mouse_event_source());
 		al_clear_to_color(al_map_rgb(0, 0, 0));
 		al_flip_display();
 		al_start_timer(timer);
+		bool menu = true;
+		while (menu)
+		{
+			
+			al_draw_text(font2, al_map_rgb(255, 0, 40), 320, 150, ALLEGRO_ALIGN_CENTRE, "START GAME");
+			al_draw_text(font2, al_map_rgb(255, 0, 40), 320, 190, ALLEGRO_ALIGN_CENTRE, "DEMO");
+			al_draw_text(font2, al_map_rgb(255, 0, 40), 320, 230, ALLEGRO_ALIGN_CENTRE, "EXIT");
+			al_flip_display();
+			ALLEGRO_EVENT ec;
+			al_wait_for_event(event_queue, &ec);
+			if (ec.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+		{
+			if (ec.mouse.y >= 150 && ec.mouse.y <= 180)
+			{
+			menu = false;
+			}
+			else if (ec.mouse.y >180 && ec.mouse.y <= 230){
+			
+			}
+			else if (ec.mouse.y > 230 && ec.mouse.y <= 260){
+				exit(1);
+			}
+			else
+			{
+			
+			}
+
+
+			
+		}
+		}
 
 		while (!doexit)
 		{
