@@ -180,25 +180,30 @@ int main(int argc, char **argv)
 	bool menu = true;
 	while (menu)
 	{
+		int startx = 230;
+		int starty = 150;
 
-		al_draw_text(font2, al_map_rgb(255, 0, 40), 320, 150, ALLEGRO_ALIGN_CENTRE, "START GAME");
-		al_draw_text(font2, al_map_rgb(255, 0, 40), 320, 190, ALLEGRO_ALIGN_CENTRE, "DEMO");
-		al_draw_text(font2, al_map_rgb(255, 0, 40), 320, 230, ALLEGRO_ALIGN_CENTRE, "EXIT");
+
+		al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty, ALLEGRO_ALIGN_LEFT, "START GAME");
+		al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty+40, ALLEGRO_ALIGN_LEFT, "DEMO");
+		al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty+80, ALLEGRO_ALIGN_LEFT, "EXIT");
 		al_flip_display();
 		ALLEGRO_EVENT ec;
 		al_wait_for_event(event_queue, &ec);
 		if (ec.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
 		{
-			if (ec.mouse.y >= 150 && ec.mouse.y <= 180)
+			if (ec.mouse.y >= 150 && ec.mouse.y <= 180 && ec.mouse.x >= startx && ec.mouse.x <= startx + 200)//start game
 			{
 				menu = false;
 			}
-			else if (ec.mouse.y >180 && ec.mouse.y <= 230){
+			else if (ec.mouse.y >180 && ec.mouse.y <= 230 && ec.mouse.x >= startx && ec.mouse.x <= startx + 88)//demo
+			{
 				demo = true;
 				menu = false;
 
 			}
-			else if (ec.mouse.y > 230 && ec.mouse.y <= 260){
+			else if (ec.mouse.y > 230 && ec.mouse.y <= 260 && ec.mouse.x >= startx && ec.mouse.x <= startx + 65)//exit
+			{
 				exit(1);
 			}
 
