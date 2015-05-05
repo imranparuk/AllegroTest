@@ -24,7 +24,10 @@ private:
 public:
 	
 	Ball(float, float, float, float, float, bool);
-	~Ball();
+	~Ball()
+	{
+		//al_destroy_bitmap(ball); not working??
+	};
 
 	float getCenter_X();
 	float getCenter_Y();
@@ -40,7 +43,7 @@ public:
 	void makeMove();
 	void reflectY();
 	void reflectX();
-	void restart(int, int, float, float);
+	void restart(int, int, float, float, bool);
 	void drawBall(int, int, int);
 
 	float getBallVelocity();

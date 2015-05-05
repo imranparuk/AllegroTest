@@ -59,11 +59,32 @@ void Player::setLocationY(int y)
 	locationY = y;
 }
 
+void Player::setSuperPlayer(bool super)
+{
+	superPlayer = super;
+	if (super)
+	{
+		sizeX = superSizeX;
+	}
+	else
+	{
+		sizeX = normSizeX;
+	}
+}
 
+bool Player::isSuperPlayer()
+{
+	return superPlayer;
+}
 
 
 ALLEGRO_BITMAP *Player::getBitMap()
 {
-	return p;
+	if (superPlayer) return s;
+	else return p;
+}
+void Player::setBitMap(ALLEGRO_BITMAP *bmp)
+{
+	p = bmp;
 }
 

@@ -19,9 +19,13 @@ Ball::Ball(float rad = 0, float sx = 0, float sy = 0, float dx = 0, float dy = 0
 	}
 }
 
-
-Ball::~Ball()
+float Ball::getDelta_X()
 {
+	return deltaX;
+}
+float Ball::getDelta_Y()
+{
+	return deltaY;
 }
 
 float Ball::getCenter_X()
@@ -32,22 +36,6 @@ float Ball::getCenter_X()
 float Ball::getCenter_Y()
 {
 	return CenterY;
-}
-
-void Ball::setCenter(int ax, int ay)
-{
-	CenterX = ax;
-	CenterX = ay;
-}
-
-float Ball::getDelta_X()
-{
-	return deltaX;
-}
-
-float Ball::getDelta_Y()
-{
-	return deltaY;
 }
 
 ALLEGRO_BITMAP *Ball::getBitMap()
@@ -82,8 +70,9 @@ void Ball::reflectY()
 	deltaY *= -1;
 }
 
-void Ball::restart(int cx, int cy, float dx, float dy)
+void Ball::restart(int cx, int cy, float dx, float dy, bool super)
 {
+	superBall = super;
 	CenterX = cx;
 	CenterY = cy;
 	deltaX = dx;

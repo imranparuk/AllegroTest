@@ -73,6 +73,7 @@
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="powerUp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArrayOfBricks.h" />
@@ -80,6 +81,7 @@
     <ClInclude Include="Brick.h" />
     <ClInclude Include="GameEngine.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="powerUp.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

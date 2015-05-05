@@ -22,11 +22,12 @@
 
 using namespace std;
 
-const float FPS = 50;
+const float FPS = 45;
 const int SCREEN_W = 640;
 const int SCREEN_H = 480;
 
 const int BALL_SIZE_RADIUS = 7;
+const int BALL_VEL = 4;
 
 const int PLAYER_SIZEX = 120;
 const int PLAYER_SIZEY = 10;
@@ -44,7 +45,7 @@ int score = 0;
 int lives = 10;
 
 bool destroyed = false;
-bool demo = true;
+bool demo = false;
 
 
 enum MYKEYS {
@@ -126,7 +127,8 @@ int main(int argc, char **argv)
 
 
 
-	Player player(PLAYER_SIZEX, PLAYER_SIZEY);
+	Player player(PLAYER_SIZEX, PLAYER_SIZEY, PLAYER_SIZEX + 100);
+	//Player superPlayer(PLAYER_SIZEX + 100, PLAYER_SIZEY);
 
 	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150,true), b4(6, 100, 175), b5(4, 150, 200);
 	ArrayOfBricks level[5] = { b1, b2, b3, b4, b5 };
@@ -142,7 +144,7 @@ int main(int argc, char **argv)
 	}
 	
 	
-	Ball ball(BALL_SIZE_RADIUS, player.getLocX() + player.getSizeX() / 2, player.getLocY(), 4, -4, false);
+	Ball ball(BALL_SIZE_RADIUS, player.getLocX() + player.getSizeX() / 2, player.getLocY(), BALL_VEL, -BALL_VEL, false);
 
 
 	al_set_target_bitmap(al_get_backbuffer(display));
@@ -173,9 +175,12 @@ int main(int argc, char **argv)
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
 		
 
-			if (score > 15)
+			if (score > 1)
+			{
 				ball.setSuperBall(true);
-
+				player.setSuperPlayer(true);
+			}
+		
 			if (key[KEY_LEFT] && !demo) 
 				player.moveLeft();
 
@@ -184,7 +189,7 @@ int main(int argc, char **argv)
 
 			if (demo)
 			{
-					player.setLocationX(ball.getCenter_X() - player.getSizeX() / 2);
+				player.setLocationX(ball.getCenter_X() - player.getSizeX() / 2);
 			}
 
 			if (player.getLocX() + 0.5*player.getSizeX() > SCREEN_W  && key[KEY_RIGHT])
@@ -201,7 +206,9 @@ int main(int argc, char **argv)
 			{
 				//std::cout << "Lives Left: " << --lives << std::endl;
 				lives--;
-				ball.restart(player.getLocX() + player.getSizeX() / 2, player.getLocY(), 4, -4);
+				player.setSuperPlayer(false);
+				ball.restart(player.getLocX() + player.getSizeX() / 2, player.getLocY(), BALL_VEL, -BALL_VEL, false);
+
 			}
 
 			if ((ball.getCenter_Y() - ball.getRadius()) <= 0 && ball.getDelta_Y() <= 0) 
@@ -396,6 +403,11 @@ int main(int argc, char **argv)
 			
 			redraw = false;
 		
+			/*if (player.isSuperPlayer())
+			{
+				player.setBitMap(superPlayer.getBitMap());
+				player.setSize(superPlayer.getSizeX(), superPlayer.getSizeY());
+			}*/
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			//al_draw_bitmap(player, player_x, player_y, 0);
 			al_draw_bitmap(player.getBitMap(), player.getLocX(), player.getLocY(),0);
