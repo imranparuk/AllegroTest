@@ -16,6 +16,7 @@
 #include "ArrayOfBricks.h"
 #include "Ball.h"
 #include "Player.h"
+#include "powerUp.h"
 
 
 #define PI 3.14159265359
@@ -61,7 +62,6 @@ int main(int argc, char **argv)
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_SAMPLE *sample = NULL;
 	ALLEGRO_SAMPLE *SAMMY = NULL;
-
 
 	bool key[4] = { false, false, false, false };
 	bool redraw = true;
@@ -129,7 +129,7 @@ int main(int argc, char **argv)
 	al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);//plays
 
 
-
+	Brick power(150, 60);
 
 	Player player(PLAYER_SIZEX, PLAYER_SIZEY, PLAYER_SIZEX + 100);
 	//Player superPlayer(PLAYER_SIZEX + 100, PLAYER_SIZEY);
@@ -150,6 +150,11 @@ int main(int argc, char **argv)
 	
 	Ball ball(BALL_SIZE_RADIUS, player.getLocX() + player.getSizeX() / 2, player.getLocY(), BALL_VEL, -BALL_VEL, false);
 
+	if (!al_init_image_addon()) {
+		fprintf(stderr, "Failed to initialize image addon!\n");
+	}
+
+	powerUp powerUp1(20,20,10,2,150,60);
 
 	al_set_target_bitmap(al_get_backbuffer(display));
 
