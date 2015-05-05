@@ -288,6 +288,11 @@ int main(int argc, char **argv)
 				ball.reboundOffPlayer(radAngle);
 
 			}
+			if (powerUp1.detectCollision(&player))
+			{
+				powerUp1.ballPowerUp(&ball);
+				powerUp1.playerPowerUp(&player);
+			}
 
 			
 				/*

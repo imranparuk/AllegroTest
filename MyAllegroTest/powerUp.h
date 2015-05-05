@@ -40,7 +40,7 @@ public:
 	void playerPowerUp(Player *);
 	void ballPowerUp(Ball *);
 
-	bool detectCollision(Player );
+	bool detectCollision(Player *);
 
 	void makeMove();
 
