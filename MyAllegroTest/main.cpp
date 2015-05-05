@@ -230,6 +230,7 @@ int main(int argc, char **argv)
 
 			if (score > 3)
 			{
+
 				//ball.setSuperBall(true);
 				//player.setSuperPlayer(true);
 				//powerUp1.enableBitmap();
@@ -378,7 +379,7 @@ int main(int argc, char **argv)
 					}
 					else
 					{
-						if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed())
+						if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed() && !level[j].arr[i]->isPowerUp())
 						{
 							if (checkVer && !ball.isSuperBall()) ball.reflectY();
 							if (checkHor && !ball.isSuperBall()) ball.reflectX();
@@ -399,28 +400,29 @@ int main(int argc, char **argv)
 							al_set_target_bitmap(al_get_backbuffer(display));
 							al_flip_display();
 							score++;
-							//std::cout << "Score is : " << ++score << std::endl;
 						}
-						if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed() && level[j].arr[i]->isPowerUp())
-						{
-							if (checkVer && !ball.isSuperBall()) ball.reflectY();
-							if (checkHor && !ball.isSuperBall()) ball.reflectX();
-							level[j].arr[i]->destroy(true);
+					}
 
-							al_play_sample(SAMMY, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
+					if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed() && level[j].arr[i]->isPowerUp())
+					{
+						if (checkVer && !ball.isSuperBall()) ball.reflectY();
+						if (checkHor && !ball.isSuperBall()) ball.reflectX();
+						level[j].arr[i]->destroy(true);
 
-							al_set_target_bitmap(level[j].arr[i]->getBitMap());
-							al_clear_to_color(al_map_rgb(0, 0, 0));
+						al_play_sample(SAMMY, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
 
-							powerUp1.enableBitmap();
+						al_set_target_bitmap(level[j].arr[i]->getBitMap());
+						al_clear_to_color(al_map_rgb(0, 0, 0));
 
-							al_set_target_bitmap(al_get_backbuffer(display));
-							al_flip_display();
-							score++;
+						std::cout << "Hello";
 
-							//std::cout << "Score is : " << ++score << std::endl;
-						}
+						powerUp1.enableBitmap();
 
+						al_set_target_bitmap(al_get_backbuffer(display));
+						al_flip_display();
+						score++;
+
+						//std::cout << "Score is : " << ++score << std::endl;
 					}
 
 				}
