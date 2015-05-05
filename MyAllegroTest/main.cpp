@@ -60,6 +60,7 @@ int main(int argc, char **argv)
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_SAMPLE *sample = NULL;
+	ALLEGRO_SAMPLE *SAMMY = NULL;
 
 
 	bool key[4] = { false, false, false, false };
@@ -82,19 +83,22 @@ int main(int argc, char **argv)
 
 	}
 
-	if (!al_reserve_samples(1)){
+	if (!al_reserve_samples(2)){
 		fprintf(stderr, "failed to reserve samples!\n");
 		return -1;
 	}
 
 	sample = al_load_sample("oursound.wav");
-
+	SAMMY = al_load_sample("bloop.wav");
 	if (!sample) {
 		printf("Audio clip sample not loaded!\n");
 		return -1;
 	}
 
-
+	if (!SAMMY) {
+		printf("Audio clip sample not loaded!\n");
+		return -1;
+	}
 
 
 	if (!al_install_keyboard()) {
@@ -231,6 +235,7 @@ int main(int argc, char **argv)
 				float radAngle = (PI / 180)*offsetAngle;
 
 				ball.reboundOffPlayer(radAngle);
+
 			}
 				
 				/*
@@ -263,6 +268,9 @@ int main(int argc, char **argv)
 					{
 						if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed())
 						{
+
+
+
 							if (ball.isSuperBall()) level[j].arr[i]->setSuperLevel(0);
 							if (level[j].arr[i]->getSuperLevel() == 2)
 							{
@@ -312,6 +320,8 @@ int main(int argc, char **argv)
 								if (checkVer) ball.reflectY();
 								if (checkHor) ball.reflectX();
 								score++;
+								al_play_sample(SAMMY, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
+
 								level[j].arr[i]->destroy(true);
 							}
 							al_set_target_bitmap(al_get_backbuffer(display));
@@ -334,6 +344,7 @@ int main(int argc, char **argv)
 								al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
 								//al_rest(0.0001);
 							}
+							al_play_sample(SAMMY, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
 
 							//al_set_target_bitmap(level[j].arr[i]->getBitMap());
 							//al_clear_to_color(al_map_rgb(0, 0, 0));
