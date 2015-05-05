@@ -53,7 +53,7 @@ enum MYKEYS {
 	KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
 };
 
-
+ 
 int main(int argc, char **argv)
 
 {
