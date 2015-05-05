@@ -57,11 +57,14 @@ enum MYKEYS {
 int main(int argc, char **argv)
 
 {
+	
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_SAMPLE *sample = NULL;
 	ALLEGRO_SAMPLE *SAMMY = NULL;
+	ALLEGRO_SAMPLE *thunder = NULL;
+
 
 	bool key[4] = { false, false, false, false };
 	bool redraw = true;
@@ -83,19 +86,26 @@ int main(int argc, char **argv)
 
 	}
 
-	if (!al_reserve_samples(2)){
+	if (!al_reserve_samples(3)){
 		fprintf(stderr, "failed to reserve samples!\n");
 		return -1;
 	}
 
 	sample = al_load_sample("oursound.wav");
 	SAMMY = al_load_sample("bloop.wav");
+	thunder = al_load_sample("thunder.wav");
+
 	if (!sample) {
 		printf("Audio clip sample not loaded!\n");
 		return -1;
 	}
 
 	if (!SAMMY) {
+		printf("Audio clip sample not loaded!\n");
+		return -1;
+	}
+
+	if (!thunder) {
 		printf("Audio clip sample not loaded!\n");
 		return -1;
 	}
@@ -126,7 +136,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);//plays
+	al_play_sample(sample, 0.5, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);//plays
 
 	if (!al_install_mouse()) {
 		fprintf(stderr, "failed to initialize the mouse!\n");
@@ -135,7 +145,7 @@ int main(int argc, char **argv)
 
 	Player player(PLAYER_SIZEX, PLAYER_SIZEY, PLAYER_SIZEX + 100);
 	//Player superPlayer(PLAYER_SIZEX + 100, PLAYER_SIZEY);
-
+restart:
 	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150, 0, true), b4(6, 100, 175), b5(4, 150, 200), powerBrick1(1, 320, 70, 1), powerBrick2(1, 320, 230, 1);
 	ArrayOfBricks level[7] = { powerBrick1, b1, b2, b3, b4, b5, powerBrick2 };
 
@@ -178,11 +188,13 @@ int main(int argc, char **argv)
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_register_event_source(event_queue, al_get_mouse_event_source());
 	al_clear_to_color(al_map_rgb(0, 0, 0));
+
 	al_flip_display();
 	al_start_timer(timer);
 
 
 	bool menu = true;
+	
 	while (menu)
 	{
 		int startx = 230;
@@ -190,8 +202,8 @@ int main(int argc, char **argv)
 
 
 		al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty, ALLEGRO_ALIGN_LEFT, "START GAME");
-		al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty+40, ALLEGRO_ALIGN_LEFT, "DEMO");
-		al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty+80, ALLEGRO_ALIGN_LEFT, "EXIT");
+		al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty + 40, ALLEGRO_ALIGN_LEFT, "DEMO");
+		al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty + 80, ALLEGRO_ALIGN_LEFT, "EXIT");
 		al_flip_display();
 		ALLEGRO_EVENT ec;
 		al_wait_for_event(event_queue, &ec);
@@ -201,7 +213,7 @@ int main(int argc, char **argv)
 			{
 				menu = false;
 			}
-			else if (ec.mouse.y >180 && ec.mouse.y <= 230 && ec.mouse.x >= startx && ec.mouse.x <= startx + 88)//demo
+			else if (ec.mouse.y > 180 && ec.mouse.y <= 230 && ec.mouse.x >= startx && ec.mouse.x <= startx + 88)//demo
 			{
 				demo = true;
 				menu = false;
@@ -217,8 +229,8 @@ int main(int argc, char **argv)
 		{
 			exit(1);
 		}
-	}
 
+}
 	while (!doexit)
 	{
 		
@@ -261,6 +273,8 @@ int main(int argc, char **argv)
 			{
 				//std::cout << "Lives Left: " << --lives << std::endl;
 				lives--;
+				al_play_sample(thunder, 2, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+
 				player.setSuperPlayer(false);
 				ball.restart(player.getLocX() + player.getSizeX() / 2, player.getLocY(), BALL_VEL, -BALL_VEL, false);
 
@@ -287,6 +301,11 @@ int main(int argc, char **argv)
 
 				ball.reboundOffPlayer(radAngle);
 
+			}
+			if (powerUp1.detectCollision(&player))
+			{
+				powerUp1.ballPowerUp(&ball);
+				powerUp1.playerPowerUp(&player);
 			}
 
 				
@@ -369,7 +388,7 @@ int main(int argc, char **argv)
 								if (checkVer) ball.reflectY();
 								if (checkHor) ball.reflectX();
 								score++;
-								al_play_sample(SAMMY, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
+								al_play_sample(SAMMY, 0.5, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
 
 								level[j].arr[i]->destroy(true);
 							}
@@ -393,7 +412,7 @@ int main(int argc, char **argv)
 								al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
 								//al_rest(0.0001);
 							}
-							al_play_sample(SAMMY, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
+							al_play_sample(SAMMY, 0.5, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
 
 							//al_set_target_bitmap(level[j].arr[i]->getBitMap());
 							//al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -403,29 +422,26 @@ int main(int argc, char **argv)
 						}
 					}
 
-					if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed() && level[j].arr[i]->isPowerUp())
-					{
-						if (checkVer && !ball.isSuperBall()) ball.reflectY();
-						if (checkHor && !ball.isSuperBall()) ball.reflectX();
-						level[j].arr[i]->destroy(true);
+						if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed() && level[j].arr[i]->isPowerUp())
+						{
+							if (checkVer && !ball.isSuperBall()) ball.reflectY();
+							if (checkHor && !ball.isSuperBall()) ball.reflectX();
+							level[j].arr[i]->destroy(true);
 
-						al_play_sample(SAMMY, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
+							al_play_sample(SAMMY, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
 
-						al_set_target_bitmap(level[j].arr[i]->getBitMap());
-						al_clear_to_color(al_map_rgb(0, 0, 0));
+							al_set_target_bitmap(level[j].arr[i]->getBitMap());
+							al_clear_to_color(al_map_rgb(0, 0, 0));
+							powerUp1.enableBitmap();
 
-						std::cout << "Hello";
+							al_set_target_bitmap(al_get_backbuffer(display));
+							al_flip_display();
+							score++;
 
-						powerUp1.enableBitmap();
+							//std::cout << "Score is : " << ++score << std::endl;
+						}
 
-						al_set_target_bitmap(al_get_backbuffer(display));
-						al_flip_display();
-						score++;
-
-						//std::cout << "Score is : " << ++score << std::endl;
 					}
-
-				}
 			}
 
 			
@@ -504,7 +520,23 @@ int main(int argc, char **argv)
 			al_draw_text(font, grey, 170, 5, ALLEGRO_ALIGN_CENTRE, scoretxt.c_str());
 			al_draw_text(font, al_map_rgb(255, 0, 40), 300, 5, ALLEGRO_ALIGN_CENTRE, "LIVES: ");
 			al_draw_text(font, al_map_rgb(255, 0, 40), 400, 5, ALLEGRO_ALIGN_CENTRE, livestxt.c_str());
+			if (score == 30)
+			{
+				al_draw_text(font1, al_map_rgb(255, 0, 40), 320, 240, ALLEGRO_ALIGN_CENTRE, "LEVEL CLEAR");
+				al_flip_display();
+				score = 0;
+				lives = 10;
+				al_rest(2.0);
 			
+				goto restart;
+			}
+			if (lives == 0)
+			{
+				al_draw_text(font1, al_map_rgb(255, 0, 40), 320, 240, ALLEGRO_ALIGN_CENTRE, "GAMEOVER");
+				al_flip_display();
+				al_rest(2.0);
+				exit(1);
+			}
 			for (int j = 0; j < 7; j++)
 				for (int i = 0; i < level[j].getNum(); i++)
 					al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);

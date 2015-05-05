@@ -59,18 +59,16 @@ void powerUp::ballPowerUp(Ball *ball)
 }
 
 
-bool powerUp::detectCollision(Player player)
+bool powerUp::detectCollision(Player *player)
 {
 
-	int temp_dy = abs(deltaY);
+	float temp_dy = abs(deltaY);
 
-	if ((deltaY > 0) && (locationY + sizeY >= player.getLocY()) && (locationY + sizeY <= player.getLocY() + temp_dy) && (locationX + sizeX > player.getLocX()) && (locationX < player.getLocX() +player.getSizeX()))
-	{
+	if ((deltaY > 0) && (locationY + sizeY >= player->getLocY()) && (locationY + sizeY <= player->getLocY() + temp_dy) && (locationX + sizeX > player->getLocX()) && (locationX < player->getLocX() + player->getSizeX()))
 		return true;
-	}
 	else
 		return false;
-
+		
 }
 
 ALLEGRO_BITMAP *powerUp::getBitmap()
