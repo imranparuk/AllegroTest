@@ -15,14 +15,8 @@ powerUp::powerUp(float sx = 0, float sy = 0, float dy = 0, float ay = 0, float l
 	locationX = lx;
 	locationY = ly;
 
-	//pUp = al_create_bitmap(sx, sy);
-	//al_set_target_bitmap(ball);
-	//al_clear_to_color(al_map_rgb(255, 0, 0));
 
-	if (!pUp)
-	{
-		fprintf(stderr, "Failed to create power up bitmap!\n");
-	}
+	
 }
 
 float powerUp::getLocationX()
@@ -47,7 +41,7 @@ float powerUp::getDeltaY()
 
 void powerUp::makeMove()
 {
-	if (pUp != NULL)
+	if (start == true)
 	{
 		deltaY += accelY;
 		locationY += deltaY;
@@ -86,12 +80,13 @@ ALLEGRO_BITMAP *powerUp::getBitmap()
 
 void powerUp::enableBitmap()
 {
-	if (pUp != NULL)
-	{
 		pUp = al_create_bitmap(sizeX, sizeY);
+		if (!pUp)
+		{
+			fprintf(stderr, "Failed to create power up bitmap!\n");
+		}
 		al_set_target_bitmap(pUp);
-		al_clear_to_color(al_map_rgb(255, 40, 0));
-	}
+		al_clear_to_color(al_map_rgb(255, 0, 0));
 }
 
 powerUp::~powerUp()

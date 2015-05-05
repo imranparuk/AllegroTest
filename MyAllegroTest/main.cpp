@@ -154,7 +154,6 @@ int main(int argc, char **argv)
 	}
 
 	powerUp powerUp1(20,20,4,0.2,10,0);
-	powerUp1.enableBitmap();
 
 
 	al_set_target_bitmap(al_get_backbuffer(display));
@@ -185,10 +184,11 @@ int main(int argc, char **argv)
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
 		
 
-			if (score > 1)
+			if (score > 3)
 			{
-				ball.setSuperBall(true);
-				player.setSuperPlayer(true);
+				//ball.setSuperBall(true);
+				//player.setSuperPlayer(true);
+				//powerUp1.enableBitmap();
 			}
 		
 			if (key[KEY_LEFT] && !demo) 
@@ -368,11 +368,7 @@ int main(int argc, char **argv)
 							al_set_target_bitmap(level[j].arr[i]->getBitMap());
 							al_clear_to_color(al_map_rgb(0, 0, 0));
 
-							ALLEGRO_BITMAP *bmp = NULL;
-							bmp = al_create_bitmap(20, 20);
-							al_set_target_bitmap(bmp);
-							al_clear_to_color(al_map_rgb(255, 0, 0));
-
+							powerUp1.enableBitmap();
 
 							al_set_target_bitmap(al_get_backbuffer(display));
 							al_flip_display();
@@ -388,7 +384,7 @@ int main(int argc, char **argv)
 
 			
 			
-
+			powerUp1.makeMove();
 			ball.makeMove();
 			redraw = true;
 		}
