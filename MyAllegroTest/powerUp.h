@@ -5,6 +5,7 @@
 #include <iostream>
 #include <math.h>
 #include "Player.h"
+#include "Ball.h"
 
 class powerUp
 {
@@ -35,8 +36,13 @@ public:
 	void setVelocity(float, float);
 	
 	void playerPowerUp(Player *);
+	void ballPowerUp(Ball *);
 
+	bool detectCollision(Player *);
 
 	void makeMove();
+
+	void setBitmap(ALLEGRO_BITMAP *);
+	ALLEGRO_BITMAP *getBitmap();
 };
 
