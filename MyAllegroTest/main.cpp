@@ -44,7 +44,7 @@ int score = 0;
 int lives = 10;
 
 bool destroyed = false;
-bool demo = true;
+bool demo = false;
 
 
 enum MYKEYS {
@@ -61,12 +61,14 @@ int main(int argc, char **argv)
 	ALLEGRO_SAMPLE *sample = NULL;
 	ALLEGRO_SAMPLE *SAMMY = NULL;
 
+	
 
 	bool key[4] = { false, false, false, false };
 	bool redraw = true;
 	bool doexit = false;
 
-	if (!al_init()) {
+	if (!al_init()) 
+	{
 		fprintf(stderr, "failed to initialize allegro!\n");
 		return -1;
 	}
@@ -125,7 +127,13 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);//plays
+
+	al_play_sample(sample, 0.2, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);//plays sound background music
+
+	if (!al_install_mouse()) {
+		fprintf(stderr, "failed to initialize the mouse!\n");
+		return -1;
+	}
 
 
 
@@ -139,6 +147,9 @@ int main(int argc, char **argv)
 	al_init_ttf_addon();
 
 	ALLEGRO_FONT *font = al_load_ttf_font("CFNuclearWar-Regular.ttf", 32, 0);
+	ALLEGRO_FONT *font1 = al_load_ttf_font("CFNuclearWar-Regular.ttf", 72, 0);
+	ALLEGRO_FONT *font2 = al_load_ttf_font("CFNuclearWar-Regular.ttf", 30, 0);
+
 
 	if (!font){
 		fprintf(stderr, "Could not load font.\n");
@@ -164,9 +175,44 @@ int main(int argc, char **argv)
 	al_register_event_source(event_queue, al_get_display_event_source(display));
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
+	al_register_event_source(event_queue, al_get_mouse_event_source());
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
 	al_start_timer(timer);
+
+	bool menu = true;
+	while (menu)
+	{
+
+		al_draw_text(font2, al_map_rgb(255, 0, 40), 320, 150, ALLEGRO_ALIGN_CENTRE, "START GAME");
+		al_draw_text(font2, al_map_rgb(255, 0, 40), 320, 190, ALLEGRO_ALIGN_CENTRE, "DEMO");
+		al_draw_text(font2, al_map_rgb(255, 0, 40), 320, 230, ALLEGRO_ALIGN_CENTRE, "EXIT");
+		al_flip_display();
+		ALLEGRO_EVENT ec;
+		al_wait_for_event(event_queue, &ec);
+		if (ec.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+		{
+			if (ec.mouse.y >= 150 && ec.mouse.y <= 180)
+			{
+				menu = false;
+			}
+			else if (ec.mouse.y >180 && ec.mouse.y <= 230){
+				demo = true;
+				menu = false;
+
+			}
+			else if (ec.mouse.y > 230 && ec.mouse.y <= 260){
+				exit(1);
+			}
+			else
+			{
+
+			}
+
+		}
+	}
+
+
 
 	while (!doexit)
 	{
