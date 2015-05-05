@@ -249,7 +249,7 @@ int main(int argc, char **argv)
 				player.moveLeft();
 
 			if (key[KEY_RIGHT] && !demo) 
-				player.moveRight();
+				player.moveRight(); 
 
 			if (demo)
 			{
@@ -428,7 +428,6 @@ int main(int argc, char **argv)
 
 							al_set_target_bitmap(level[j].arr[i]->getBitMap());
 							al_clear_to_color(al_map_rgb(0, 0, 0));
-
 							powerUp1.enableBitmap();
 
 							al_set_target_bitmap(al_get_backbuffer(display));
