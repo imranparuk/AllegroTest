@@ -4,7 +4,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <iostream>
 #include <math.h>
-#include "Player.h";
+#include "Player.h"
 
 class powerUp
 {
