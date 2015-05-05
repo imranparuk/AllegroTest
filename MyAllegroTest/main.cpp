@@ -137,7 +137,7 @@ int main(int argc, char **argv)
 	Player player(PLAYER_SIZEX, PLAYER_SIZEY, PLAYER_SIZEX + 100);
 	//Player superPlayer(PLAYER_SIZEX + 100, PLAYER_SIZEY);
 
-	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150,true), b4(6, 100, 175), b5(4, 150, 200);
+	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150, true), b4(6, 100, 175), b5(4, 150, 200);
 	ArrayOfBricks level[5] = { b1, b2, b3, b4, b5 };
 
 	al_init_font_addon();
@@ -151,8 +151,8 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Could not load font.\n");
 		return -1;
 	}
-	
-	
+
+
 	Ball ball(BALL_SIZE_RADIUS, player.getLocX() + player.getSizeX() / 2, player.getLocY(), BALL_VEL, -BALL_VEL, false);
 
 
@@ -178,15 +178,16 @@ int main(int argc, char **argv)
 
 
 	bool menu = true;
-	while (menu)
-	{
+	
+		while (menu)
+		{
 		int startx = 230;
 		int starty = 150;
 
 
 		al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty, ALLEGRO_ALIGN_LEFT, "START GAME");
-		al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty+40, ALLEGRO_ALIGN_LEFT, "DEMO");
-		al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty+80, ALLEGRO_ALIGN_LEFT, "EXIT");
+		al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty + 40, ALLEGRO_ALIGN_LEFT, "DEMO");
+		al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty + 80, ALLEGRO_ALIGN_LEFT, "EXIT");
 		al_flip_display();
 		ALLEGRO_EVENT ec;
 		al_wait_for_event(event_queue, &ec);
@@ -196,7 +197,7 @@ int main(int argc, char **argv)
 			{
 				menu = false;
 			}
-			else if (ec.mouse.y >180 && ec.mouse.y <= 230 && ec.mouse.x >= startx && ec.mouse.x <= startx + 88)//demo
+			else if (ec.mouse.y > 180 && ec.mouse.y <= 230 && ec.mouse.x >= startx && ec.mouse.x <= startx + 88)//demo
 			{
 				demo = true;
 				menu = false;
@@ -208,8 +209,8 @@ int main(int argc, char **argv)
 			}
 
 		}
-	}
-
+		
+}
 	while (!doexit)
 	{
 		
