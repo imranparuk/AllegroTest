@@ -43,7 +43,7 @@ int score = 0;
 int lives = 10;
 
 bool destroyed = false;
-bool demo = false;
+bool demo = true;
 
 
 enum MYKEYS {
