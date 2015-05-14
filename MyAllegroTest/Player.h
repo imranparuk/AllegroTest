@@ -14,7 +14,7 @@ private:
 	int locationY = SCREEN_H - 70;
 
 	int superSizeX;
-	int normSizeX;
+	int normSizeX; //hello
 
 	int sizeX;
 	int sizeY;
