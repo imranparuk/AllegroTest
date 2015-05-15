@@ -246,6 +246,7 @@ restart:
 			if (levelnum == 4)
 			{
 				levelnum = 1;
+
 			}
 			int startx = 230;
 			int starty = 150;
@@ -548,6 +549,12 @@ restart:
 				al_rest(2.0);
 				levelnum++;
 				check = true;
+				if (levelnum == 4)
+				{
+					score = 0;
+					lives = 10;
+ 				}
+				
 				goto restart;
 			}
 			if (lives == 0)
@@ -555,7 +562,7 @@ restart:
 				al_draw_text(font1, al_map_rgb(255, 0, 40), 320, 240, ALLEGRO_ALIGN_CENTRE, "GAMEOVER");
 				al_flip_display();
 				al_rest(2.0);
-				exit(1);
+				goto restart;
 			}
 			for (int j = 0; j < 7; j++)
 				for (int i = 0; i < level[j].getNum(); i++)
@@ -584,7 +591,7 @@ restart:
 				al_flip_display();
 				al_rest(2.0);
 				check = false;
-			
+           			
 			
 			}
 
