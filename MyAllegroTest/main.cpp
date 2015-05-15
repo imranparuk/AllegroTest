@@ -7,7 +7,6 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 
-
 #include <math.h>
 #include <iostream>
 #include <string>
@@ -185,7 +184,7 @@ restart:
 		super1 = true;
 	}
 	ArrayOfBricks b1(r1, lx1, 100,0,super), b2(r2, lx2, 125), b3(r3, lx3, 150, 0, true), b4(r4, lx4, 175), b5(r5, lx5, 200,0,super1), powerBrick1(1, 320, 70, 1), powerBrick2(1, 320, 230, 1);
-	ArrayOfBricks level[7] = { powerBrick1, b1, b2, b3, b4, b5, powerBrick2 };
+	ArrayOfBricks level[7] = { powerBrick1, b1, b2, b3, b4, b5, powerBrick2 }; //2D array of bricks created to make each level
 	maxScore = r1 + r2 + r3 + r4 + r5 + 2 + maxScore;
 
 	al_init_font_addon();
@@ -215,7 +214,7 @@ restart:
 	powerUp powerUp1(toPlayer, Balla, 20, 20, 4, 0.2, level[6].arr[0]->getLocX(), level[6].arr[0]->getLocY());
 	powerUp powerUp2(toPlayer, Balla, 20, 20, 4, 0.2, level[0].arr[0]->getLocX(), level[0].arr[0]->getLocY());
 
-	powerUp powerUps[amountPUps] = { powerUp1, powerUp2 };
+	powerUp powerUps[amountPUps] = { powerUp1, powerUp2 };//powerUps stored in an array
 
 	al_set_target_bitmap(al_get_backbuffer(display));
 
@@ -382,9 +381,11 @@ restart:
 					bool checkVer = level[j].arr[i]->detectCollisionVertical(ball.getCenter_X(), ball.getCenter_Y(), ball.getDelta_X(), ball.getDelta_Y(), BALL_SIZE_RADIUS);
 					bool checkHor = level[j].arr[i]->detectCollisionHorizontal(ball.getCenter_X(), ball.getCenter_Y(), ball.getDelta_X(), ball.getDelta_Y(), BALL_SIZE_RADIUS);
 				
+					//check for collision detection and if brick is not destroyed
+
 					if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed())
 					{
-						if (level[j].arr[i]->isPowerUp())
+						if (level[j].arr[i]->isPowerUp())//check if power up brick is created
 						{
 							if (checkVer && !ball.isSuperBall()) ball.reflectY();
 							if (checkHor && !ball.isSuperBall()) ball.reflectX();
@@ -396,9 +397,8 @@ restart:
 
 							al_play_sample(SAMMY, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
 
-							al_set_target_bitmap(level[j].arr[i]->getBitMap());
+							al_set_target_bitmap(level[j].arr[i]->getBitMap());//destroying of the brick
 							al_clear_to_color(al_map_rgb(0, 0, 0));
-							//powerUp1.enableBitmap();
 
 							powerUps[pCount].enableBitmap();
 							pCount++;
@@ -409,7 +409,7 @@ restart:
 						}
 						else
 						{
-							if (level[j].arr[i]->isSuper())
+							if (level[j].arr[i]->isSuper())//check if super brick
 							{
 								if (ball.isSuperBall()) level[j].arr[i]->setSuperLevel(0);
 								if (checkVer) ball.reflectY();
@@ -418,15 +418,15 @@ restart:
 								switch (level[j].arr[i]->getSuperLevel())
 								{
 								case 2:
-									level[j].arr[i]->brick = al_load_bitmap("second.bmp");
+									level[j].arr[i]->brick = al_load_bitmap("second.bmp"); //second stage of brick loaded 
 									al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
 									break;
 								case 1:
-									level[j].arr[i]->brick = al_load_bitmap("final.bmp");
+									level[j].arr[i]->brick = al_load_bitmap("final.bmp"); //final stage of brick loaded
 									al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
 									break;
 								case 0:
-									al_set_target_bitmap(level[j].arr[i]->getBitMap());
+									al_set_target_bitmap(level[j].arr[i]->getBitMap());//actual destroying of brick
 									al_clear_to_color(al_map_rgb(0, 0, 0));
 
 									score++;
@@ -436,7 +436,7 @@ restart:
 									break;
 								}
 							}
-							else
+							else//if simple brick 
 							{
 								if (checkVer && !ball.isSuperBall()) ball.reflectY();
 								if (checkHor && !ball.isSuperBall()) ball.reflectX();
