@@ -152,7 +152,7 @@ int main(int argc, char **argv)
 	int r1, r2, r3, r4, r5;
 	int lx1, lx2, lx3, lx4, lx5;
 restart:
-	if (levelnum == 1)
+	if (levelnum == 1 || levelnum == 4)
 	{
 		r1 = 4,	r2 = 6,r3 = 8, r4 = 6, r5 = 4;
 		 lx1 = (((640 / 2) - ((r1 * 70) / 2)));
@@ -170,6 +170,7 @@ restart:
 		lx3 = lx1;
 		lx4 = lx1;
 		lx5 = lx1;
+		pCount = 0;
 		super = true;
 	}
 	else if (levelnum == 3)
@@ -180,6 +181,7 @@ restart:
 		lx3 = lx1;
 		lx4 = lx1;
 		lx5 = lx1;
+		pCount = 0;
 		super1 = true;
 	}
 	ArrayOfBricks b1(r1, lx1, 100,0,super), b2(r2, lx2, 125), b3(r3, lx3, 150, 0, true), b4(r4, lx4, 175), b5(r5, lx5, 200,0,super1), powerBrick1(1, 320, 70, 1), powerBrick2(1, 320, 230, 1);
@@ -241,6 +243,10 @@ restart:
 	{
 		while (menu)
 		{
+			if (levelnum == 4)
+			{
+				levelnum = 1;
+			}
 			int startx = 230;
 			int starty = 150;
 
