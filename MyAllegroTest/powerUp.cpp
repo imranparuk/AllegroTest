@@ -3,20 +3,23 @@
 #include <allegro5/allegro_primitives.h>
 #include <iostream>
 #include <math.h>
+#include <cstdlib>
 #include "powerUp.h"
 
 
-powerUp::powerUp(float sx = 0, float sy = 0, float dy = 0, float ay = 0, float lx = 0, float ly = 0)
+powerUp::powerUp(Player* playa, Ball* bala, float sx = 0, float sy = 0, float dy = 0, float ay = 0, float lx = 0, float ly = 0)
 {
+	srand(time(NULL));
+
+	player = playa;
+	ball = bala;
+
 	sizeX = sx;
 	sizeY = sy;
 	deltaY = dy;
 	accelY = ay;
 	locationX = lx;
 	locationY = ly;
-
-
-	
 }
 
 float powerUp::getLocationX()
@@ -68,7 +71,7 @@ bool powerUp::detectCollision(Player *player)
 		return true;
 	else
 		return false;
-		
+
 }
 
 ALLEGRO_BITMAP *powerUp::getBitmap()
@@ -78,18 +81,36 @@ ALLEGRO_BITMAP *powerUp::getBitmap()
 
 void powerUp::enableBitmap()
 {
-		pUp = al_create_bitmap(sizeX, sizeY);
-		if (!pUp)
-		{
-			fprintf(stderr, "Failed to create power up bitmap!\n");
-		}
+	pUp = al_create_bitmap(sizeX, sizeY);
+	if (!pUp)
+	{
+		fprintf(stderr, "Failed to create power up bitmap!\n");
+	}
 
-		al_set_target_bitmap(pUp);
-		al_clear_to_color(al_map_rgb(255, 0, 0));
-		std::cout << "Hello";
+	al_set_target_bitmap(pUp);
+	al_clear_to_color(al_map_rgb(255, 0, 0));
+}
+
+void powerUp::selectRandomPowerUp()
+{
+	int random = rand() % (2) + 1;
+
+	std::cout << "Rand: " << random << std::endl;
+	switch (random)
+	{
+	case 1:
+		playerPowerUp(player);
+		break;
+	case 2:
+		ballPowerUp(ball);
+		break;
+	}
+
 }
 
 powerUp::~powerUp()
 {
 	al_destroy_bitmap(pUp);
 }
+
+

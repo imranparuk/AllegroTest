@@ -48,16 +48,18 @@ int lives = 10;
 bool destroyed = false;
 bool demo = false;
 
+int pCount = 0;
+
 
 enum MYKEYS {
 	KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
 };
 
- 
+
 int main(int argc, char **argv)
 
 {
-	
+
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
@@ -160,17 +162,23 @@ restart:
 		fprintf(stderr, "Could not load font.\n");
 		return -1;
 	}
-	
-	
+
+
 	Ball ball(BALL_SIZE_RADIUS, player.getLocX() + player.getSizeX() / 2, player.getLocY(), BALL_VEL, -BALL_VEL, false);
 
 	if (!al_init_image_addon()) {
 		fprintf(stderr, "Failed to initialize image addon!\n");
 	}
 
-	powerUp powerUp1(20,20,4,0.04,320,70);
-	powerUp powerUp2(20, 20, 4, 0.04, 320, 230);
+	const int amountPUps = 2;
+	Player *toPlayer = &player;
+	Ball *Balla = &ball;
 
+
+	powerUp powerUp1(toPlayer, Balla, 20, 20, 4, 0.2, level[6].arr[0]->getLocX(), level[6].arr[0]->getLocY());
+	powerUp powerUp2(toPlayer, Balla, 20, 20, 4, 0.2, level[0].arr[0]->getLocX(), level[0].arr[0]->getLocY());
+
+	powerUp powerUps[amountPUps] = { powerUp1, powerUp2 };
 
 	al_set_target_bitmap(al_get_backbuffer(display));
 
@@ -195,7 +203,7 @@ restart:
 
 
 	bool menu = true;
-	
+
 	while (menu)
 	{
 		int startx = 230;
@@ -224,22 +232,22 @@ restart:
 			{
 				exit(1);
 			}
-			
+
 		}
 		if (ec.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 		{
 			exit(1);
 		}
 
-}
+	}
 	while (!doexit)
 	{
-		
+
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
-		
+
 
 			if (score > 3)
 			{
@@ -248,11 +256,11 @@ restart:
 				//player.setSuperPlayer(true);
 				//powerUp1.enableBitmap();
 			}
-		
-			if (key[KEY_LEFT] && !demo) 
+
+			if (key[KEY_LEFT] && !demo)
 				player.moveLeft();
 
-			if (key[KEY_RIGHT] && !demo) 
+			if (key[KEY_RIGHT] && !demo)
 				player.moveRight();
 
 			if (demo)
@@ -269,7 +277,7 @@ restart:
 			{
 				player.setLocationX(SCREEN_W);
 			}
-			
+
 			if (ball.getCenter_Y() > SCREEN_H - ball.getRadius())
 			{
 				//std::cout << "Lives Left: " << --lives << std::endl;
@@ -281,7 +289,7 @@ restart:
 
 			}
 
-			if ((ball.getCenter_Y() - ball.getRadius()) <= 0 && ball.getDelta_Y() <= 0) 
+			if ((ball.getCenter_Y() - ball.getRadius()) <= 0 && ball.getDelta_Y() <= 0)
 			{
 				ball.reflectY();
 			}
@@ -289,7 +297,7 @@ restart:
 
 			if (((ball.getCenter_X() - ball.getRadius() < 0) && ball.getDelta_X() <= 0) || (ball.getCenter_X() + ball.getRadius() > SCREEN_W && ball.getDelta_X() >= 0) /*|| ((ball_y + BALL_SIZE_RADIUS > player_y) && ((ball_x + BALL_SIZE_RADIUS < player_x) || (ball_x - BALL_SIZE_RADIUS > player_x + PLAYER_SIZEX)))*/) {
 				ball.reflectX();
-				
+
 			}
 
 			if (player.detectBallCollsion(ball))
@@ -303,40 +311,37 @@ restart:
 				ball.reboundOffPlayer(radAngle);
 
 			}
-			if (powerUp1.detectCollision(&player))
+
+
+			for (int i = 0; i < amountPUps; i++)
 			{
-				powerUp1.ballPowerUp(&ball);
-				al_set_target_bitmap(powerUp1.getBitmap());
-				al_clear_to_color(al_map_rgb(0, 0, 0));
-				al_set_target_bitmap(al_get_backbuffer(display));
-				al_flip_display();
+				if (powerUps[i].detectCollision(toPlayer))
+				{
+					powerUps[i].selectRandomPowerUp();
+					//powerUp1.ballPowerUp(&ball);
+					//powerUp1.playerPowerUp(&player);
+				}
 			}
 
-			if (powerUp2.detectCollision(&player))
-			{
-				powerUp1.playerPowerUp(&player);
-				//al_set_target_bitmap(powerUp1.getBitmap());
-				//al_clear_to_color(al_map_rgb(0, 0, 0));
-			}
-				
-				/*
-				Ay dont delete this 
-				ballVel = ball.getBallVelocity();
-				ballAngle = ball.getBallAngle();
-				
-				std::cout << "Angle: " << ballAngle*(180 / PI) << std::endl;
 
-				float tempdX = ballVel*cos(ballAngle + radAngle);
-				float tempdY = ballVel*sin(-(ballAngle + radAngle));
-				
-				std::cout << "Temps: " << tempdX << " , " << tempdY << std::endl;
-				ball.setVelocity(tempdX, tempdY);
+			/*
+			Ay dont delete this (original player code)
+			ballVel = ball.getBallVelocity();
+			ballAngle = ball.getBallAngle();
 
-				float ballAngle2 = ball.getBallAngle();
+			std::cout << "Angle: " << ballAngle*(180 / PI) << std::endl;
 
-				std::cout << "New Angle: " << ballAngle2*(180 / PI) << std::endl;
-				*/
-		
+			float tempdX = ballVel*cos(ballAngle + radAngle);
+			float tempdY = ballVel*sin(-(ballAngle + radAngle));
+			s
+			std::cout << "Temps: " << tempdX << " , " << tempdY << std::endl;
+			ball.setVelocity(tempdX, tempdY);
+
+			float ballAngle2 = ball.getBallAngle();
+
+			std::cout << "New Angle: " << ballAngle2*(180 / PI) << std::endl;
+			*/
+
 			//cleaning code here
 			for (int j = 0; j < 8; j++)
 			{
@@ -354,7 +359,7 @@ restart:
 							{
 
 								//if (!al_init_image_addon()) {
-									//fprintf(stderr, "Failed to initialize image addon!\n");
+								//fprintf(stderr, "Failed to initialize image addon!\n");
 								//}
 
 								level[j].arr[i]->brick = al_load_bitmap("second.bmp");
@@ -432,29 +437,43 @@ restart:
 						}
 					}
 
-						if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed() && level[j].arr[i]->isPowerUp())
-						{
-							if (checkVer && !ball.isSuperBall()) ball.reflectY();
-							if (checkHor && !ball.isSuperBall()) ball.reflectX();
-							level[j].arr[i]->destroy(true);
+					if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed() && level[j].arr[i]->isPowerUp())
+					{
+						if (checkVer && !ball.isSuperBall()) ball.reflectY();
+						if (checkHor && !ball.isSuperBall()) ball.reflectX();
+						level[j].arr[i]->destroy(true);
 
-							al_play_sample(SAMMY, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
+						int xPos = ball.getCenter_X();
+						int yPos = ball.getCenter_Y();
+						Brick *temp = level[j].arr[i];
 
-							al_set_target_bitmap(level[j].arr[i]->getBitMap());
-							al_clear_to_color(al_map_rgb(0, 0, 0));
-							powerUp1.enableBitmap();
-							powerUp2.enableBitmap();
-							//ensure that the powerups are only enabled when hitting the bricks... this is a problem, try using flags.
-							al_set_target_bitmap(al_get_backbuffer(display));
-							al_flip_display();
-							score++;
-						}
+						al_play_sample(SAMMY, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
 
+						al_set_target_bitmap(level[j].arr[i]->getBitMap());
+						al_clear_to_color(al_map_rgb(0, 0, 0));
+						//powerUp1.enableBitmap();
+
+						powerUps[pCount].enableBitmap();
+
+						pCount++;
+						al_set_target_bitmap(al_get_backbuffer(display));
+						al_flip_display();
+						score++;
+
+						//std::cout << "Score is : " << ++score << std::endl;
 					}
+
+				}
 			}
-			
-			powerUp1.makeMove();
-			powerUp2.makeMove();
+
+
+
+			//powerUp1.makeMove();
+
+			for (int i = 0; i < amountPUps; i++)
+			{
+				powerUps[i].makeMove();
+			}
 			ball.makeMove();
 			redraw = true;
 		}
@@ -505,21 +524,24 @@ restart:
 		}
 
 		if (redraw && al_is_event_queue_empty(event_queue)) {
-			
+
 			redraw = false;
-		
+
 			/*if (player.isSuperPlayer())
 			{
-				player.setBitMap(superPlayer.getBitMap());
-				player.setSize(superPlayer.getSizeX(), superPlayer.getSizeY());
+			player.setBitMap(superPlayer.getBitMap());
+			player.setSize(superPlayer.getSizeX(), superPlayer.getSizeY());
 			}*/
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			//al_draw_bitmap(player, player_x, player_y, 0);
-			al_draw_bitmap(player.getBitMap(), player.getLocX(), player.getLocY(),0);
+			al_draw_bitmap(player.getBitMap(), player.getLocX(), player.getLocY(), 0);
 
-			if (powerUp1.getBitmap() != NULL)
-				al_draw_bitmap(powerUp1.getBitmap(), powerUp1.getLocationX(), powerUp1.getLocationY(), 0);
-			
+			for (int i = 0; i < amountPUps; i++)
+			{
+				if (powerUps[i].getBitmap() != NULL)
+					al_draw_bitmap(powerUps[i].getBitmap(), powerUps[i].getLocationX(), powerUps[i].getLocationY(), 0);
+			}
+
 			string scoretxt = to_string(score);
 			string livestxt = to_string(lives);
 			ALLEGRO_COLOR grey = al_map_rgb(100, 100, 100);
@@ -535,7 +557,7 @@ restart:
 				score = 0;
 				lives = 10;
 				al_rest(2.0);
-			
+
 				goto restart;
 			}
 			if (lives == 0)
@@ -553,7 +575,7 @@ restart:
 			else ball.drawBall(255, 0, 0);
 			al_flip_display();
 		}
-		
+
 	}
 
 	//al_destroy_bitmap(player);

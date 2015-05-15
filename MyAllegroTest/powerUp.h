@@ -6,11 +6,11 @@
 #include <math.h>
 #include "Player.h"
 #include "Ball.h"
+#include <ctime>
 
 class powerUp
 {
 private:
-
 	float sizeX;
 	float sizeY;
 
@@ -22,11 +22,16 @@ private:
 
 	ALLEGRO_BITMAP *pUp = NULL;
 
+	Player *player;
+	Ball *ball;
+
+	int numPowerUps = 2;
+
 	bool start = false;
 
 
 public:
-	powerUp(float, float, float, float, float, float);
+	powerUp(Player*, Ball*, float, float, float, float, float, float);
 	~powerUp();
 
 	float getLocationX();
@@ -36,9 +41,11 @@ public:
 	float getDeltaY();
 	float getAccel();
 	void setVelocity(float, float);
-	
+
 	void playerPowerUp(Player *);
 	void ballPowerUp(Ball *);
+
+	void selectRandomPowerUp();
 
 	bool detectCollision(Player *);
 
