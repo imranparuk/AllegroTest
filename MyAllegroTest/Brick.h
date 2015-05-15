@@ -8,14 +8,14 @@
 class Brick
 {
 private:
-	const int sizeX = 60;
+	const int sizeX = 60; //dimensions of each brick
 	const int sizeY = 15;
-	const int locationX;
+	const int locationX; 
 	const int locationY;  
-	bool destroyed;
-	bool super;
-	int superLevel;
-	int puBrick;
+	bool destroyed; //flag to indicate if destroyed
+	bool super; //flag ro indicate if super brick
+	int superLevel; //indicates the level if superbrick
+	int puBrick; //indicates if power up brick
 //	ALLEGRO_BITMAP *brick = NULL;
 	
 	
@@ -35,7 +35,6 @@ public:
 			}
 			brick = al_load_bitmap("super.bmp");
 			al_draw_bitmap(brick, locationX, locationY, 0);
-
 		}
 		else
 		{
@@ -44,9 +43,6 @@ public:
 			}
 			brick = al_load_bitmap("final.bmp");
 			al_draw_bitmap(brick, locationX, locationY,0);
-
-			//brick = al_load_bitmap("sexy.bmp");
-			//al_draw_bitmap_region(brick, 120, 0, 60,15, locationX, locationY, 0);
 
 		}
 		if (!brick)
@@ -73,9 +69,9 @@ public:
 
 	void destroy(bool result);
 
-	ALLEGRO_BITMAP *getBitMap();
+	ALLEGRO_BITMAP *getBitMap(); //returns the bitmap of the brick
 
-	bool detectCollisionVertical(const int ball_x, const int ball_y, const int ball_dx, const int ball_dy, const int BALL_SIZE_RADIUS);
-	bool detectCollisionHorizontal(const int ball_x, const int ball_y, const int ball_dx, const int ball_dy, const int BALL_SIZE_RADIUS);
+	bool detectCollisionVertical(const int ball_x, const int ball_y, const int ball_dx, const int ball_dy, const int BALL_SIZE_RADIUS);//ball to brick detection
+	bool detectCollisionHorizontal(const int ball_x, const int ball_y, const int ball_dx, const int ball_dy, const int BALL_SIZE_RADIUS);//ball to brick detection
 
 };
