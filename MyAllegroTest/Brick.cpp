@@ -36,6 +36,14 @@ bool Brick::isPowerUp()
 	return false;
 }
 
+bool Brick::isSuper()
+{
+	if (super == 1)
+		return true;
+	return false;
+}
+
+
 
 bool Brick::detectCollisionVertical(const int ball_x, const int ball_y, const int ball_dx, const int ball_dy, const int BALL_SIZE_RADIUS)
 {

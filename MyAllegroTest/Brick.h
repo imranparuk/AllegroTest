@@ -35,9 +35,7 @@ public:
 			}
 			brick = al_load_bitmap("super.bmp");
 			al_draw_bitmap(brick, locationX, locationY, 0);
-			//brick = al_create_bitmap(sizeX, sizeY);
-			//al_set_target_bitmap(brick);
-			al_clear_to_color(al_map_rgb(0, 0, 255));
+
 		}
 		else
 		{
@@ -46,9 +44,10 @@ public:
 			}
 			brick = al_load_bitmap("final.bmp");
 			al_draw_bitmap(brick, locationX, locationY,0);
-			//brick = al_create_bitmap(sizeX, sizeY);
-			//al_set_target_bitmap(brick);
-			//al_clear_to_color(al_map_rgb(125, 246, 231));
+
+			//brick = al_load_bitmap("sexy.bmp");
+			//al_draw_bitmap_region(brick, 120, 0, 60,15, locationX, locationY, 0);
+
 		}
 		if (!brick)
 		{
@@ -69,6 +68,7 @@ public:
 	bool isDestroyed();
 	int getSuperLevel();
 	void setSuperLevel(int);
+	bool isSuper();
 	//void setBitmap(ALLEGRO_BITMAP );
 
 	void destroy(bool result);

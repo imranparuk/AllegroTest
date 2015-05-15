@@ -145,9 +145,10 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+restart:
+
 	Player player(PLAYER_SIZEX, PLAYER_SIZEY, PLAYER_SIZEX + 100);
 	//Player superPlayer(PLAYER_SIZEX + 100, PLAYER_SIZEY);
-restart:
 	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150, 0, true), b4(6, 100, 175), b5(4, 150, 200), powerBrick1(1, 320, 70, 1), powerBrick2(1, 320, 230, 1);
 	ArrayOfBricks level[7] = { powerBrick1, b1, b2, b3, b4, b5, powerBrick2 };
 
@@ -185,8 +186,6 @@ restart:
 	event_queue = al_create_event_queue();
 	if (!event_queue) {
 		fprintf(stderr, "failed to create event_queue!\n");
-		//al_destroy_bitmap(player);
-		//al_destroy_bitmap(ball);
 		al_destroy_display(display);
 		al_destroy_timer(timer);
 		return -1;
@@ -247,15 +246,6 @@ restart:
 		al_wait_for_event(event_queue, &ev);
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
-
-
-			if (score > 3)
-			{
-
-				//ball.setSuperBall(true);
-				//player.setSuperPlayer(true);
-				//powerUp1.enableBitmap();
-			}
 
 			if (key[KEY_LEFT] && !demo)
 				player.moveLeft();
@@ -343,6 +333,7 @@ restart:
 			*/
 
 			//cleaning code here
+			/*
 			for (int j = 0; j < 8; j++)
 			{
 				for (int i = 0; i < level[j].getNum(); i++)
@@ -364,9 +355,8 @@ restart:
 
 								level[j].arr[i]->brick = al_load_bitmap("second.bmp");
 								al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
-								//al_set_target_bitmap(level[j].arr[i]->getBitMap());
-								//al_clear_to_color(al_map_rgb(0, 100, 255));
-								//std::cout << "Vertical: " << checkVer << " , Horizontal: " << checkHor << std::endl;
+								
+								
 								if (checkVer) ball.reflectY();
 								if (checkHor) ball.reflectX();
 
@@ -376,9 +366,11 @@ restart:
 							{
 								level[j].arr[i]->brick = al_load_bitmap("final.bmp");
 								al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
-								//al_set_target_bitmap(level[j].arr[i]->getBitMap());
-								//al_clear_to_color(al_map_rgb(125, 246, 231));
-								//std::cout << "Vertical: " << checkVer << " , Horizontal: " << checkHor << std::endl;
+								
+								
+								//level[j].arr[i]->brick = al_load_bitmap("sexy.bmp");
+								//al_draw_bitmap_region(level[j].arr[i]->brick, 120, 0, 60, 15, level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
+								
 
 								if (checkVer) ball.reflectY();
 								if (checkHor) ball.reflectX();
@@ -387,17 +379,8 @@ restart:
 							if (level[j].arr[i]->getSuperLevel() == 0)
 							{
 
-								for (int k = 1; k < 10; k++)
-								{
-									string num = to_string(k);
-									string naam = "ani" + num + ".bmp";
-									level[j].arr[i]->brick = al_load_bitmap(naam.c_str());
-									al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
-									//al_rest(0.0001);
-								}
-
-								//al_set_target_bitmap(level[j].arr[i]->getBitMap());
-								//al_clear_to_color(al_map_rgb(0, 0, 0));
+								al_set_target_bitmap(level[j].arr[i]->getBitMap());
+								al_clear_to_color(al_map_rgb(0, 0, 0));
 								std::cout << "Vertical: " << checkVer << " , Horizontal: " << checkHor << std::endl;
 
 								if (checkVer) ball.reflectY();
@@ -419,18 +402,10 @@ restart:
 							if (checkHor && !ball.isSuperBall()) ball.reflectX();
 							level[j].arr[i]->destroy(true);
 
-							for (int k = 1; k < 10; k++)
-							{
-								string num = to_string(k);
-								string naam = "ani" + num + ".bmp";
-								level[j].arr[i]->brick = al_load_bitmap(naam.c_str());
-								al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
-								//al_rest(0.0001);
-							}
 							al_play_sample(SAMMY, 0.5, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
 
-							//al_set_target_bitmap(level[j].arr[i]->getBitMap());
-							//al_clear_to_color(al_map_rgb(0, 0, 0));
+							al_set_target_bitmap(level[j].arr[i]->getBitMap());
+							al_clear_to_color(al_map_rgb(0, 0, 0));
 							al_set_target_bitmap(al_get_backbuffer(display));
 							al_flip_display();
 							score++;
@@ -454,8 +429,8 @@ restart:
 						//powerUp1.enableBitmap();
 
 						powerUps[pCount].enableBitmap();
-
 						pCount++;
+
 						al_set_target_bitmap(al_get_backbuffer(display));
 						al_flip_display();
 						score++;
@@ -464,8 +439,90 @@ restart:
 					}
 
 				}
-			}
+			}*/
 
+			for (int j = 0; j < 8; j++)
+			{
+				for (int i = 0; i < level[j].getNum(); i++)
+				{
+					bool checkVer = level[j].arr[i]->detectCollisionVertical(ball.getCenter_X(), ball.getCenter_Y(), ball.getDelta_X(), ball.getDelta_Y(), BALL_SIZE_RADIUS);
+					bool checkHor = level[j].arr[i]->detectCollisionHorizontal(ball.getCenter_X(), ball.getCenter_Y(), ball.getDelta_X(), ball.getDelta_Y(), BALL_SIZE_RADIUS);
+				
+					if ((checkVer || checkHor) && !level[j].arr[i]->isDestroyed())
+					{
+						if (level[j].arr[i]->isPowerUp())
+						{
+							if (checkVer && !ball.isSuperBall()) ball.reflectY();
+							if (checkHor && !ball.isSuperBall()) ball.reflectX();
+							level[j].arr[i]->destroy(true);
+
+							int xPos = ball.getCenter_X();
+							int yPos = ball.getCenter_Y();
+							Brick *temp = level[j].arr[i];
+
+							al_play_sample(SAMMY, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
+
+							al_set_target_bitmap(level[j].arr[i]->getBitMap());
+							al_clear_to_color(al_map_rgb(0, 0, 0));
+							//powerUp1.enableBitmap();
+
+							powerUps[pCount].enableBitmap();
+							pCount++;
+
+							al_set_target_bitmap(al_get_backbuffer(display));
+							al_flip_display();
+							score++;
+						}
+						else
+						{
+							if (level[j].arr[i]->isSuper())
+							{
+								if (ball.isSuperBall()) level[j].arr[i]->setSuperLevel(0);
+								if (checkVer) ball.reflectY();
+								if (checkHor) ball.reflectX();
+
+								switch (level[j].arr[i]->getSuperLevel())
+								{
+								case 2:
+									level[j].arr[i]->brick = al_load_bitmap("second.bmp");
+									al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
+									break;
+								case 1:
+									level[j].arr[i]->brick = al_load_bitmap("final.bmp");
+									al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
+									break;
+								case 0:
+									al_set_target_bitmap(level[j].arr[i]->getBitMap());
+									al_clear_to_color(al_map_rgb(0, 0, 0));
+
+									score++;
+									al_play_sample(SAMMY, 0.5, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
+
+									level[j].arr[i]->destroy(true);
+									break;
+								}
+							}
+							else
+							{
+								if (checkVer && !ball.isSuperBall()) ball.reflectY();
+								if (checkHor && !ball.isSuperBall()) ball.reflectX();
+								level[j].arr[i]->destroy(true);
+
+								al_play_sample(SAMMY, 0.5, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
+
+								al_set_target_bitmap(level[j].arr[i]->getBitMap());
+								al_clear_to_color(al_map_rgb(0, 0, 0));
+
+								score++;
+							}
+							al_set_target_bitmap(al_get_backbuffer(display));
+							al_flip_display();
+
+						}
+					}
+
+				}
+			}
 
 
 			//powerUp1.makeMove();
@@ -578,9 +635,6 @@ restart:
 
 	}
 
-	//al_destroy_bitmap(player);
-	//al_destroy_bitmap(ball);
-	//destroy brick bitmaps
 	al_destroy_font(font);
 	al_destroy_timer(timer);
 	al_destroy_display(display);
