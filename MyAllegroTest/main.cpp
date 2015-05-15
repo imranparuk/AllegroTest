@@ -44,10 +44,13 @@ float reflectionConst = 0;
 
 int score = 0;
 int lives = 10;
-
+int levelnum = 1;
+int maxScore = 0;
 bool destroyed = false;
 bool demo = false;
-
+bool check = true;
+bool super = false;
+bool super1 = false;
 int pCount = 0;
 
 
@@ -144,13 +147,44 @@ int main(int argc, char **argv)
 		fprintf(stderr, "failed to initialize the mouse!\n");
 		return -1;
 	}
-
-restart:
-
 	Player player(PLAYER_SIZEX, PLAYER_SIZEY, PLAYER_SIZEX + 100);
 	//Player superPlayer(PLAYER_SIZEX + 100, PLAYER_SIZEY);
-	ArrayOfBricks b1(4, 150, 100), b2(6, 100, 125), b3(8, 50, 150, 0, true), b4(6, 100, 175), b5(4, 150, 200), powerBrick1(1, 320, 70, 1), powerBrick2(1, 320, 230, 1);
+	int r1, r2, r3, r4, r5;
+	int lx1, lx2, lx3, lx4, lx5;
+restart:
+	if (levelnum == 1)
+	{
+		r1 = 4,	r2 = 6,r3 = 8, r4 = 6, r5 = 4;
+		 lx1 = (((640 / 2) - ((r1 * 70) / 2)));
+		 lx2 = (((640 / 2) - ((r2 * 70) / 2)));
+	     lx3 = (((640 / 2) - ((r3 * 70) / 2)));
+		 lx4 = (((640 / 2) - ((r4 * 70) / 2)));
+		 lx5 = (((640 / 2) - ((r5 * 70) / 2)));
+	
+	}
+	else if (levelnum == 2)
+	{
+		r1 = 8,r2 = 8,r3 = 8,r4 = 8,r5 = 8;
+		lx1 = (((640 / 2) - ((r1 * 70) / 2)));
+		lx2 = lx1;
+		lx3 = lx1;
+		lx4 = lx1;
+		lx5 = lx1;
+		super = true;
+	}
+	else if (levelnum == 3)
+	{
+		r1 = 8, r2 = 0, r3 = 8, r4 = 0, r5 = 8;
+		lx1 = (((640 / 2) - ((r1 * 70) / 2)));
+		lx2 = lx1;
+		lx3 = lx1;
+		lx4 = lx1;
+		lx5 = lx1;
+		super1 = true;
+	}
+	ArrayOfBricks b1(r1, lx1, 100,0,super), b2(r2, lx2, 125), b3(r3, lx3, 150, 0, true), b4(r4, lx4, 175), b5(r5, lx5, 200,0,super1), powerBrick1(1, 320, 70, 1), powerBrick2(1, 320, 230, 1);
 	ArrayOfBricks level[7] = { powerBrick1, b1, b2, b3, b4, b5, powerBrick2 };
+	maxScore = r1 + r2 + r3 + r4 + r5 + 2 + maxScore;
 
 	al_init_font_addon();
 	al_init_ttf_addon();
@@ -203,41 +237,44 @@ restart:
 
 	bool menu = true;
 
-	while (menu)
+	if (levelnum == 1 || levelnum == 4)
 	{
-		int startx = 230;
-		int starty = 150;
-
-
-		al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty, ALLEGRO_ALIGN_LEFT, "START GAME");
-		al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty + 40, ALLEGRO_ALIGN_LEFT, "DEMO");
-		al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty + 80, ALLEGRO_ALIGN_LEFT, "EXIT");
-		al_flip_display();
-		ALLEGRO_EVENT ec;
-		al_wait_for_event(event_queue, &ec);
-		if (ec.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+		while (menu)
 		{
-			if (ec.mouse.y >= 150 && ec.mouse.y <= 180 && ec.mouse.x >= startx && ec.mouse.x <= startx + 200)//start game
+			int startx = 230;
+			int starty = 150;
+
+
+			al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty, ALLEGRO_ALIGN_LEFT, "START GAME");
+			al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty + 40, ALLEGRO_ALIGN_LEFT, "DEMO");
+			al_draw_text(font2, al_map_rgb(255, 0, 40), startx, starty + 80, ALLEGRO_ALIGN_LEFT, "EXIT");
+			al_flip_display();
+			ALLEGRO_EVENT ec;
+			al_wait_for_event(event_queue, &ec);
+			if (ec.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
 			{
-				menu = false;
-			}
-			else if (ec.mouse.y > 180 && ec.mouse.y <= 230 && ec.mouse.x >= startx && ec.mouse.x <= startx + 88)//demo
-			{
-				demo = true;
-				menu = false;
+				if (ec.mouse.y >= 150 && ec.mouse.y <= 180 && ec.mouse.x >= startx && ec.mouse.x <= startx + 200)//start game
+				{
+					menu = false;
+				}
+				else if (ec.mouse.y > 180 && ec.mouse.y <= 230 && ec.mouse.x >= startx && ec.mouse.x <= startx + 88)//demo
+				{
+					demo = true;
+					menu = false;
+
+				}
+				else if (ec.mouse.y > 230 && ec.mouse.y <= 260 && ec.mouse.x >= startx && ec.mouse.x <= startx + 65)//exit
+				{
+					exit(1);
+				}
 
 			}
-			else if (ec.mouse.y > 230 && ec.mouse.y <= 260 && ec.mouse.x >= startx && ec.mouse.x <= startx + 65)//exit
+			if (ec.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 			{
 				exit(1);
 			}
 
 		}
-		if (ec.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-		{
-			exit(1);
-		}
-
 	}
 	while (!doexit)
 	{
@@ -498,14 +535,13 @@ restart:
 			al_draw_text(font, grey, 170, 5, ALLEGRO_ALIGN_CENTRE, scoretxt.c_str());
 			al_draw_text(font, al_map_rgb(255, 0, 40), 300, 5, ALLEGRO_ALIGN_CENTRE, "LIVES: ");
 			al_draw_text(font, al_map_rgb(255, 0, 40), 400, 5, ALLEGRO_ALIGN_CENTRE, livestxt.c_str());
-			if (score == 30)
+			if (score == maxScore)
 			{
 				al_draw_text(font1, al_map_rgb(255, 0, 40), 320, 240, ALLEGRO_ALIGN_CENTRE, "LEVEL CLEAR");
 				al_flip_display();
-				score = 0;
-				lives = 10;
 				al_rest(2.0);
-
+				levelnum++;
+				check = true;
 				goto restart;
 			}
 			if (lives == 0)
@@ -521,6 +557,32 @@ restart:
 
 			if (ball.isSuperBall())	ball.drawBall(255, 255, 0);
 			else ball.drawBall(255, 0, 0);
+
+			if (levelnum == 1 && check)
+			{
+				al_draw_text(font1, al_map_rgb(255, 0, 40), 320, 240, ALLEGRO_ALIGN_CENTRE, "LEVEL 1");
+				al_flip_display();
+				al_rest(2.0);
+				check = false;
+			}
+			else if (levelnum == 2 && check)
+			{
+				al_draw_text(font1, al_map_rgb(255, 0, 40), 320, 240, ALLEGRO_ALIGN_CENTRE, "LEVEL 2");
+				al_flip_display();
+				al_rest(2.0);
+				check = false;
+			}
+			else if (levelnum == 3 && check)
+			{
+				al_draw_text(font1, al_map_rgb(255, 0, 40), 320, 240, ALLEGRO_ALIGN_CENTRE, "FINAL LEVEL");
+				al_flip_display();
+				al_rest(2.0);
+				check = false;
+			
+			
+			}
+
+			
 			al_flip_display();
 		}
 
