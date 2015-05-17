@@ -65,7 +65,6 @@ public:
 	int getSuperLevel();
 	void setSuperLevel(int);
 	bool isSuper();
-	//void setBitmap(ALLEGRO_BITMAP );
 
 	void destroy(bool result);
 

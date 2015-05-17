@@ -44,15 +44,11 @@ public:
 
 	void playerPowerUp(Player *);
 	void ballPowerUp(Ball *);
-
 	void selectRandomPowerUp();
-
 	bool detectCollision(Player *);
-
 	void makeMove();
-
-	//void setBitmap(ALLEGRO_BITMAP *, bool);
 	void enableBitmap();
+
 	ALLEGRO_BITMAP *getBitmap();
 };
 

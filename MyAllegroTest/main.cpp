@@ -147,7 +147,6 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	Player player(PLAYER_SIZEX, PLAYER_SIZEY, PLAYER_SIZEX + 100);
-	//Player superPlayer(PLAYER_SIZEX + 100, PLAYER_SIZEY);
 	int r1, r2, r3, r4, r5;
 	int lx1, lx2, lx3, lx4, lx5;
 restart:
@@ -183,6 +182,7 @@ restart:
 		pCount = 0;
 		super1 = true;
 	}
+
 	ArrayOfBricks b1(r1, lx1, 100,0,super), b2(r2, lx2, 125), b3(r3, lx3, 150, 0, true), b4(r4, lx4, 175), b5(r5, lx5, 200,0,super1), powerBrick1(1, 320, 70, 1), powerBrick2(1, 320, 230, 1);
 	ArrayOfBricks level[7] = { powerBrick1, b1, b2, b3, b4, b5, powerBrick2 }; //2D array of bricks created to make each level
 	maxScore = r1 + r2 + r3 + r4 + r5 + 2 + maxScore;
@@ -285,11 +285,14 @@ restart:
 	while (!doexit)
 	{
 
+		if (pCount > 1)
+			pCount = 0;
+
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 
-		if (ev.type == ALLEGRO_EVENT_TIMER) {
-
+		if (ev.type == ALLEGRO_EVENT_TIMER)
+		{
 			if (key[KEY_LEFT] && !demo)
 				player.moveLeft();
 
@@ -313,7 +316,6 @@ restart:
 
 			if (ball.getCenter_Y() > SCREEN_H - ball.getRadius())
 			{
-				//std::cout << "Lives Left: " << --lives << std::endl;
 				lives--;
 				al_play_sample(thunder, 2, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
 
@@ -351,30 +353,11 @@ restart:
 				if (powerUps[i].detectCollision(toPlayer))
 				{
 					powerUps[i].selectRandomPowerUp();
-					//powerUp1.ballPowerUp(&ball);
-					//powerUp1.playerPowerUp(&player);
 				}
 			}
 
 
-			/*
-			Ay dont delete this (original player code)
-			ballVel = ball.getBallVelocity();
-			ballAngle = ball.getBallAngle();
-
-			std::cout << "Angle: " << ballAngle*(180 / PI) << std::endl;
-
-			float tempdX = ballVel*cos(ballAngle + radAngle);
-			float tempdY = ballVel*sin(-(ballAngle + radAngle));
-			s
-			std::cout << "Temps: " << tempdX << " , " << tempdY << std::endl;
-			ball.setVelocity(tempdX, tempdY);
-
-			float ballAngle2 = ball.getBallAngle();
-
-			std::cout << "New Angle: " << ballAngle2*(180 / PI) << std::endl;
-			*/
-
+			//logic for the brick
 			for (int j = 0; j < 8; j++)
 			{
 				for (int i = 0; i < level[j].getNum(); i++)
@@ -459,9 +442,6 @@ restart:
 				}
 			}
 
-
-			//powerUp1.makeMove();
-
 			for (int i = 0; i < amountPUps; i++)
 			{
 				powerUps[i].makeMove();
@@ -519,13 +499,7 @@ restart:
 
 			redraw = false;
 
-			/*if (player.isSuperPlayer())
-			{
-			player.setBitMap(superPlayer.getBitMap());
-			player.setSize(superPlayer.getSizeX(), superPlayer.getSizeY());
-			}*/
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-			//al_draw_bitmap(player, player_x, player_y, 0);
 			al_draw_bitmap(player.getBitMap(), player.getLocX(), player.getLocY(), 0);
 
 			for (int i = 0; i < amountPUps; i++)

@@ -35,8 +35,7 @@ public:
 
 	~ArrayOfBricks()
 	{
-		//for (int i = 0; i < 9; i++)
-			//delete arr[i];
+
 	}
 
 };
