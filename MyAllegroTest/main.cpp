@@ -27,7 +27,7 @@ const int SCREEN_W = 640;
 const int SCREEN_H = 480;
 
 const int BALL_SIZE_RADIUS = 7;
-const int BALL_VEL = 4;
+int BALL_VEL = 4;
 
 const int PLAYER_SIZEX = 120;
 const int PLAYER_SIZEY = 10;
@@ -169,6 +169,7 @@ restart:
 		lx4 = lx1;
 		lx5 = lx1;
 		pCount = 0;
+		BALL_VEL *= 1.3;
 		super = true;
 	}
 	else if (levelnum == 3)
@@ -180,6 +181,7 @@ restart:
 		lx4 = lx1;
 		lx5 = lx1;
 		pCount = 0;
+		BALL_VEL *= 1.1;
 		super1 = true;
 	}
 
@@ -294,14 +296,14 @@ restart:
 		if (ev.type == ALLEGRO_EVENT_TIMER)
 		{
 			if (key[KEY_LEFT] && !demo)
-				player.moveLeft();
+				player.moveLeft();                      //move player left
 
 			if (key[KEY_RIGHT] && !demo)
-				player.moveRight();
+				player.moveRight();                     //move right
 
 			if (demo)
 			{
-				player.setLocationX(ball.getCenter_X() - player.getSizeX() / 2);
+				player.setLocationX(ball.getCenter_X() - player.getSizeX() / 2); // demo mode
 			}
 
 			if (player.getLocX() + 0.5*player.getSizeX() > SCREEN_W  && key[KEY_RIGHT])
@@ -337,6 +339,7 @@ restart:
 
 			if (player.detectBallCollsion(ball))
 			{
+				// The ball will not reflect 90 degrees off the player. The further away it is from the center of the player, the greater the rebound angle
 				float awayFromCent = player.getLocX() + (player.getSizeX() / 2) - ball.getCenter_X();
 				float reflectionConst = (awayFromCent / (player.getSizeX() / 2));
 
@@ -381,9 +384,7 @@ restart:
 
 							al_play_sample(SAMMY, 1, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
 
-							al_set_target_bitmap(level[j].arr[i]->getBitMap());//destroying of the brick
-							al_clear_to_color(al_map_rgb(0, 0, 0));
-
+							level[j].arr[i]->~Brick();
 
 							powerUps[pCount].enableBitmap();
 							pCount++;
@@ -411,8 +412,7 @@ restart:
 									al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
 									break;
 								case 0:
-									al_set_target_bitmap(level[j].arr[i]->getBitMap());//actual destroying of brick
-									al_clear_to_color(al_map_rgb(0, 0, 0));
+									level[j].arr[i]->~Brick();
 
 									score++;
 									al_play_sample(SAMMY, 0.5, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
@@ -429,8 +429,7 @@ restart:
 
 								al_play_sample(SAMMY, 0.5, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);//plays
 
-								al_set_target_bitmap(level[j].arr[i]->getBitMap());
-								al_clear_to_color(al_map_rgb(0, 0, 0));
+								level[j].arr[i]->~Brick();
 
 								score++;
 							}
@@ -541,7 +540,8 @@ restart:
 			}
 			for (int j = 0; j < 7; j++)
 				for (int i = 0; i < level[j].getNum(); i++)
-					al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
+					if (!level[j].arr[i]->isDestroyed())
+						al_draw_bitmap(level[j].arr[i]->getBitMap(), level[j].arr[i]->getLocX(), level[j].arr[i]->getLocY(), 0);
 
 			if (ball.isSuperBall())	ball.drawBall(255, 255, 0);
 			else ball.drawBall(255, 0, 0);
