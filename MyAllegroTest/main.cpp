@@ -181,7 +181,7 @@ restart:
 		lx4 = lx1;
 		lx5 = lx1;
 		pCount = 0;
-		BALL_VEL *= 1.1;
+		BALL_VEL *= 1.2;
 		super1 = true;
 	}
 
