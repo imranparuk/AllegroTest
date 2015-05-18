@@ -384,6 +384,7 @@ restart:
 							al_set_target_bitmap(level[j].arr[i]->getBitMap());//destroying of the brick
 							al_clear_to_color(al_map_rgb(0, 0, 0));
 
+
 							powerUps[pCount].enableBitmap();
 							pCount++;
 
