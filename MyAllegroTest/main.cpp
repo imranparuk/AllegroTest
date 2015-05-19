@@ -52,9 +52,11 @@ bool super = false;
 bool super1 = false;
 int pCount = 0;
 
+bool stopBall = false;
+
 
 enum MYKEYS {
-	KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
+	KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE
 };
 
 
@@ -301,6 +303,19 @@ restart:
 			if (key[KEY_RIGHT] && !demo)
 				player.moveRight();                     //move right
 
+			// one small cheat, the gravity Mode
+			if (key[KEY_UP])
+			{
+				key[KEY_UP] = false;
+				ball.setAccel(-0.15);
+			}
+			// the antigravity mode
+			if (key[KEY_DOWN])
+			{
+				key[KEY_DOWN] = false;
+				ball.setAccel(0.15);
+			}
+
 			if (demo)
 			{
 				player.setLocationX(ball.getCenter_X() - player.getSizeX() / 2); // demo mode
@@ -316,25 +331,28 @@ restart:
 				player.setLocationX(SCREEN_W);
 			}
 
+			//check if it fell through the bottom
 			if (ball.getCenter_Y() > SCREEN_H - ball.getRadius())
 			{
 				lives--;
 				al_play_sample(thunder, 2, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
 
 				player.setSuperPlayer(false);
+				ball.setAccel(0);
 				ball.restart(player.getLocX() + player.getSizeX() / 2, player.getLocY(), BALL_VEL, -BALL_VEL, false);
 
 			}
 
+			// check to reflect on the top
 			if ((ball.getCenter_Y() - ball.getRadius()) <= 0 && ball.getDelta_Y() <= 0)
 			{
 				ball.reflectY();
 			}
 
-
-			if (((ball.getCenter_X() - ball.getRadius() < 0) && ball.getDelta_X() <= 0) || (ball.getCenter_X() + ball.getRadius() > SCREEN_W && ball.getDelta_X() >= 0) /*|| ((ball_y + BALL_SIZE_RADIUS > player_y) && ((ball_x + BALL_SIZE_RADIUS < player_x) || (ball_x - BALL_SIZE_RADIUS > player_x + PLAYER_SIZEX)))*/) {
+			// check to reflect on the sides
+			if (((ball.getCenter_X() - ball.getRadius() < 0) && ball.getDelta_X() <= 0) || (ball.getCenter_X() + ball.getRadius() > SCREEN_W && ball.getDelta_X() >= 0) /*|| ((ball_y + BALL_SIZE_RADIUS > player_y) && ((ball_x + BALL_SIZE_RADIUS < player_x) || (ball_x - BALL_SIZE_RADIUS > player_x + PLAYER_SIZEX)))*/) 
+			{
 				ball.reflectX();
-
 			}
 
 			if (player.detectBallCollsion(ball))
@@ -345,7 +363,7 @@ restart:
 
 				float offsetAngle = 30 * reflectionConst; //max offset 45 degrees
 				float radAngle = (PI / 180)*offsetAngle;
-
+				
 				ball.reboundOffPlayer(radAngle);
 
 			}
@@ -446,6 +464,7 @@ restart:
 			{
 				powerUps[i].makeMove();
 			}
+
 			ball.makeMove();
 			redraw = true;
 		}
@@ -454,12 +473,13 @@ restart:
 		}
 		else if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
 			switch (ev.keyboard.keycode) {
+		
 			case ALLEGRO_KEY_UP:
-				key[KEY_UP] = true;
+				//key[KEY_UP] = true;
 				break;
 
 			case ALLEGRO_KEY_DOWN:
-				key[KEY_DOWN] = true;
+				//key[KEY_DOWN] = true;
 				break;
 
 			case ALLEGRO_KEY_LEFT:
@@ -469,16 +489,19 @@ restart:
 			case ALLEGRO_KEY_RIGHT:
 				key[KEY_RIGHT] = true;
 				break;
+
+			
 			}
 		}
 		else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
 			switch (ev.keyboard.keycode) {
+
 			case ALLEGRO_KEY_UP:
-				key[KEY_UP] = false;
+				key[KEY_UP] = true;
 				break;
 
 			case ALLEGRO_KEY_DOWN:
-				key[KEY_DOWN] = false;
+				key[KEY_DOWN] = true;
 				break;
 
 			case ALLEGRO_KEY_LEFT:

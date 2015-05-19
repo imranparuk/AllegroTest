@@ -17,9 +17,12 @@ private:
 
 	float deltaX;
 	float deltaY;
+
+	float deltaA;
 	ALLEGRO_BITMAP *ball = NULL;
 
 	bool superBall;
+	bool stop;
 
 public:
 	
@@ -39,6 +42,10 @@ public:
 
 	void setSuperBall(bool);
 	bool isSuperBall();
+
+	void setAccel(float);
+	void boostVelocity(float);
+
 
 	void makeMove();
 	void reflectY();
