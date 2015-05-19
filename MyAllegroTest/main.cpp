@@ -61,6 +61,7 @@ enum MYKEYS {
 int main(int argc, char **argv)
 
 {
+	srand(time(NULL));
 
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
