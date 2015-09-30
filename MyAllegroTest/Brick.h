@@ -8,7 +8,7 @@
 class Brick
 {
 private:
-	const int sizeX = 60; //dimensions of each brick
+	const int sizeX = 60; //dimensions of each brick 
 	const int sizeY = 15;
 	const int locationX; 
 	const int locationY;  
